@@ -10,9 +10,14 @@ import sys
 parser=argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("worksFile", help="the csv file containing the raw works export from ProEco", metavar="CSV_FILE" , default="travaux.csv", nargs="?")
 parser.add_argument("-v","--verbose", action="store_const", dest="logging", const=logging.DEBUG, default=logging.INFO, help="show debug logs")
+parser.add_argument("--dsn", help="the dsn to use for db operations", action="store", dest="dsn", default="theros_dev")
+parser.add_argument("--is", "--insert-student", help="insert (ignoring duplicates) students into database (requires --dsn)", action="store_true", dest="insertStudents")
 args=parser.parse_args()
 logging.basicConfig(level=args.logging, stream=sys.stdout)
 logger=logging.getLogger()
+
+if args.insertStudents and not args.dsn:
+    parser.error("--is requires --dsn")
 
 worksFile=args.worksFile
 works=[]
@@ -24,6 +29,7 @@ with open(worksFile) as fh:
         if header:
             header=False
             continue
+        line=line.decode("utf8")
         klass,student, dummy, foo, desc, grp = map(lambda s:s.strip(), line.split("\t"))
         klass=klass.replace(" ","")
         student=student.replace("  "," ")
@@ -37,3 +43,14 @@ with open(worksFile) as fh:
 
 logger.info("got %i works, %i students, %i classes", len(works), len(students), len(classes))
 
+if args.insertStudents:
+    logging.info("inserting students")
+    import pyodbc
+    conn=pyodbc.connect(dsn=args.dsn)
+    try:
+        db=conn.cursor()
+        params=[(s,) for s in sorted(students)]
+        db.executemany("INSERT IGNORE INTO student(st_name) VALUES (?)", params)
+        conn.commit()
+    finally:
+        conn.close()
