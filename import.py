@@ -6,6 +6,7 @@ A script to import initial data from ProEco into Theros
 import logging
 import argparse
 import sys
+import re
 
 parser=argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("worksFile", help="the csv file containing the raw works export from ProEco", metavar="CSV_FILE" , default="travaux.csv", nargs="?")
@@ -25,13 +26,15 @@ classes=set()
 students=set()
 with open(worksFile) as fh:
     header=True
-    for line in fh:
+    for i,line in enumerate(fh):
         if header:
             header=False
             continue
         line=line.decode("utf8")
         klass,student, dummy, foo, desc, grp = map(lambda s:s.strip(), line.split("\t"))
-        klass=klass.replace(" ","")
+        klass=klass.replace(" ","").upper()
+        if not re.search(r"^\d[A-Z]+$", klass):
+            raise ValueError, "line %i contains bad class: %s"%(i+1, klass)
         student=student.replace("  "," ")
         classes.add(klass)
         students.add(student)
