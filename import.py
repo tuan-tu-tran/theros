@@ -5,12 +5,13 @@ A script to import initial data from ProEco into Theros
 
 import logging
 import argparse
+import sys
 
 parser=argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("worksFile", help="the csv file containing the raw works export from ProEco", metavar="CSV_FILE" , default="travaux.csv", nargs="?")
 parser.add_argument("-v","--verbose", action="store_const", dest="logging", const=logging.DEBUG, default=logging.INFO, help="show debug logs")
 args=parser.parse_args()
-logging.basicConfig(level=args.logging)
+logging.basicConfig(level=args.logging, stream=sys.stdout)
 logger=logging.getLogger()
 
 worksFile=args.worksFile
