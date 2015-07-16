@@ -49,6 +49,21 @@ CREATE TABLE `raw_data` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `schoolyear`
+--
+
+DROP TABLE IF EXISTS `schoolyear`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `schoolyear` (
+  `sy_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sy_desc` varchar(45) NOT NULL,
+  PRIMARY KEY (`sy_id`),
+  UNIQUE KEY `sy_desc_UNIQUE` (`sy_desc`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `student`
 --
 
