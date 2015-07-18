@@ -9,7 +9,7 @@ import sys
 import re
 
 parser=argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-parser.add_argument("worksFile", help="the csv file containing the raw works export from ProEco", metavar="CSV_FILE" , default="travaux.csv", nargs="?")
+parser.add_argument("-w","--works", help="the csv file containing the raw works export from ProEco", metavar="CSV_FILE" , default="travaux.csv", dest="worksFile")
 parser.add_argument("-v","--verbose", action="store_const", dest="logging", const=logging.DEBUG, default=logging.INFO, help="show debug logs")
 parser.add_argument("--dsn", help="the dsn to use for db operations", action="store", dest="dsn", default="theros_dev")
 parser.add_argument("-i", "--insert", help="insert (ignoring duplicates) data into database (see --dsn)", action="store_true", dest="insertData")
