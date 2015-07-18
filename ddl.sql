@@ -113,6 +113,22 @@ CREATE TABLE `subject` (
   UNIQUE KEY `sub_code_UNIQUE` (`sub_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `teacher`
+--
+
+DROP TABLE IF EXISTS `teacher`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `teacher` (
+  `tea_id` int(11) NOT NULL AUTO_INCREMENT,
+  `tea_fullname` varchar(255) NOT NULL,
+  `tea_password` varchar(45) NOT NULL,
+  PRIMARY KEY (`tea_id`),
+  UNIQUE KEY `tea_fullname_UNIQUE` (`tea_fullname`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

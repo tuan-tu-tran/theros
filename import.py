@@ -7,10 +7,12 @@ import logging
 import argparse
 import sys
 import re
+import hashlib
 
 parser=argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("-w","--works", help="the csv file containing the raw works export from ProEco", metavar="CSV_FILE" , default="travaux.csv", dest="worksFile")
 parser.add_argument("-s","--subjects", help="the csv file containing the subjects export from ProEco", metavar="CSV_FILE" , default="cours.csv", dest="subjectsFile")
+parser.add_argument("--teachers", help="the csv file containing the teachers export from ProEco", metavar="CSV_FILE" , default="profs.csv", dest="teachersFile")
 parser.add_argument("-v","--verbose", action="store_const", dest="logging", const=logging.DEBUG, default=logging.INFO, help="show debug logs")
 parser.add_argument("--dsn", help="the dsn to use for db operations", action="store", dest="dsn", default="theros_dev")
 parser.add_argument("-i", "--insert", help="insert (ignoring duplicates) data into database (see --dsn)", action="store_true", dest="insertData")
@@ -66,8 +68,14 @@ for i,line in enumerate(iterCsv(args.subjectsFile, False)):
     code=line[2]
     desc=line[5]
     subjects[code]=desc
-
 logger.info("got %i subjects", len(subjects))
+
+teachers={}
+for i,line in enumerate(iterCsv(args.teachersFile)):
+    first,last,dob = line[:3]
+    name=first+" "+last
+    teachers[name]=hashlib.md5(dob).hexdigest()
+logger.info("got %i teachers", len(teachers))
 
 if args.insertData or args.truncate:
     logging.info("connecting to database")
@@ -127,6 +135,10 @@ if args.insertData or args.truncate:
             logging.info("inserting subjects")
             params=sorted(subjects.items())
             db.executemany("INSERT IGNORE INTO subject(sub_code, sub_desc) VALUES (?,?)", params)
+
+            logging.info("inserting teachers")
+            params=sorted(teachers.items())
+            db.executemany("INSERT IGNORE INTO teacher(tea_fullname, tea_password) VALUES (?,?)", params)
 
         conn.commit()
     finally:
