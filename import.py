@@ -23,9 +23,8 @@ logger=logging.getLogger()
 if not args.dsn and args.insertData:
     parser.error("missing --dsn specification")
 
-def iterCsv(fname):
+def iterCsv(fname, header=True):
     with open(fname) as fh:
-        header=True
         for line in fh:
             if header:
                 header=False
@@ -63,7 +62,7 @@ for i,line in enumerate(iterCsv(worksFile)):
 logger.info("got %i works, %i students, %i classes", len(works), len(students), len(classes))
 
 subjects={}
-for i,line in enumerate(iterCsv(args.subjectsFile)):
+for i,line in enumerate(iterCsv(args.subjectsFile, False)):
     code=line[2]
     desc=line[5]
     subjects[code]=desc
