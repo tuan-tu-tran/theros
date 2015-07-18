@@ -100,6 +100,22 @@ CREATE TABLE `student_class` (
   CONSTRAINT `fk_student_class_3` FOREIGN KEY (`sc_sy_id`) REFERENCES `schoolyear` (`sy_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `subject`
+--
+
+DROP TABLE IF EXISTS `subject`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `subject` (
+  `sub_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sub_code` varchar(45) NOT NULL,
+  `sub_desc` varchar(255) NOT NULL,
+  PRIMARY KEY (`sub_id`),
+  UNIQUE KEY `sub_code_UNIQUE` (`sub_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
