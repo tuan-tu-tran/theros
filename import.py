@@ -114,6 +114,11 @@ if args.insertData:
             db.executemany(query, params)
         else:
             logger.warn("no work inserted")
+
+        logging.info("inserting subjects")
+        params=sorted(subjects.items())
+        db.executemany("INSERT IGNORE INTO subject(sub_code, sub_desc) VALUES (?,?)", params)
+
         conn.commit()
     finally:
         conn.close()
