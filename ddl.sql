@@ -49,6 +49,21 @@ CREATE TABLE `raw_data` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `schoolyear`
+--
+
+DROP TABLE IF EXISTS `schoolyear`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `schoolyear` (
+  `sy_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sy_desc` varchar(45) NOT NULL,
+  PRIMARY KEY (`sy_id`),
+  UNIQUE KEY `sy_desc_UNIQUE` (`sy_desc`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `student`
 --
 
@@ -60,6 +75,29 @@ CREATE TABLE `student` (
   `st_name` varchar(255) NOT NULL,
   PRIMARY KEY (`st_id`),
   UNIQUE KEY `st_name_UNIQUE` (`st_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `student_class`
+--
+
+DROP TABLE IF EXISTS `student_class`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `student_class` (
+  `sc_id` int(11) NOT NULL AUTO_INCREMENT,
+  `sc_st_id` int(11) NOT NULL,
+  `sc_cl_id` int(11) NOT NULL,
+  `sc_sy_id` int(11) NOT NULL,
+  PRIMARY KEY (`sc_id`),
+  UNIQUE KEY `idx_unique` (`sc_st_id`,`sc_cl_id`,`sc_sy_id`),
+  KEY `fk_student_class_1_idx` (`sc_st_id`),
+  KEY `fk_student_class_2_idx` (`sc_cl_id`),
+  KEY `fk_student_class_3_idx` (`sc_sy_id`),
+  CONSTRAINT `fk_student_class_1` FOREIGN KEY (`sc_st_id`) REFERENCES `student` (`st_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_student_class_2` FOREIGN KEY (`sc_cl_id`) REFERENCES `class` (`cl_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_student_class_3` FOREIGN KEY (`sc_sy_id`) REFERENCES `schoolyear` (`sy_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
