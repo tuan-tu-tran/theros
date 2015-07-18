@@ -10,6 +10,7 @@ import re
 
 parser=argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("-w","--works", help="the csv file containing the raw works export from ProEco", metavar="CSV_FILE" , default="travaux.csv", dest="worksFile")
+parser.add_argument("-s","--subjects", help="the csv file containing the subjects export from ProEco", metavar="CSV_FILE" , default="cours.csv", dest="subjectsFile")
 parser.add_argument("-v","--verbose", action="store_const", dest="logging", const=logging.DEBUG, default=logging.INFO, help="show debug logs")
 parser.add_argument("--dsn", help="the dsn to use for db operations", action="store", dest="dsn", default="theros_dev")
 parser.add_argument("-i", "--insert", help="insert (ignoring duplicates) data into database (see --dsn)", action="store_true", dest="insertData")
@@ -59,6 +60,14 @@ for i,line in enumerate(iterCsv(worksFile)):
         logger.debug("discarded line %s", line)
 
 logger.info("got %i works, %i students, %i classes", len(works), len(students), len(classes))
+
+subjects={}
+for i,line in enumerate(iterCsv(args.subjectsFile)):
+    code=line[2]
+    desc=line[5]
+    subjects[code]=desc
+
+logger.info("got %i subjects", len(subjects))
 
 if args.insertData:
     logging.info("connecting to database")
