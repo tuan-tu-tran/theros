@@ -21,6 +21,16 @@ logger=logging.getLogger()
 if not args.dsn and args.insertData:
     parser.error("missing --dsn specification")
 
+def iterCsv(fname):
+    with open(fname) as fh:
+        header=True
+        for line in fh:
+            if header:
+                header=False
+                continue
+            line=line.decode("utf8")
+            yield map(lambda s:s.strip(), line.split("\t"))
+
 worksFile=args.worksFile
 works=[]
 classes=set()
@@ -33,26 +43,20 @@ class Work:
         self.desc=desc
         self.line=line
 
-with open(worksFile) as fh:
-    header=True
-    for i,line in enumerate(fh):
-        if header:
-            header=False
-            continue
-        line=line.decode("utf8")
-        klass,student, dummy, foo, desc, grp = map(lambda s:s.strip(), line.split("\t"))
-        klass=klass.replace(" ","").upper()
-        if not re.search(r"^\d[A-Z]+$", klass):
-            raise ValueError, "line %i contains bad class: %s"%(i+1, klass)
-        student=student.replace("  "," ")
-        classes.add(klass)
-        students.add(student)
-        compositions.append(Work(klass, student, desc, i+1))
-        if desc:
-            works.append(compositions[-1])
-            logger.debug("keep %s", works[-1])
-        else:
-            logger.debug("discarded line %s", line.strip())
+for i,line in enumerate(iterCsv(worksFile)):
+    klass,student, dummy, foo, desc, grp = line
+    klass=klass.replace(" ","").upper()
+    if not re.search(r"^\d[A-Z]+$", klass):
+        raise ValueError, "line %i contains bad class: %s"%(i+1, klass)
+    student=student.replace("  "," ")
+    classes.add(klass)
+    students.add(student)
+    compositions.append(Work(klass, student, desc, i+1))
+    if desc:
+        works.append(compositions[-1])
+        logger.debug("keep %s", works[-1])
+    else:
+        logger.debug("discarded line %s", line)
 
 logger.info("got %i works, %i students, %i classes", len(works), len(students), len(classes))
 
