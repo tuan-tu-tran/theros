@@ -19,7 +19,7 @@ parser.add_argument("-i", "--insert", help="insert (ignoring duplicates) data in
 parser.add_argument("-y", "--shoolyear", help="specify the current school year", action="store", dest="schoolyear", default="2014-15")
 parser.add_argument("-t", "--truncate", help="truncate all tables", action="store_true", dest="truncate")
 args=parser.parse_args()
-logging.basicConfig(level=args.logging, stream=sys.stdout)
+logging.basicConfig(level=args.logging, stream=sys.stdout, format="%(levelname)7s : %(message)s")
 logger=logging.getLogger()
 
 if not args.dsn and args.insertData:
@@ -65,17 +65,32 @@ logger.info("got %i works, %i students, %i classes", len(works), len(students), 
 
 subjects={}
 for i,line in enumerate(iterCsv(args.subjectsFile, False)):
-    code=line[2]
+    code=line[2].strip().upper()
     desc=line[5]
     subjects[code]=desc
 logger.info("got %i subjects", len(subjects))
 
+teachings=set()
 teachers={}
 for i,line in enumerate(iterCsv(args.teachersFile)):
     first,last,dob = line[:3]
+    subject=line[-1].strip().upper()
+    klass=line[-3].replace(" ","").upper()
     name=first+" "+last
     teachers[name]=hashlib.md5(dob).hexdigest()
-logger.info("got %i teachers", len(teachers))
+    localClasses=[ c for c in classes if c.startswith(klass)]
+    logger.debug("%s teaches %s in %s (%i match, %s)", name, subject, klass, len(localClasses), subject in subjects)
+    if not klass:
+        logger.warn("%s teaches %s in no class", name, subject)
+    elif subject not in subjects:
+        logger.warn("%s teaches %s in %s : unknown subject", name, subject, klass)
+    elif len(localClasses) == 0:
+        logger.Warn("%s teaches %s in %s : unknown class", name, subject, klass)
+    else:
+        for c in localClasses:
+            teachings.add((name, subject, c))
+logger.info("got %i teachers and %i teachings", len(teachers), len(teachings))
+teachings=sorted(teachings)
 
 if args.insertData or args.truncate:
     logging.info("connecting to database")
@@ -139,6 +154,12 @@ if args.insertData or args.truncate:
             logging.info("inserting teachers")
             params=sorted(teachers.items())
             db.executemany("INSERT IGNORE INTO teacher(tea_fullname, tea_password) VALUES (?,?)", params)
+
+            logging.info("inserting teachings")
+            subjects=dict([ (r.sub_code, r.sub_id) for r in db.execute("SELECT * FROM subject").fetchall() ])
+            teachers=dict([ (r.tea_fullname, r.tea_id) for r in db.execute("SELECT * FROM teacher").fetchall() ])
+            params=[ (teachers[name], subjects[code], schoolyear, classes[klass]) for name, code, klass in teachings ]
+            db.executemany("INSERT IGNORE INTO teacher_subject(ts_tea_id, ts_sub_id, ts_sy_id, ts_cl_id) VALUES (?,?,?,?)", params)
 
         conn.commit()
     finally:

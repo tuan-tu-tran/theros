@@ -129,6 +129,32 @@ CREATE TABLE `teacher` (
   UNIQUE KEY `tea_fullname_UNIQUE` (`tea_fullname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `teacher_subject`
+--
+
+DROP TABLE IF EXISTS `teacher_subject`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `teacher_subject` (
+  `ts_id` int(11) NOT NULL AUTO_INCREMENT,
+  `ts_tea_id` int(11) NOT NULL,
+  `ts_sub_id` int(11) NOT NULL,
+  `ts_cl_id` int(11) NOT NULL,
+  `ts_sy_id` int(11) NOT NULL,
+  PRIMARY KEY (`ts_id`),
+  UNIQUE KEY `unique` (`ts_tea_id`,`ts_sub_id`,`ts_cl_id`,`ts_sy_id`),
+  KEY `fk_teacher_subject_1_idx` (`ts_tea_id`),
+  KEY `fk_teacher_subject_2_idx` (`ts_sub_id`),
+  KEY `fk_teacher_subject_3_idx` (`ts_cl_id`),
+  KEY `fk_teacher_subject_4_idx` (`ts_sy_id`),
+  CONSTRAINT `fk_teacher_subject_2` FOREIGN KEY (`ts_sub_id`) REFERENCES `subject` (`sub_id`),
+  CONSTRAINT `fk_teacher_subject_3` FOREIGN KEY (`ts_cl_id`) REFERENCES `class` (`cl_id`),
+  CONSTRAINT `fk_teacher_subject_4` FOREIGN KEY (`ts_sy_id`) REFERENCES `schoolyear` (`sy_id`),
+  CONSTRAINT `fk_teacher_subject_1` FOREIGN KEY (`ts_tea_id`) REFERENCES `teacher` (`tea_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
