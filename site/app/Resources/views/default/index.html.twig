@@ -1,6 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <h1>Liste brute des travaux</h1>
+
+    <table>
+        {% for w in works %}
+            <tr>
+                <td>{{w.student.name}}</td>
+                <td>{{w.class.code}}</td>
+                <td>{{w.description}}</td>
+            </tr>
+        {% endfor%}
+    </table>
     <div id="wrapper">
         <div id="container">
             <div id="welcome">
