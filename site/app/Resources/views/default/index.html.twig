@@ -3,15 +3,17 @@
 {% block body %}
     <h1>Liste brute des travaux</h1>
 
-    <table>
-        {% for w in works %}
-            <tr>
-                <td>{{w.student.name}}</td>
-                <td>{{w.class.code}}</td>
-                <td>{{w.description}}</td>
-            </tr>
-        {% endfor%}
-    </table>
+    <div id="raw_data">
+        <table>
+            {% for w in works %}
+            <tr class="{{w.treated? 'treated' : 'not-treated'}}">
+                    <td>{{w.student.name}}</td>
+                    <td>{{w.class.code}}</td>
+                    <td>{{w.description}}</td>
+                </tr>
+            {% endfor%}
+        </table>
+    </div>
     <div id="wrapper">
         <div id="container">
             <div id="welcome">
@@ -83,5 +85,17 @@
         @keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
         .sf-toolbar { opacity: 0; -webkit-animation: fade-in 1s .2s forwards; animation: fade-in 1s .2s forwards;}
     }
+
+    div#raw_data {
+        height:10em;
+        overflow-y:scroll;
+    }
+
+    div#raw_data table td {
+        border:1pt solid black;
+    }
+
+    div#raw_data table tr.not-treated { background-color:LightSalmon; }
+    div#raw_data table tr.treated { background-color:LightGreen; }
 </style>
 {% endblock %}
