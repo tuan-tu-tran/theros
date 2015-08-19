@@ -20,7 +20,10 @@ $(function(){
             function filter(){
                 var text=$("#tbFilter").val().toLowerCase().trim();
                 var patterns=$(text.split(/\s+/)).filter(function(i,p){ return p.length > 1});
+                var shown=0;
+                var total=0;
                 $("#subject tr").each(function(i, row){
+                    total+=1;
                     var rowText = $(row).text().toLowerCase().trim();
                     var match;
                     if(!text || $(row).hasClass("selected")){
@@ -34,12 +37,14 @@ $(function(){
                             return false;
                         }
                     });
+                    shown+=match;
                     if (match){
                         $(row).show();
                     }else{
                         $(row).hide();
                     }
                 });
+                $("#lFilterCounts").text(shown+"/"+total+" affichés");
             };
             $("#tbFilter").keyup(filter);
 
