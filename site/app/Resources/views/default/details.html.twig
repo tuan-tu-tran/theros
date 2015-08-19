@@ -11,11 +11,16 @@
         <input type="radio" name="type" value="tdv" id="rbTdv"><label for="rbTdv">Travail de vacances</label></input>
         <input type="radio" name="type" value="ran" id="rbRan"><label for="rbRan">Remise à niveau</label></input>
     </p>
-
-    <select id="subject">
-        {% for t in teachings %}
-            <option value="{{t.id}}">{{t.subject.code}} - {{t.subject.description}} - {{t.teacher.fullname}}</option>
-        {% endfor %}
-    </select>
+	<div id="subject">
+		<table >
+			{% for t in teachings %}
+				<tr>
+					<td>{{t.subject.code}}</td>
+					<td>{{t.subject.description}}</td>
+					<td>{{t.teacher.fullname}}</td>
+				</tr>
+			{% endfor %}
+		</table>
+	</div>
 
 </fieldset>

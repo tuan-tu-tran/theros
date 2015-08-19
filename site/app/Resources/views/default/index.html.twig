@@ -62,6 +62,21 @@
     div#raw_data table tr.treated { background-color:LightGreen; }
     div#raw_data table tr:hover { background-color:yellow; }
     div#raw_data table tr.selected { background-color:LightBlue; }
+
+	div#subject {
+        height:10em;
+        overflow-y:scroll;
+		border:1pt solid black;
+	}
+	div#subject table{
+		width:100%;
+	}
+	div#subject table tr{
+		cursor:pointer;
+	}
+	div#subject table tr:hover{
+		background-color:lightgray;
+	}
 </style>
 
 <script type="text/javascript" src="{{asset("js/jquery-2.1.4.min.js")}}"></script>
