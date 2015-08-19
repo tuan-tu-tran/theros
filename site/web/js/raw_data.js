@@ -42,6 +42,12 @@ $(function(){
                 });
             };
             $("#tbFilter").keyup(filter);
+
+            //setup the clear button
+            $("#pbClear").click(function(){
+                $("#tbFilter").val("").focus();
+                filter();
+            });
         });
     });
 });
