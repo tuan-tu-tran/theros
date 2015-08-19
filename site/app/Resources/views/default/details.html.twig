@@ -1,17 +1,23 @@
 <h2>{{raw.student.name}} ({{raw.class.code}})</h2>
 
-<fieldset>
+<fieldset id="fsDescription">
     <legend>Description</legend>
     {{raw.description}}
 </fieldset>
 
-<fieldset>
+<fieldset id="fsAddNew">
     <legend>Ajouter un travail</legend>
     <input type="hidden" id="hRawDesc" value="{{raw.description}}"/>
     <p>
-        <input type="radio" name="type" value="tdv" id="rbTdv"><label for="rbTdv">Travail de vacances</label></input>
-        <input type="radio" name="type" value="ran" id="rbRan"><label for="rbRan">Remise à niveau</label></input>
-        <span id="selectedSubjectText" style="margin-left:3em"></span>
+        <span id="pnType">
+            <label for="rbTdv">
+                <input type="radio" name="type" value="tdv" id="rbTdv">Travail de vacances</input>
+            </label>
+            <label for="rbRan">
+                <input type="radio" name="type" value="ran" id="rbRan">Remise à niveau</input>
+            </label>
+        </span>
+        <span id="selectedSubjectText" style="margin-left:3em; background-color:lightblue; padding:5px; display:none;"></span>
     </p>
     <p>
         <label for="tbFilter">Filtre:</label>

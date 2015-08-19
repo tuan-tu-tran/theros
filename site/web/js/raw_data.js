@@ -11,7 +11,7 @@ $(function(){
             $("div#details").html(data);
             $("#subject tr").click(function(){
                 var text=$(this).find("td").map(function(){return $(this).text();}).toArray().join(" - ");
-                $("#selectedSubjectText").text(text);
+                $("#selectedSubjectText").text(text).show();
                 $(this).siblings(".selected").removeClass("selected");
                 $(this).addClass("selected");
             });
