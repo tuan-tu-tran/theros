@@ -7,6 +7,7 @@
 
 <fieldset>
     <legend>Ajouter un travail</legend>
+    <input type="hidden" id="hRawDesc" value="{{raw.description}}"/>
     <p>
         <input type="radio" name="type" value="tdv" id="rbTdv"><label for="rbTdv">Travail de vacances</label></input>
         <input type="radio" name="type" value="ran" id="rbRan"><label for="rbRan">Remise à niveau</label></input>
@@ -14,7 +15,7 @@
     </p>
     <p>
         <label for="tbFilter">Filtre:</label>
-        <input id="tbFilter" size="25"/>
+        <input id="tbFilter" size="60"/>
         <img id="pbClear" src="{{asset("img/delete.gif")}}"/>
     </p>
     <div id="subject">

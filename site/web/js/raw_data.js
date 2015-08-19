@@ -19,7 +19,7 @@ $(function(){
             //setup the filter
             function filter(){
                 var text=$("#tbFilter").val().toLowerCase().trim();
-                var patterns=$(text.split(/\s+/));
+                var patterns=$(text.split(/\s+/)).filter(function(i,p){ return p.length > 1});
                 $("#subject tr").each(function(i, row){
                     var rowText = $(row).text().toLowerCase().trim();
                     var match;
@@ -48,6 +48,38 @@ $(function(){
                 $("#tbFilter").val("").focus();
                 filter();
             });
+
+            //autofill the filter
+            var initFilter = $("#hRawDesc").val()
+                .toLowerCase()
+                .replace(/[\.,\(\):\-0-9]/g," ")
+                .replace(/\s+/g," ")
+                .replace(/\ble\b/g,"")
+                .replace(/\bsi\b/g,"")
+                .replace(/\brn\b/g,"")
+                .replace(/\bràn\b/g,"")
+                .replace(/\brem [àa] n\b/g,"")
+                .replace(/\bremise à niveau\b/g,"")
+                .replace(/\brem [aà] niv\b/g,"")
+                .replace(/\btrav\b/g,"")
+                .replace(/\btravail de vacances\b/g,"")
+                .replace(/\blecture\b/g,"francais")
+                .replace(/\borthographe\b/g,"francais")
+                .replace(/\bortho\b/g,"francais")
+                .replace(/\bee\b/g,"francais")
+                .replace(/\bexpr écrite\b/g,"francais")
+                .replace(/\bfr\b/g,"francais")
+                .replace(/\bedm\b/g,"milieu")
+                .replace(/\bmaths\b/g,"math")
+                .replace(/\bndl?s\b/g,"neerlandais")
+                .replace(/\ban\b/g,"anglais")
+                .replace(/\s+/g," ")
+                .replace(/[éè]/g,"e")
+                .replace("ç","c")
+                .trim()
+            ;
+            $("#tbFilter").val(initFilter);
+            filter();
         });
     });
 });
