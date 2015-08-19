@@ -15,6 +15,33 @@ $(function(){
                 $(this).siblings(".selected").removeClass("selected");
                 $(this).addClass("selected");
             });
+
+            //setup the filter
+            function filter(){
+                var text=$("#tbFilter").val().toLowerCase().trim();
+                var patterns=$(text.split(/\s+/));
+                $("#subject tr").each(function(i, row){
+                    var rowText = $(row).text().toLowerCase().trim();
+                    var match;
+                    if(!text || $(row).hasClass("selected")){
+                        match=true;
+                    }else{
+                        match=false;
+                    }
+                    patterns.each(function(i, p){
+                        if(rowText.indexOf(p) >= 0){
+                            match=true;
+                            return false;
+                        }
+                    });
+                    if (match){
+                        $(row).show();
+                    }else{
+                        $(row).hide();
+                    }
+                });
+            };
+            $("#tbFilter").keyup(filter);
         });
     });
 });
