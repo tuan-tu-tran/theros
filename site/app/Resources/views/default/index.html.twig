@@ -6,7 +6,7 @@
     <div id="raw_data">
         <table>
             {% for w in works %}
-            <tr class="{{w.treated? 'treated' : 'not-treated'}}">
+                <tr class="{{w.treated? 'treated' : 'not-treated'}}">
                     <td>{{w.student.name}}</td>
                     <td>{{w.class.code}}</td>
                     <td>{{w.description}}</td>
