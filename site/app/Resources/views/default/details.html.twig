@@ -13,8 +13,8 @@
     </p>
 
     <select id="subject">
-        {% for s in subjects %}
-            <option value="{{s.id}}">{{s.code}} - {{s.description}}</option>
+        {% for t in teachings %}
+            <option value="{{t.id}}">{{t.subject.code}} - {{t.subject.description}} - {{t.teacher.fullname}}</option>
         {% endfor %}
     </select>
 

@@ -9,6 +9,7 @@ use AppBundle\Entity\RawData;
 use AppBundle\Entity\Klass;
 use AppBundle\Entity\Student;
 use AppBundle\Entity\Subject;
+use AppBundle\Entity\Teaching;
 
 class DefaultController extends Controller
 {
@@ -62,6 +63,8 @@ class DefaultController extends Controller
             FROM teacher_subject
             JOIN subject ON ts_sub_id = sub_id
             JOIN schoolyear ON ts_sy_id = sy_id
+            JOIN class ON cl_id = ts_cl_id
+            JOIN teacher ON tea_id = ts_tea_id
             WHERE ts_cl_id = :cl_id
             AND sy_desc = :schoolyear
             ORDER BY sub_code
@@ -71,15 +74,14 @@ class DefaultController extends Controller
         $s->bindValue("schoolyear", $schoolyear, \PDO::PARAM_STR);
         $s->execute();
         $result=$s->fetchAll();
-        $subjects=[];
+        $teachings=[];
         foreach($result as $row){
-            $subjects[] = new Subject($row);
+            $teachings[] = Teaching::GetFull($row);
         }
 
-        $this->get("logger")->info("subjects:",[$subjects]);
         return $this->render("default/details.html.twig", array(
             "raw"=>$raw,
-            "subjects"=>$subjects,
+            "teachings"=>$teachings,
         ));
     }
 }
