@@ -1,0 +1,21 @@
+<h2>{{raw.student.name}} ({{raw.class.code}})</h2>
+
+<fieldset>
+    <legend>Description</legend>
+    {{raw.description}}
+</fieldset>
+
+<fieldset>
+    <legend>Ajouter un travail</legend>
+    <p>
+        <input type="radio" name="type" value="tdv" id="rbTdv"><label for="rbTdv">Travail de vacances</label></input>
+        <input type="radio" name="type" value="ran" id="rbRan"><label for="rbRan">Remise à niveau</label></input>
+    </p>
+
+    <select id="subject">
+        {% for s in subjects %}
+            <option value="{{s.id}}">{{s.code}} - {{s.description}}</option>
+        {% endfor %}
+    </select>
+
+</fieldset>

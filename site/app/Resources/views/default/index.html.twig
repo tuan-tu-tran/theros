@@ -10,10 +10,12 @@
                     <td>{{w.student.name}}</td>
                     <td>{{w.class.code}}</td>
                     <td>{{w.description}}</td>
+                    <input name="id" type="hidden" value="{{w.id}}"/>
                 </tr>
             {% endfor%}
         </table>
     </div>
+    <div id="details">
     </div>
 {% endblock %}
 
@@ -49,11 +51,21 @@
         overflow-y:scroll;
     }
 
+    div#raw_data table tr {
+        cursor:pointer;
+    }
     div#raw_data table td {
         border:1pt solid black;
     }
 
     div#raw_data table tr.not-treated { background-color:LightSalmon; }
     div#raw_data table tr.treated { background-color:LightGreen; }
+    div#raw_data table tr:hover { background-color:yellow; }
 </style>
+
+<script type="text/javascript" src="{{asset("js/jquery-2.1.4.min.js")}}"></script>
+<script type="text/javascript" src="{{asset("js/raw_data.js")}}"></script>
+<script type="text/javascript">
+    detailsUrl="{{path("details")}}";
+</script>
 {% endblock %}

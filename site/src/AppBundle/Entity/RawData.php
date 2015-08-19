@@ -17,4 +17,12 @@ class RawData
         $this->treated = $row["rd_treated"];
         $this->description=$row["rd_desc"];
     }
+
+    public static function GetFull($row)
+    {
+        $w=new RawData($row);
+        $w->class=new Klass($row);
+        $w->student=new Student($row);
+        return $w;
+    }
 }
