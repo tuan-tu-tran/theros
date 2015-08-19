@@ -78,6 +78,7 @@ $(function(){
                 .replace(/\bmaths\b/g,"math")
                 .replace(/\bndl?s\b/g,"neerlandais")
                 .replace(/\ban\b/g,"anglais")
+                .replace(/\bfgs\b/g,"format.geog")
                 .replace(/\s+/g," ")
                 .replace(/[éè]/g,"e")
                 .replace("ç","c")
