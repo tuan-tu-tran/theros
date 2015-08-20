@@ -25,6 +25,10 @@
                     <td>{{w.teaching.subject.description}}</td>
                     <td>{{w.teaching.teacher.fullname}}</td>
                     <td>{{w.description}}</td>
+                    <td class="delete">
+                        <img src="{{asset("img/delete.gif")}}"/>
+                        <input type="hidden" name="workId" value="{{w.id}}"/>
+                    </td>
                 </tr>
             {% endfor %}
         </table>

@@ -3,8 +3,10 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\RawData;
 use AppBundle\Entity\Klass;
 use AppBundle\Entity\Student;
@@ -151,5 +153,24 @@ class DefaultController extends Controller
             throw $e;
         }
         return $this->getDetails($rawDataId);
+    }
+
+    /**
+     * @Route("/delete", name="delete")
+     * @Method({"POST"})
+     */
+    public function deleteAction(Request $request)
+    {
+        $workId = $request->request->get("workId");
+        if($workId){
+            $db=$this->get("database_connection");
+            $s=$db->prepare("DELETE FROM work WHERE w_id = :workId");
+            $s->bindValue("workId", $workId, \PDO::PARAM_INT);
+            $s->execute();
+            return new Response();
+        } else {
+            throw new \Exception("No work id provided");
+        }
+
     }
 }

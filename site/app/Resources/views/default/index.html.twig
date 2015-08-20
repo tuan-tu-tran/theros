@@ -142,7 +142,12 @@
     #fsWorks table tr:nth-child(odd){
         background-color:#E0E0E0;
     }
-
+    #fsWorks table tr.selected{
+        background-color:yellow;
+    }
+    #fsWorks table td.delete{
+        cursor:pointer;
+    }
 </style>
 
 <script type="text/javascript" src="{{asset("js/jquery-2.1.4.min.js")}}"></script>
@@ -150,5 +155,6 @@
 <script type="text/javascript">
     detailsUrl="{{path("details")}}";
     addUrl="{{path("add")}}";
+    deleteUrl="{{path("delete")}}";
 </script>
 {% endblock %}

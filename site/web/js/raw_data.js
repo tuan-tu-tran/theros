@@ -1,5 +1,6 @@
 var detailsUrl;
 var addUrl;
+var deleteUrl;
 
 $(function(){
     function showDetails(data){
@@ -151,6 +152,22 @@ $(function(){
                     type:type,
                 }, showDetails);
             }
+        });
+
+        //setup the delete button
+        $("#fsWorks td.delete").hover(function(){
+            $(this).parent().addClass("selected");
+        }, function(){
+            $(this).parent().removeClass("selected");
+        }).click(function(){
+            var id=$(this).find("[name='workId']").val();
+            var tr=$(this).parent();
+            $.post(deleteUrl,{workId:id}, function(){
+                if (tr.siblings().length == 1) {
+                    $("#fsWorks").slideUp();
+                }
+                tr.remove();
+            });
         });
     }
     $("div#raw_data tr").click(function(){
