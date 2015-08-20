@@ -184,6 +184,7 @@ $(function(){
                 if(treated){
                     $("#details").empty();
                     row.removeClass("selected");
+                    $("div#raw_data").removeClass("truncated");
                 }
             });
         });
@@ -191,6 +192,10 @@ $(function(){
     $("div#raw_data tr").click(function(){
         //highlight selected
         $(this).addClass("selected").siblings().removeClass("selected");
+
+        //truncate the table
+        $("div#raw_data").addClass("truncated");
+        this.scrollIntoView();
 
         //get the details
         var id=$(this).find("input").val();
