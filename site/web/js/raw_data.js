@@ -159,6 +159,6 @@ $(function(){
 
         //get the details
         var id=$(this).find("input").val();
-        $.get(detailsUrl,{id:id}, showDetails);
+        $.post(detailsUrl,{id:id}, showDetails);
     });
 });

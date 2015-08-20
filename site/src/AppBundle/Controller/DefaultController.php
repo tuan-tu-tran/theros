@@ -44,7 +44,7 @@ class DefaultController extends Controller
      */
     public function detailsAction(Request $request)
     {
-        $id=$request->query->get("id");
+        $id=$request->request->get("id");
         return $this->getDetails($id);
     }
 
