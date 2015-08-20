@@ -3,6 +3,8 @@
 {% block body %}
     <h1>Liste brute des travaux</h1>
 
+    <label for="cbTreatedToo" style="cursor:pointer"><input type="checkbox" id="cbTreatedToo">Afficher les travaux déjà traités</input></label>
+    <br/>
     <div id="raw_data">
         <table>
             {% for w in works %}
@@ -147,6 +149,11 @@
     }
     #fsWorks table td.delete{
         cursor:pointer;
+    }
+</style>
+<style type="text/css" id="cssTreated">
+    #raw_data tr.treated {
+        display:none;
     }
 </style>
 

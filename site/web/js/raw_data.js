@@ -196,4 +196,14 @@ $(function(){
         var id=$(this).find("input").val();
         $.post(detailsUrl,{id:id}, showDetails);
     });
+
+    var cssTreated=$("#cssTreated");
+    $("#cbTreatedToo").change(function(){
+        var checked=$(this).is(":checked");
+        if(checked){
+            cssTreated.detach();
+        }else{
+            cssTreated.appendTo("head");
+        }
+    });
 });
