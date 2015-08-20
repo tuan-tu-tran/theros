@@ -2,18 +2,20 @@ var detailsUrl;
 
 $(function(){
     $("div#raw_data tr").click(function(){
-        if(!$(this).hasClass("selected")){
-            $("tr.selected").removeClass("selected");
-            $(this).addClass("selected");
-        }
+        //highlight selected
+        $(this).addClass("selected").siblings().removeClass("selected");
+
+        //get the details
         var id=$(this).find("input").val();
         $.get(detailsUrl,{id:id}, function(data){
+            //show the details
             $("div#details").html(data);
+
+            //setup click on subject
             $("#subject tr").click(function(){
                 var text=$(this).find("td").map(function(){return $(this).text();}).toArray().join(" - ");
                 $("#selectedSubjectText").text(text).show();
-                $(this).siblings(".selected").removeClass("selected");
-                $(this).addClass("selected");
+                $(this).addClass("selected").siblings().removeClass("selected");
             });
 
             //setup the filter
