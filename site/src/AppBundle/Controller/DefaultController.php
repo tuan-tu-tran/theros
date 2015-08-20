@@ -44,7 +44,11 @@ class DefaultController extends Controller
     public function detailsAction(Request $request)
     {
         $id=$request->query->get("id");
+        return $this->getDetails($id);
+    }
 
+    private function getDetails($id)
+    {
         $db=$this->get("database_connection");
         $stmt=$db->prepare("
             SELECT *
@@ -83,5 +87,42 @@ class DefaultController extends Controller
             "raw"=>$raw,
             "teachings"=>$teachings,
         ));
+    }
+
+    /**
+     * @Route("/add", name="add")
+     */
+    public function addAction(Request $request)
+    {
+        $studentId = $request->request->get("studentId");
+        $teachingId = $request->request->get("teachingId");
+        $rawDataId = $request->request->get("rawDataId");
+        $description = $request->request->get("description");
+
+        $db=$this->get("database_connection");
+
+        $db->beginTransaction();
+        try
+        {
+            $s=$db->prepare("INSERT INTO work(w_ts_id, w_st_id, w_description) VALUES (:teachingId, :studentId, :description)");
+            $s->bindValue("teachingId", $teachingId, \PDO::PARAM_INT);
+            $s->bindValue("studentId", $studentId, \PDO::PARAM_INT);
+            $s->bindValue("description", $description, \PDO::PARAM_STR);
+            $s->execute();
+
+            $workId = $db->lastInsertId();
+            $s=$db->prepare("INSERT INTO raw_data_work(rdw_rd_id, rdw_w_id) VALUES (:rawDataId, :workId)");
+            $s->bindValue("rawDataId", $rawDataId, \PDO::PARAM_INT);
+            $s->bindValue("workId", $workId, \PDO::PARAM_INT);
+            $s->execute();
+
+            $db->commit();
+        }
+        catch(\Exception $e)
+        {
+            $db->rollBack();
+            throw $e;
+        }
+        return $this->getDetails($rawDataId);
     }
 }

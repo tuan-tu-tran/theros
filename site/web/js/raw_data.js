@@ -1,13 +1,8 @@
 var detailsUrl;
+var addUrl;
 
 $(function(){
-    $("div#raw_data tr").click(function(){
-        //highlight selected
-        $(this).addClass("selected").siblings().removeClass("selected");
-
-        //get the details
-        var id=$(this).find("input").val();
-        $.get(detailsUrl,{id:id}, function(data){
+        function showDetails(data){
             //show the details
             $("div#details").html(data);
 
@@ -16,6 +11,7 @@ $(function(){
                 var text=$(this).find("td").map(function(){return $(this).text();}).toArray().join(" - ");
                 $("#selectedSubjectText").text(text).show();
                 $(this).addClass("selected").siblings().removeClass("selected");
+                $("#hfSelectedSubject").val($(this).find("input[name='subjectId']").val());
             });
 
             //setup the filter
@@ -133,6 +129,34 @@ $(function(){
             }else if (isTdv && !isRan){
                 $("#rbTdv").click();
             }
-        });
+
+            //setup the add button
+            $("#bAdd").click(function(){
+                var selectedSubject=$("#hfSelectedSubject").val();
+                if($("#pnType :checked").length == 0){
+                    alert("Veuillez sélectionner un type");
+                } else if(!selectedSubject){
+                    alert("Veuillez sélectionner une branche et un professeur");
+                } else{
+                    var studentId = $("#hfStudentId").val();
+                    var teachingId = selectedSubject;
+                    var rawDataId = $("#hfRawDataId").val();
+                    var description = $("#tbDescription").val();
+                    $.post(addUrl, {
+                        studentId:studentId,
+                        teachingId:teachingId,
+                        rawDataId:rawDataId,
+                        description:description,
+                    }, showDetails);
+                }
+            });
+        }
+    $("div#raw_data tr").click(function(){
+        //highlight selected
+        $(this).addClass("selected").siblings().removeClass("selected");
+
+        //get the details
+        var id=$(this).find("input").val();
+        $.get(detailsUrl,{id:id}, showDetails);
     });
 });

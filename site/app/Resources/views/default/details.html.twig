@@ -1,5 +1,8 @@
 <h2>{{raw.student.name}} ({{raw.class.code}})</h2>
 
+<input type="hidden" id="hfStudentId" value="{{raw.student.id}}"/>
+<input type="hidden" id="hfRawDataId" value="{{raw.id}}"/>
+
 <fieldset id="fsDescription">
     <legend>Description</legend>
     {{raw.description}}
@@ -18,6 +21,7 @@
             </label>
         </span>
         <span id="selectedSubjectText" style="margin-left:3em; background-color:lightblue; padding:5px; display:none;"></span>
+        <input id="hfSelectedSubject" type="hidden" value="" />
     </p>
     <p>
         <label for="tbFilter">Filtre:</label>
@@ -32,6 +36,7 @@
                     <td>{{t.subject.code}}</td>
                     <td>{{t.subject.description}}</td>
                     <td>{{t.teacher.fullname}}</td>
+                    <input type="hidden" name="subjectId" value="{{t.id}}"/>
                 </tr>
             {% endfor %}
         </table>
@@ -39,6 +44,7 @@
     <div id="pnAddDesc" >
         <label for="tbDescription">Description (optionnel)</label><br/>
         <textarea id="tbDescription" rows="5" cols="60"></textarea><br/>
+        <button id="bAdd">Ajouter</button>
     </div>
 
 </fieldset>
