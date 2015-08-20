@@ -86,6 +86,11 @@ $(function(){
             ;
             $("#tbFilter").val(initFilter);
             filter();
+
+            //setup highlight of selected type
+            $("#pnType input").change(function(){
+                $(this).parent().addClass("selected").siblings().removeClass("selected");
+            });
         });
     });
 });
