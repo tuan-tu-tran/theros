@@ -1,7 +1,9 @@
 <h2>{{raw.student.name}} ({{raw.class.code}})</h2>
 
+<button id="bTreated">Marquer comme {{raw.treated?"non-":""}}traité</button>
 <input type="hidden" id="hfStudentId" value="{{raw.student.id}}"/>
 <input type="hidden" id="hfRawDataId" value="{{raw.id}}"/>
+<input type="hidden" id="hfTreated" value="{{raw.treated?"1":""}}" />
 
 <fieldset id="fsDescription">
     <legend>Description</legend>

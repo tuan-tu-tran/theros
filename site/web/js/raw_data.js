@@ -1,6 +1,7 @@
 var detailsUrl;
 var addUrl;
 var deleteUrl;
+var treatedUrl;
 
 $(function(){
     function showDetails(data){
@@ -167,6 +168,23 @@ $(function(){
                     $("#fsWorks").slideUp();
                 }
                 tr.remove();
+            });
+        });
+
+        //setup the mark as treated button
+        $("#bTreated").click(function(){
+            var rawDataId = $("#hfRawDataId").val();
+            $.post(treatedUrl, {id:rawDataId}, function(data){
+                var treated = Boolean($("#hfTreated").val());
+                treated=!treated;
+                $("#hfTreated").val(treated?"1":"");
+                $("#bTreated").text("Marquer comme "+(treated?"non-":"")+"traité");
+                var row=$("#raw_data tr input[value='"+rawDataId+"']").parent();
+                row.removeClass(treated?"not-treated":"treated").addClass(treated?"treated":"not-treated");
+                if(treated){
+                    $("#details").empty();
+                    row.removeClass("selected");
+                }
             });
         });
     }

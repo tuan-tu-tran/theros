@@ -171,6 +171,25 @@ class DefaultController extends Controller
         } else {
             throw new \Exception("No work id provided");
         }
+    }
 
+    /**
+     * @Route("/treat", name="treat")
+     * @Method({"POST"})
+     */
+    public function toggleTreated(Request $request)
+    {
+        $id=$request->request->get("id");
+        if($id)
+        {
+            $db=$this->get("database_connection");
+            $s=$db->prepare("UPDATE raw_data SET rd_treated = !rd_treated WHERE rd_id = :id");
+            $s->bindValue("id", $id, \PDO::PARAM_INT);
+            $s->execute();
+            return new Response();
+        }
+        else{
+            throw new \Exception("no id provided");
+        }
     }
 }
