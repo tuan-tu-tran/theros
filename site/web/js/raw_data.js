@@ -142,11 +142,13 @@ $(function(){
                 var teachingId = selectedSubject;
                 var rawDataId = $("#hfRawDataId").val();
                 var description = $("#tbDescription").val();
+                var type = $("#pnType :checked").val();
                 $.post(addUrl, {
                     studentId:studentId,
                     teachingId:teachingId,
                     rawDataId:rawDataId,
                     description:description,
+                    type:type,
                 }, showDetails);
             }
         });

@@ -98,13 +98,15 @@ class DefaultController extends Controller
         $teachingId = $request->request->get("teachingId");
         $rawDataId = $request->request->get("rawDataId");
         $description = $request->request->get("description");
+        $type = $request->request->get("type");
 
         $db=$this->get("database_connection");
 
         $db->beginTransaction();
         try
         {
-            $s=$db->prepare("INSERT INTO work(w_ts_id, w_st_id, w_description) VALUES (:teachingId, :studentId, :description)");
+            $s=$db->prepare("INSERT INTO work(w_type, w_ts_id, w_st_id, w_description) VALUES (:type, :teachingId, :studentId, :description)");
+            $s->bindValue("type", $type, \PDO::PARAM_INT);
             $s->bindValue("teachingId", $teachingId, \PDO::PARAM_INT);
             $s->bindValue("studentId", $studentId, \PDO::PARAM_INT);
             $s->bindValue("description", $description, \PDO::PARAM_STR);

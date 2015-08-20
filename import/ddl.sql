@@ -182,6 +182,7 @@ DROP TABLE IF EXISTS `work`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `work` (
   `w_id` int(11) NOT NULL AUTO_INCREMENT,
+  `w_type` tinyint(4) NOT NULL COMMENT '1=TDV, 2=RN',
   `w_ts_id` int(11) NOT NULL,
   `w_st_id` int(11) NOT NULL,
   `w_description` text,
