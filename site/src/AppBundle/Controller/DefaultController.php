@@ -10,6 +10,7 @@ use AppBundle\Entity\Klass;
 use AppBundle\Entity\Student;
 use AppBundle\Entity\Subject;
 use AppBundle\Entity\Teaching;
+use AppBundle\Entity\Work;
 
 class DefaultController extends Controller
 {
@@ -50,6 +51,7 @@ class DefaultController extends Controller
     private function getDetails($id)
     {
         $db=$this->get("database_connection");
+        //get requested raw data
         $stmt=$db->prepare("
             SELECT *
             FROM raw_data
@@ -62,6 +64,28 @@ class DefaultController extends Controller
         $result=$stmt->fetch();
         $raw = RawData::GetFull($result);
 
+        //get list of current works
+        $s=$db->prepare("
+            SELECT *
+            FROM work
+            JOIN raw_data_work ON rdw_w_id = w_id
+            JOIN teacher_subject ON ts_id = w_ts_id
+            JOIN subject ON ts_sub_id = sub_id
+            JOIN schoolyear ON ts_sy_id = sy_id
+            JOIN class ON cl_id = ts_cl_id
+            JOIN teacher ON tea_id = ts_tea_id
+            JOIN student ON st_id = w_st_id
+            WHERE rdw_rd_id = :id
+        ");
+        $s->bindValue("id",$id, \PDO::PARAM_INT);
+        $s->execute();
+        $result = $s->fetchAll();
+        $works=[];
+        foreach($result as $row){
+            $works[]=Work::GetFull($row);
+        }
+
+        //get list of subjects
         $s=$db->prepare("
             SELECT *
             FROM teacher_subject
@@ -86,6 +110,7 @@ class DefaultController extends Controller
         return $this->render("default/details.html.twig", array(
             "raw"=>$raw,
             "teachings"=>$teachings,
+            "works"=>$works,
         ));
     }
 

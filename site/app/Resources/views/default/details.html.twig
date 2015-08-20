@@ -8,6 +8,29 @@
     {{raw.description}}
 </fieldset>
 
+{% if works %}
+    <fieldset id="fsWorks">
+        <legend>Travaux encodés</legend>
+        <table>
+            <tr>
+                <th>Type</th>
+                <th colspan="2">Branche</th>
+                <th>Professeur</th>
+                <th>Description</th>
+            </tr>
+            {% for w in works %}
+                <tr>
+                    <td>{{w.type}}</td>
+                    <td>{{w.teaching.subject.code}}</td>
+                    <td>{{w.teaching.subject.description}}</td>
+                    <td>{{w.teaching.teacher.fullname}}</td>
+                    <td>{{w.description}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </fieldset>
+{% endif %}
+
 <fieldset id="fsAddNew">
     <legend>Ajouter un travail</legend>
     <input type="hidden" id="hRawDesc" value="{{raw.description}}"/>
