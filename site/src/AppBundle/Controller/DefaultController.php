@@ -67,7 +67,7 @@ class DefaultController extends Controller
             JOIN teacher ON tea_id = ts_tea_id
             WHERE ts_cl_id = :cl_id
             AND sy_desc = :schoolyear
-            ORDER BY sub_code
+            ORDER BY sub_code, sub_desc, tea_fullname
         ");
         $schoolyear = $this->getParameter("schoolyear");
         $s->bindValue("cl_id", $raw->class->id, \PDO::PARAM_INT);
