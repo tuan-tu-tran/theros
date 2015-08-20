@@ -93,6 +93,46 @@ $(function(){
             $("#pnType input").change(function(){
                 $(this).parent().addClass("selected").siblings().removeClass("selected");
             });
+
+            //preselect right type if possible
+            var rawDesc=$("#hRawDesc").val();
+            rawDesc=rawDesc
+                .toLowerCase()
+                .replace(/[\.,\(\):\-0-9]/g," ")
+                .replace(/[éè]/g,"e")
+                .replace("ç","c")
+                .replace(/\s+/g," ")
+                .trim()
+            ;
+            var isRan = false;
+            var isTdv = false;
+            function matches(relist){
+                var match=false;
+                $(relist).each(function(i, re){
+                    if(re.test(rawDesc)){
+                        match=true;
+                        return false;
+                    }
+                });
+                return match;
+            };
+            var isRan = matches([
+                /\brn\b/g,
+                /\bràn\b/g,
+                /\brem [àa] n\b/g,
+                /\bremise à niveau\b/g,
+                /\brem [aà] niv\b/g,
+            ]);
+            var isTdv = matches([
+                /\btrav\b/g,
+                /\btravail( de vacances)?\b/g,
+            ]);
+            if(isRan && !isTdv)
+            {
+                $("#rbRan").click();
+            }else if (isTdv && !isRan){
+                $("#rbTdv").click();
+            }
         });
     });
 });
