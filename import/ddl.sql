@@ -149,10 +149,10 @@ CREATE TABLE `teacher_subject` (
   KEY `fk_teacher_subject_2_idx` (`ts_sub_id`),
   KEY `fk_teacher_subject_3_idx` (`ts_cl_id`),
   KEY `fk_teacher_subject_4_idx` (`ts_sy_id`),
+  CONSTRAINT `fk_teacher_subject_1` FOREIGN KEY (`ts_tea_id`) REFERENCES `teacher` (`tea_id`),
   CONSTRAINT `fk_teacher_subject_2` FOREIGN KEY (`ts_sub_id`) REFERENCES `subject` (`sub_id`),
   CONSTRAINT `fk_teacher_subject_3` FOREIGN KEY (`ts_cl_id`) REFERENCES `class` (`cl_id`),
-  CONSTRAINT `fk_teacher_subject_4` FOREIGN KEY (`ts_sy_id`) REFERENCES `schoolyear` (`sy_id`),
-  CONSTRAINT `fk_teacher_subject_1` FOREIGN KEY (`ts_tea_id`) REFERENCES `teacher` (`tea_id`)
+  CONSTRAINT `fk_teacher_subject_4` FOREIGN KEY (`ts_sy_id`) REFERENCES `schoolyear` (`sy_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
