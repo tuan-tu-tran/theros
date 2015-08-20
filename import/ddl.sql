@@ -46,6 +46,23 @@ CREATE TABLE `raw_data` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `raw_data_work`
+--
+
+DROP TABLE IF EXISTS `raw_data_work`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `raw_data_work` (
+  `rdw_rd_id` int(11) NOT NULL,
+  `rdw_w_id` int(11) NOT NULL COMMENT 'tracks which work were created by which raw_data',
+  PRIMARY KEY (`rdw_rd_id`,`rdw_w_id`),
+  KEY `fk_raw_data_work_2_idx` (`rdw_w_id`),
+  CONSTRAINT `fk_raw_data_work_1` FOREIGN KEY (`rdw_rd_id`) REFERENCES `raw_data` (`rd_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_raw_data_work_2` FOREIGN KEY (`rdw_w_id`) REFERENCES `work` (`w_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `schoolyear`
 --
 
