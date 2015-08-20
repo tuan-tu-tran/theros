@@ -155,6 +155,26 @@ CREATE TABLE `teacher_subject` (
   CONSTRAINT `fk_teacher_subject_1` FOREIGN KEY (`ts_tea_id`) REFERENCES `teacher` (`tea_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `work`
+--
+
+DROP TABLE IF EXISTS `work`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `work` (
+  `w_id` int(11) NOT NULL AUTO_INCREMENT,
+  `w_ts_id` int(11) NOT NULL,
+  `w_st_id` int(11) NOT NULL,
+  `w_description` text,
+  PRIMARY KEY (`w_id`),
+  KEY `fk_work_1_idx` (`w_ts_id`),
+  KEY `fk_work_2_idx` (`w_st_id`),
+  CONSTRAINT `fk_work_2` FOREIGN KEY (`w_st_id`) REFERENCES `student` (`st_id`),
+  CONSTRAINT `fk_work_1` FOREIGN KEY (`w_ts_id`) REFERENCES `teacher_subject` (`ts_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
