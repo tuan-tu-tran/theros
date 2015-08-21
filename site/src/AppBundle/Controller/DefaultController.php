@@ -87,29 +87,27 @@ class DefaultController extends Controller
 
         //get list of subjects
         $s=$db->prepare("
-            SELECT *
+            SELECT DISTINCT s.*
             FROM teacher_subject
-            JOIN subject ON ts_sub_id = sub_id
-            JOIN schoolyear ON ts_sy_id = sy_id
-            JOIN class ON cl_id = ts_cl_id
-            JOIN teacher ON tea_id = ts_tea_id
+            JOIN subject s ON ts_sub_id = sub_id
+            JOIN schoolyear sy ON ts_sy_id = sy_id
             WHERE ts_cl_id = :cl_id
             AND sy_desc = :schoolyear
-            ORDER BY sub_code, sub_desc, tea_fullname
+            ORDER BY sub_code, sub_desc
         ");
         $schoolyear = $this->getParameter("schoolyear");
         $s->bindValue("cl_id", $raw->class->id, \PDO::PARAM_INT);
         $s->bindValue("schoolyear", $schoolyear, \PDO::PARAM_STR);
         $s->execute();
         $result=$s->fetchAll();
-        $teachings=[];
+        $subjects=[];
         foreach($result as $row){
-            $teachings[] = Teaching::GetFull($row);
+            $subjects[] = new Subject($row);
         }
 
         return $this->render("default/details.html.twig", array(
             "raw"=>$raw,
-            "teachings"=>$teachings,
+            "subjects"=>$subjects,
             "works"=>$works,
         ));
     }

@@ -58,12 +58,11 @@
     </p>
     <div id="subject">
         <table >
-            {% for t in teachings %}
+            {% for s in subjects %}
                 <tr>
-                    <td>{{t.subject.code}}</td>
-                    <td>{{t.subject.description}}</td>
-                    <td>{{t.teacher.fullname}}</td>
-                    <input type="hidden" name="subjectId" value="{{t.id}}"/>
+                    <td>{{s.code}}</td>
+                    <td>{{s.description}}</td>
+                    <input type="hidden" name="subjectId" value="{{s.id}}"/>
                 </tr>
             {% endfor %}
         </table>
