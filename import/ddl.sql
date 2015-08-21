@@ -183,13 +183,16 @@ DROP TABLE IF EXISTS `work`;
 CREATE TABLE `work` (
   `w_id` int(11) NOT NULL AUTO_INCREMENT,
   `w_type` tinyint(4) NOT NULL COMMENT '1=TDV, 2=RN',
-  `w_ts_id` int(11) NOT NULL,
+  `w_sub_id` int(11) NOT NULL,
   `w_st_id` int(11) NOT NULL,
+  `w_tea_id` int(11) DEFAULT NULL,
   `w_description` text,
   PRIMARY KEY (`w_id`),
-  KEY `fk_work_1_idx` (`w_ts_id`),
   KEY `fk_work_2_idx` (`w_st_id`),
-  CONSTRAINT `fk_work_1` FOREIGN KEY (`w_ts_id`) REFERENCES `teacher_subject` (`ts_id`),
+  KEY `fk_work_1_idx` (`w_sub_id`),
+  KEY `fk_work_3_idx` (`w_tea_id`),
+  CONSTRAINT `fk_work_3` FOREIGN KEY (`w_tea_id`) REFERENCES `teacher` (`tea_id`),
+  CONSTRAINT `fk_work_1` FOREIGN KEY (`w_sub_id`) REFERENCES `subject` (`sub_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_work_2` FOREIGN KEY (`w_st_id`) REFERENCES `student` (`st_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
