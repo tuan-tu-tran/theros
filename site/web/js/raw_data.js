@@ -141,13 +141,13 @@ $(function(){
                 alert("Veuillez sélectionner une branche et un professeur");
             } else{
                 var studentId = $("#hfStudentId").val();
-                var teachingId = selectedSubject;
+                var subjectId = selectedSubject;
                 var rawDataId = $("#hfRawDataId").val();
                 var description = $("#tbDescription").val();
                 var type = $("#pnType :checked").val();
                 $.post(addUrl, {
                     studentId:studentId,
-                    teachingId:teachingId,
+                    subjectId:subjectId,
                     rawDataId:rawDataId,
                     description:description,
                     type:type,

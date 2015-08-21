@@ -118,7 +118,7 @@ class DefaultController extends Controller
     public function addAction(Request $request)
     {
         $studentId = $request->request->get("studentId");
-        $teachingId = $request->request->get("teachingId");
+        $subjectId = $request->request->get("subjectId");
         $rawDataId = $request->request->get("rawDataId");
         $description = $request->request->get("description");
         $type = $request->request->get("type");
@@ -128,11 +128,17 @@ class DefaultController extends Controller
         $db->beginTransaction();
         try
         {
-            $s=$db->prepare("INSERT INTO work(w_type, w_ts_id, w_st_id, w_description) VALUES (:type, :teachingId, :studentId, :description)");
+            $s=$db->prepare("
+                INSERT INTO work(w_type, w_sub_id, w_st_id, w_description, w_sy_id)
+                SELECT :type, :subjectId, :studentId, :description, sy_id
+                FROM schoolyear
+                WHERE sy_desc = :schoolyear
+            ");
             $s->bindValue("type", $type, \PDO::PARAM_INT);
-            $s->bindValue("teachingId", $teachingId, \PDO::PARAM_INT);
+            $s->bindValue("subjectId", $subjectId, \PDO::PARAM_INT);
             $s->bindValue("studentId", $studentId, \PDO::PARAM_INT);
             $s->bindValue("description", $description, \PDO::PARAM_STR);
+            $s->bindValue("schoolyear", $this->getParameter("schoolyear"), \PDO::PARAM_STR);
             $s->execute();
 
             $workId = $db->lastInsertId();
