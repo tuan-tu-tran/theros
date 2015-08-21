@@ -71,11 +71,9 @@ class DefaultController extends Controller
             SELECT *
             FROM work
             JOIN raw_data_work ON rdw_w_id = w_id
-            JOIN teacher_subject ON ts_id = w_ts_id
-            JOIN subject ON ts_sub_id = sub_id
-            JOIN schoolyear ON ts_sy_id = sy_id
-            JOIN class ON cl_id = ts_cl_id
-            JOIN teacher ON tea_id = ts_tea_id
+            JOIN subject ON w_sub_id = sub_id
+            JOIN schoolyear ON w_sy_id = sy_id
+            LEFT JOIN teacher ON tea_id = w_tea_id
             JOIN student ON st_id = w_st_id
             WHERE rdw_rd_id = :id
         ");
