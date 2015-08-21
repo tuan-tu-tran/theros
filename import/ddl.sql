@@ -36,7 +36,7 @@ CREATE TABLE `raw_data` (
   `rd_st_id` int(11) NOT NULL,
   `rd_cl_id` int(11) NOT NULL,
   `rd_desc` text NOT NULL,
-  `rd_treated` bit(1) DEFAULT b'0',
+  `rd_treated` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`rd_id`),
   UNIQUE KEY `rd_st_id_UNIQUE` (`rd_st_id`),
   KEY `fk_raw_data_2_idx` (`rd_cl_id`),
