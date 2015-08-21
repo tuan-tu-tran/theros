@@ -187,13 +187,16 @@ CREATE TABLE `work` (
   `w_st_id` int(11) NOT NULL,
   `w_tea_id` int(11) DEFAULT NULL,
   `w_description` text,
+  `w_sy_id` int(11) NOT NULL,
   PRIMARY KEY (`w_id`),
   KEY `fk_work_2_idx` (`w_st_id`),
   KEY `fk_work_1_idx` (`w_sub_id`),
   KEY `fk_work_3_idx` (`w_tea_id`),
-  CONSTRAINT `fk_work_3` FOREIGN KEY (`w_tea_id`) REFERENCES `teacher` (`tea_id`),
+  KEY `fk_work_4_idx` (`w_sy_id`),
+  CONSTRAINT `fk_work_4` FOREIGN KEY (`w_sy_id`) REFERENCES `schoolyear` (`sy_id`),
   CONSTRAINT `fk_work_1` FOREIGN KEY (`w_sub_id`) REFERENCES `subject` (`sub_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_work_2` FOREIGN KEY (`w_st_id`) REFERENCES `student` (`st_id`)
+  CONSTRAINT `fk_work_2` FOREIGN KEY (`w_st_id`) REFERENCES `student` (`st_id`),
+  CONSTRAINT `fk_work_3` FOREIGN KEY (`w_tea_id`) REFERENCES `teacher` (`tea_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
