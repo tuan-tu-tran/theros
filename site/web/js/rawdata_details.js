@@ -4,10 +4,6 @@ var deleteUrl;
 var treatedUrl;
 
 $(function(){
-    function showDetails(data){
-        //show the details
-        $("div#details").html(data);
-
         //setup click on subject
         $("#subject tr").click(function(){
             var text=$(this).find("td").map(function(){return $(this).text();}).toArray().join(" - ");
@@ -188,27 +184,4 @@ $(function(){
                 }
             });
         });
-    }
-    $("div#raw_data tr").click(function(){
-        //highlight selected
-        $(this).addClass("selected").siblings().removeClass("selected");
-
-        //truncate the table
-        $("div#raw_data").addClass("truncated");
-        this.scrollIntoView();
-
-        //get the details
-        var id=$(this).find("input").val();
-        $.post(detailsUrl,{id:id}, showDetails);
-    });
-
-    var cssTreated=$("#cssTreated");
-    $("#cbTreatedToo").change(function(){
-        var checked=$(this).is(":checked");
-        if(checked){
-            cssTreated.detach();
-        }else{
-            cssTreated.appendTo("head");
-        }
-    });
 });

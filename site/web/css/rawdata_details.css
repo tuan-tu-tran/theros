@@ -1,0 +1,84 @@
+div#subject {
+    height:9em;
+    background-color:white;
+    overflow-y:scroll;
+    border:1pt solid black;
+    display:inline-block;
+    min-width:400px;
+}
+div#subject table td{
+    padding-left:10px;
+    padding-right:10px;
+}
+div#subject table{
+    width:100%
+}
+div#subject table tr{
+    cursor:pointer;
+    background-color:white;
+}
+div#subject table tr:hover{
+    background-color:lightgray;
+}
+div#subject table tr.selected{ background-color:lightblue; }
+
+img#pbClear {
+    vertical-align:middle;
+    cursor:pointer;
+}
+
+#fsDescription {
+    background-color:yellow;
+    font-weight:bold;
+    font-style:italic;
+}
+
+#fsDescription legend{
+    font-weight:normal;
+    font-style:normal;
+}
+
+#fsAddNew {
+    background-color:#DEDEDE;
+}
+
+#pnType {
+    padding:5px;
+    background-color:lightgreen
+}
+
+#pnType label{
+    cursor:pointer;
+}
+
+#pnType label.selected{
+    background-color:lightyellow;
+}
+
+#pnAddDesc{
+    display:inline-block;
+    vertical-align:top;
+}
+
+#fsWorks{
+    background-color:#E0FFF0;
+}
+#fsWorks table th, #fsWorks table td{
+    padding-left:5px;
+    padding-right:5px;
+}
+#fsWorks table th{
+    border:1pt solid black;
+}
+#fsWorks table tr:nth-child(even){
+    background-color:#F0F0F0;
+}
+#fsWorks table tr:nth-child(odd){
+    background-color:#E0E0E0;
+}
+#fsWorks table tr.selected{
+    background-color:yellow;
+}
+#fsWorks table td.delete{
+    cursor:pointer;
+}
