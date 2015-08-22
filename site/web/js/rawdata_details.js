@@ -1,5 +1,4 @@
 var detailsUrl;
-var addUrl;
 var deleteUrl;
 var treatedUrl;
 
@@ -133,21 +132,10 @@ $(function(){
             var selectedSubject=$("#hfSelectedSubject").val();
             if($("#pnType :checked").length == 0){
                 alert("Veuillez sélectionner un type");
+                return false;
             } else if(!selectedSubject){
                 alert("Veuillez sélectionner une branche et un professeur");
-            } else{
-                var studentId = $("#hfStudentId").val();
-                var subjectId = selectedSubject;
-                var rawDataId = $("#hfRawDataId").val();
-                var description = $("#tbDescription").val();
-                var type = $("#pnType :checked").val();
-                $.post(addUrl, {
-                    studentId:studentId,
-                    subjectId:subjectId,
-                    rawDataId:rawDataId,
-                    description:description,
-                    type:type,
-                }, showDetails);
+                return false;
             }
         });
 

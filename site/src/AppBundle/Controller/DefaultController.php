@@ -112,7 +112,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/add", name="add")
+     * @Route("/add", name="rawdata_add")
      */
     public function addAction(Request $request)
     {
@@ -153,7 +153,7 @@ class DefaultController extends Controller
             $db->rollBack();
             throw $e;
         }
-        return $this->getDetails($rawDataId);
+        return $this->redirectToRoute("rawdata_details", array("id"=>$rawDataId));
     }
 
     /**
