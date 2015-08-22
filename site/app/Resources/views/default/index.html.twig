@@ -1,5 +1,16 @@
 {% extends 'base.html.twig' %}
 
+{% set stylesheets=["rawdata_list.css"] %}
+{% set javascripts=["rawdata_list.js"] %}
+
+{% block post_head %}
+    <style type="text/css" id="cssTreated">
+        #raw_data tr.treated {
+            display:none;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
     <h1>Liste brute des travaux</h1>
 
@@ -8,161 +19,14 @@
     <div id="raw_data">
         <table>
             {% for w in works %}
-                <tr class="{{w.treated? 'treated' : 'not-treated'}}">
+                <tr class="{{w.treated? 'treated' : 'not-treated'}}" onclick>
                     <td>{{w.student.name}}</td>
                     <td>{{w.class.code}}</td>
                     <td>{{w.description}}</td>
-                    <input name="id" type="hidden" value="{{w.id}}"/>
+                    <input name="url" type="hidden" value="{{path("rawdata_details", {"id":w.id})}}"/>
                 </tr>
             {% endfor%}
         </table>
     </div>
-    <div id="details">
-    </div>
 {% endblock %}
 
-{% block stylesheets %}
-<style>
-    body { background: #F5F5F5; font: 18px/1.5 sans-serif; }
-    h1, h2 { line-height: 1.2; margin: 0 0 .5em; }
-    h1 { font-size: 36px; }
-    h2 { font-size: 21px; margin-bottom: 1em; }
-    p { margin: 0 0 1em 0; }
-    a { color: #0000F0; }
-    a:hover { text-decoration: none; }
-    code { background: #F5F5F5; max-width: 100px; padding: 2px 6px; word-wrap: break-word; }
-    #wrapper { background: #FFF; margin: 1em auto; max-width: 800px; width: 95%; }
-    #container { padding: 2em; }
-    #welcome, #status { margin-bottom: 2em; }
-    #welcome h1 span { display: block; font-size: 75%; }
-    #icon-status, #icon-book { float: left; height: 64px; margin-right: 1em; margin-top: -4px; width: 64px; }
-    #icon-book { display: none; }
-
-    @media (min-width: 768px) {
-        #wrapper { width: 80%; margin: 2em auto; }
-        #icon-book { display: inline-block; }
-        #status a, #next a { display: block; }
-
-        @-webkit-keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
-        @keyframes fade-in { 0% { opacity: 0; } 100% { opacity: 1; } }
-        .sf-toolbar { opacity: 0; -webkit-animation: fade-in 1s .2s forwards; animation: fade-in 1s .2s forwards;}
-    }
-
-    div#raw_data.truncated{
-        height:10em;
-        overflow-y:scroll;
-        display:inline-block;
-    }
-
-    div#raw_data table tr {
-        cursor:pointer;
-    }
-    div#raw_data table td {
-        border:1pt solid black;
-    }
-
-    div#raw_data table tr.not-treated { background-color:LightSalmon; }
-    div#raw_data table tr.treated { background-color:LightGreen; }
-    div#raw_data table tr:hover { background-color:yellow; }
-    div#raw_data table tr.selected { background-color:LightBlue; }
-
-    div#subject {
-        height:9em;
-        background-color:white;
-        overflow-y:scroll;
-        border:1pt solid black;
-        display:inline-block;
-        min-width:400px;
-    }
-    div#subject table td{
-        padding-left:10px;
-        padding-right:10px;
-    }
-    div#subject table{
-        width:100%
-    }
-    div#subject table tr{
-        cursor:pointer;
-        background-color:white;
-    }
-    div#subject table tr:hover{
-        background-color:lightgray;
-    }
-    div#subject table tr.selected{ background-color:lightblue; }
-
-    img#pbClear {
-        vertical-align:middle;
-        cursor:pointer;
-    }
-
-    #fsDescription {
-        background-color:yellow;
-        font-weight:bold;
-        font-style:italic;
-    }
-
-    #fsDescription legend{
-        font-weight:normal;
-        font-style:normal;
-    }
-
-    #fsAddNew {
-        background-color:#DEDEDE;
-    }
-
-    #pnType {
-        padding:5px;
-        background-color:lightgreen
-    }
-
-    #pnType label{
-        cursor:pointer;
-    }
-
-    #pnType label.selected{
-        background-color:lightyellow;
-    }
-
-    #pnAddDesc{
-        display:inline-block;
-        vertical-align:top;
-    }
-
-    #fsWorks{
-        background-color:#E0FFF0;
-    }
-    #fsWorks table th, #fsWorks table td{
-        padding-left:5px;
-        padding-right:5px;
-    }
-    #fsWorks table th{
-        border:1pt solid black;
-    }
-    #fsWorks table tr:nth-child(even){
-        background-color:#F0F0F0;
-    }
-    #fsWorks table tr:nth-child(odd){
-        background-color:#E0E0E0;
-    }
-    #fsWorks table tr.selected{
-        background-color:yellow;
-    }
-    #fsWorks table td.delete{
-        cursor:pointer;
-    }
-</style>
-<style type="text/css" id="cssTreated">
-    #raw_data tr.treated {
-        display:none;
-    }
-</style>
-
-<script type="text/javascript" src="{{asset("js/jquery-2.1.4.min.js")}}"></script>
-<script type="text/javascript" src="{{asset("js/raw_data.js")}}"></script>
-<script type="text/javascript">
-    detailsUrl="{{path("details")}}";
-    addUrl="{{path("add")}}";
-    deleteUrl="{{path("delete")}}";
-    treatedUrl="{{path("treat")}}";
-</script>
-{% endblock %}

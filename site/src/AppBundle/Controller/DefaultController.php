@@ -42,11 +42,10 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/details", name="details")
+     * @Route("/details/{id}", name="rawdata_details", requirements={"id":"\d+"})
      */
-    public function detailsAction(Request $request)
+    public function detailsAction($id)
     {
-        $id=$request->request->get("id");
         return $this->getDetails($id);
     }
 
