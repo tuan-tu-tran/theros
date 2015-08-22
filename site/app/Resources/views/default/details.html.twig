@@ -33,8 +33,9 @@
                     <td>{{w.subject.description}}</td>
                     <td>{{w.description}}</td>
                     <td class="delete">
-                        <img src="{{asset("img/delete.gif")}}"/>
-                        <input type="hidden" name="workId" value="{{w.id}}"/>
+                        <form action="{{path("rawdata_delete", {"id":w.id, "rawDataId":raw.id})}}" method="POST">
+                        <input type="image"  src="{{asset("img/delete.gif")}}"/>
+                        </form>
                     </td>
                 </tr>
             {% endfor %}

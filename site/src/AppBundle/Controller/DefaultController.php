@@ -157,21 +157,16 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/delete", name="delete")
+     * @Route("/delete/{id}/{rawDataId}", name="rawdata_delete", requirements={"id":"\d+", "rawDataId":"\d+"})
      * @Method({"POST"})
      */
-    public function deleteAction(Request $request)
+    public function deleteAction($id, $rawDataId)
     {
-        $workId = $request->request->get("workId");
-        if($workId){
-            $db=$this->get("database_connection");
-            $s=$db->prepare("DELETE FROM work WHERE w_id = :workId");
-            $s->bindValue("workId", $workId, \PDO::PARAM_INT);
-            $s->execute();
-            return new Response();
-        } else {
-            throw new \Exception("No work id provided");
-        }
+        $db=$this->get("database_connection");
+        $s=$db->prepare("DELETE FROM work WHERE w_id = :id");
+        $s->bindValue("id", $id, \PDO::PARAM_INT);
+        $s->execute();
+        return $this->redirectToRoute("rawdata_details", array("id"=>$rawDataId));
     }
 
     /**

@@ -144,15 +144,6 @@ $(function(){
             $(this).parent().addClass("selected");
         }, function(){
             $(this).parent().removeClass("selected");
-        }).click(function(){
-            var id=$(this).find("[name='workId']").val();
-            var tr=$(this).parent();
-            $.post(deleteUrl,{workId:id}, function(){
-                if (tr.siblings().length == 1) {
-                    $("#fsWorks").slideUp();
-                }
-                tr.remove();
-            });
         });
 
         //setup the mark as treated button
