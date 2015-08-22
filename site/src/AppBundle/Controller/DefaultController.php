@@ -71,11 +71,9 @@ class DefaultController extends Controller
             SELECT *
             FROM work
             JOIN raw_data_work ON rdw_w_id = w_id
-            JOIN teacher_subject ON ts_id = w_ts_id
-            JOIN subject ON ts_sub_id = sub_id
-            JOIN schoolyear ON ts_sy_id = sy_id
-            JOIN class ON cl_id = ts_cl_id
-            JOIN teacher ON tea_id = ts_tea_id
+            JOIN subject ON w_sub_id = sub_id
+            JOIN schoolyear ON w_sy_id = sy_id
+            LEFT JOIN teacher ON tea_id = w_tea_id
             JOIN student ON st_id = w_st_id
             WHERE rdw_rd_id = :id
         ");
@@ -89,29 +87,27 @@ class DefaultController extends Controller
 
         //get list of subjects
         $s=$db->prepare("
-            SELECT *
+            SELECT DISTINCT s.*
             FROM teacher_subject
-            JOIN subject ON ts_sub_id = sub_id
-            JOIN schoolyear ON ts_sy_id = sy_id
-            JOIN class ON cl_id = ts_cl_id
-            JOIN teacher ON tea_id = ts_tea_id
+            JOIN subject s ON ts_sub_id = sub_id
+            JOIN schoolyear sy ON ts_sy_id = sy_id
             WHERE ts_cl_id = :cl_id
             AND sy_desc = :schoolyear
-            ORDER BY sub_code, sub_desc, tea_fullname
+            ORDER BY sub_code, sub_desc
         ");
         $schoolyear = $this->getParameter("schoolyear");
         $s->bindValue("cl_id", $raw->class->id, \PDO::PARAM_INT);
         $s->bindValue("schoolyear", $schoolyear, \PDO::PARAM_STR);
         $s->execute();
         $result=$s->fetchAll();
-        $teachings=[];
+        $subjects=[];
         foreach($result as $row){
-            $teachings[] = Teaching::GetFull($row);
+            $subjects[] = new Subject($row);
         }
 
         return $this->render("default/details.html.twig", array(
             "raw"=>$raw,
-            "teachings"=>$teachings,
+            "subjects"=>$subjects,
             "works"=>$works,
         ));
     }
@@ -122,7 +118,7 @@ class DefaultController extends Controller
     public function addAction(Request $request)
     {
         $studentId = $request->request->get("studentId");
-        $teachingId = $request->request->get("teachingId");
+        $subjectId = $request->request->get("subjectId");
         $rawDataId = $request->request->get("rawDataId");
         $description = $request->request->get("description");
         $type = $request->request->get("type");
@@ -132,11 +128,17 @@ class DefaultController extends Controller
         $db->beginTransaction();
         try
         {
-            $s=$db->prepare("INSERT INTO work(w_type, w_ts_id, w_st_id, w_description) VALUES (:type, :teachingId, :studentId, :description)");
+            $s=$db->prepare("
+                INSERT INTO work(w_type, w_sub_id, w_st_id, w_description, w_sy_id)
+                SELECT :type, :subjectId, :studentId, :description, sy_id
+                FROM schoolyear
+                WHERE sy_desc = :schoolyear
+            ");
             $s->bindValue("type", $type, \PDO::PARAM_INT);
-            $s->bindValue("teachingId", $teachingId, \PDO::PARAM_INT);
+            $s->bindValue("subjectId", $subjectId, \PDO::PARAM_INT);
             $s->bindValue("studentId", $studentId, \PDO::PARAM_INT);
             $s->bindValue("description", $description, \PDO::PARAM_STR);
+            $s->bindValue("schoolyear", $this->getParameter("schoolyear"), \PDO::PARAM_STR);
             $s->execute();
 
             $workId = $db->lastInsertId();
