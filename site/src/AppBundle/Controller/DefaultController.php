@@ -183,6 +183,7 @@ class DefaultController extends Controller
                 SELECT rd_id
                 FROM raw_data
                 JOIN student ON rd_st_id = st_id
+                JOIN class ON cl_id = rd_cl_id
                 WHERE NOT rd_treated
                 ORDER BY cl_desc, st_name
                 LIMIT 1
