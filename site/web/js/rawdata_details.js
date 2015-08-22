@@ -1,5 +1,3 @@
-var detailsUrl;
-var deleteUrl;
 var treatedUrl;
 
 $(function(){
@@ -122,9 +120,9 @@ $(function(){
         ]);
         if(isRan && !isTdv)
         {
-            $("#rbRan").click();
+            $("#rbRan").click().change();
         }else if (isTdv && !isRan){
-            $("#rbTdv").click();
+            $("#rbTdv").click().change();
         }
 
         //setup the add button
