@@ -7,10 +7,11 @@
 
 <h2>{{raw.student.name}} ({{raw.class.code}})</h2>
 
-<button id="bTreated">Marquer comme {{raw.treated?"non-":""}}traité</button>
-<input type="hidden" id="hfStudentId" value="{{raw.student.id}}"/>
-<input type="hidden" id="hfRawDataId" value="{{raw.id}}"/>
-<input type="hidden" id="hfTreated" value="{{raw.treated?"1":""}}" />
+<p>
+    <form action="{{path("rawdata_treat", {"id":raw.id, "treated":raw.treated})}}" method="POST">
+        <button id="bTreated">{{raw.treated?"Marquer comme non-traité et revenir à la liste":"Marquer comme traité et passer au suivant"}}</button>
+    </form>
+</p>
 
 <fieldset id="fsDescription">
     <legend>Description</legend>
