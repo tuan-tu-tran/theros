@@ -46,11 +46,6 @@ class DefaultController extends Controller
      */
     public function detailsAction($id)
     {
-        return $this->getDetails($id);
-    }
-
-    private function getDetails($id)
-    {
         $db=$this->get("database_connection");
         //get requested raw data
         $stmt=$db->prepare("
