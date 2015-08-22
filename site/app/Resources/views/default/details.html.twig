@@ -70,7 +70,7 @@
                 <tr>
                     <td>{{s.code}}</td>
                     <td>{{s.description}}</td>
-                    <input type="hidden" name="subjectId" value="{{s.id}}"/>
+                    <input type="radio" name="subjectId" value="{{s.id}}" style="display:none"/>
                 </tr>
             {% endfor %}
         </table>
@@ -80,7 +80,6 @@
         <textarea id="tbDescription" name="description" rows="5" cols="60"></textarea><br/>
         <button id="bAdd">Ajouter</button>
     </div>
-    <input id="hfSelectedSubject" name="subjectId" type="hidden" value="" />
     <input name="studentId" type="hidden" value="{{raw.student.id}}"/>
     <input name="rawDataId" type="hidden" value="{{raw.id}}"/>
     </form>

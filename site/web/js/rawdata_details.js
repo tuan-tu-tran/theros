@@ -6,7 +6,7 @@ $(function(){
             var text=$(this).find("td").map(function(){return $(this).text();}).toArray().join(" - ");
             $("#selectedSubjectText").text(text).show();
             $(this).addClass("selected").siblings().removeClass("selected");
-            $("#hfSelectedSubject").val($(this).find("input[name='subjectId']").val());
+            $(this).find("input")[0].checked = true;
         });
 
         //setup the filter
@@ -131,7 +131,7 @@ $(function(){
             if($("#pnType :checked").length == 0){
                 alert("Veuillez sélectionner un type");
                 return false;
-            } else if(!selectedSubject){
+            } else if($("#subject :checked").length==0){
                 alert("Veuillez sélectionner une branche et un professeur");
                 return false;
             }
