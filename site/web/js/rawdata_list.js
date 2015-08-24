@@ -6,14 +6,14 @@ $(function(){
     var cssTreated=$("#cssTreated");
     var checkbox=$("#cbTreatedToo").change(function(){
         var checked=$(this).is(":checked");
-        Cookies.set("showTreated", checked, {path:"", expires:365});
+        Cookies.set("showTreated", checked?"1":"", {path:"", expires:365});
         if(checked){
             cssTreated.detach();
         }else{
             cssTreated.appendTo("head");
         }
     });
-    checkbox[0].checked = Cookies.get("showTreated");
+    checkbox[0].checked = Boolean(Cookies.get("showTreated"));
     checkbox.change();
 
 });
