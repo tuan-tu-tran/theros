@@ -1,0 +1,17 @@
+div#raw_data.truncated{
+    height:10em;
+    overflow-y:scroll;
+    display:inline-block;
+}
+
+div#raw_data table tr {
+    cursor:pointer;
+}
+div#raw_data table td {
+    border:1pt solid black;
+}
+
+div#raw_data table tr.not-treated { background-color:LightSalmon; }
+div#raw_data table tr.treated { background-color:LightGreen; }
+div#raw_data table tr:hover { background-color:yellow; }
+div#raw_data table tr.selected { background-color:LightBlue; }

@@ -1,19 +1,12 @@
-var detailsUrl;
-var addUrl;
-var deleteUrl;
 var treatedUrl;
 
 $(function(){
-    function showDetails(data){
-        //show the details
-        $("div#details").html(data);
-
         //setup click on subject
         $("#subject tr").click(function(){
             var text=$(this).find("td").map(function(){return $(this).text();}).toArray().join(" - ");
             $("#selectedSubjectText").text(text).show();
             $(this).addClass("selected").siblings().removeClass("selected");
-            $("#hfSelectedSubject").val($(this).find("input[name='subjectId']").val());
+            $(this).find("input")[0].checked = true;
         });
 
         //setup the filter
@@ -127,9 +120,9 @@ $(function(){
         ]);
         if(isRan && !isTdv)
         {
-            $("#rbRan").click();
+            $("#rbRan").click().change();
         }else if (isTdv && !isRan){
-            $("#rbTdv").click();
+            $("#rbTdv").click().change();
         }
 
         //setup the add button
@@ -137,21 +130,10 @@ $(function(){
             var selectedSubject=$("#hfSelectedSubject").val();
             if($("#pnType :checked").length == 0){
                 alert("Veuillez sélectionner un type");
-            } else if(!selectedSubject){
+                return false;
+            } else if($("#subject :checked").length==0){
                 alert("Veuillez sélectionner une branche et un professeur");
-            } else{
-                var studentId = $("#hfStudentId").val();
-                var subjectId = selectedSubject;
-                var rawDataId = $("#hfRawDataId").val();
-                var description = $("#tbDescription").val();
-                var type = $("#pnType :checked").val();
-                $.post(addUrl, {
-                    studentId:studentId,
-                    subjectId:subjectId,
-                    rawDataId:rawDataId,
-                    description:description,
-                    type:type,
-                }, showDetails);
+                return false;
             }
         });
 
@@ -160,55 +142,5 @@ $(function(){
             $(this).parent().addClass("selected");
         }, function(){
             $(this).parent().removeClass("selected");
-        }).click(function(){
-            var id=$(this).find("[name='workId']").val();
-            var tr=$(this).parent();
-            $.post(deleteUrl,{workId:id}, function(){
-                if (tr.siblings().length == 1) {
-                    $("#fsWorks").slideUp();
-                }
-                tr.remove();
-            });
         });
-
-        //setup the mark as treated button
-        $("#bTreated").click(function(){
-            var rawDataId = $("#hfRawDataId").val();
-            $.post(treatedUrl, {id:rawDataId}, function(data){
-                var treated = Boolean($("#hfTreated").val());
-                treated=!treated;
-                $("#hfTreated").val(treated?"1":"");
-                $("#bTreated").text("Marquer comme "+(treated?"non-":"")+"traité");
-                var row=$("#raw_data tr input[value='"+rawDataId+"']").parent();
-                row.removeClass(treated?"not-treated":"treated").addClass(treated?"treated":"not-treated");
-                if(treated){
-                    $("#details").empty();
-                    row.removeClass("selected");
-                    $("div#raw_data").removeClass("truncated");
-                }
-            });
-        });
-    }
-    $("div#raw_data tr").click(function(){
-        //highlight selected
-        $(this).addClass("selected").siblings().removeClass("selected");
-
-        //truncate the table
-        $("div#raw_data").addClass("truncated");
-        this.scrollIntoView();
-
-        //get the details
-        var id=$(this).find("input").val();
-        $.post(detailsUrl,{id:id}, showDetails);
-    });
-
-    var cssTreated=$("#cssTreated");
-    $("#cbTreatedToo").change(function(){
-        var checked=$(this).is(":checked");
-        if(checked){
-            cssTreated.detach();
-        }else{
-            cssTreated.appendTo("head");
-        }
-    });
 });

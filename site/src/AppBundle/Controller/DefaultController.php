@@ -27,6 +27,7 @@ class DefaultController extends Controller
             FROM raw_data
             JOIN student ON st_id = rd_st_id
             JOIN class ON cl_id = rd_cl_id
+            ORDER BY cl_desc, st_name
         ")->fetchAll();
         $works=[];
         foreach($res as $row){
@@ -42,15 +43,9 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/details", name="details")
+     * @Route("/details/{id}", name="rawdata_details", requirements={"id":"\d+"})
      */
-    public function detailsAction(Request $request)
-    {
-        $id=$request->request->get("id");
-        return $this->getDetails($id);
-    }
-
-    private function getDetails($id)
+    public function detailsAction($id)
     {
         $db=$this->get("database_connection");
         //get requested raw data
@@ -113,7 +108,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/add", name="add")
+     * @Route("/add", name="rawdata_add")
      */
     public function addAction(Request $request)
     {
@@ -154,44 +149,49 @@ class DefaultController extends Controller
             $db->rollBack();
             throw $e;
         }
-        return $this->getDetails($rawDataId);
+        return $this->redirectToRoute("rawdata_details", array("id"=>$rawDataId));
     }
 
     /**
-     * @Route("/delete", name="delete")
+     * @Route("/delete/{id}/{rawDataId}", name="rawdata_delete", requirements={"id":"\d+", "rawDataId":"\d+"})
      * @Method({"POST"})
      */
-    public function deleteAction(Request $request)
+    public function deleteAction($id, $rawDataId)
     {
-        $workId = $request->request->get("workId");
-        if($workId){
-            $db=$this->get("database_connection");
-            $s=$db->prepare("DELETE FROM work WHERE w_id = :workId");
-            $s->bindValue("workId", $workId, \PDO::PARAM_INT);
-            $s->execute();
-            return new Response();
-        } else {
-            throw new \Exception("No work id provided");
-        }
+        $db=$this->get("database_connection");
+        $s=$db->prepare("DELETE FROM work WHERE w_id = :id");
+        $s->bindValue("id", $id, \PDO::PARAM_INT);
+        $s->execute();
+        return $this->redirectToRoute("rawdata_details", array("id"=>$rawDataId));
     }
 
     /**
-     * @Route("/treat", name="treat")
+     * @Route("/treat/{id}/{treated}", name="rawdata_treat", requirements={"id":"\d+", "treated":"(0|1)"})
      * @Method({"POST"})
      */
-    public function toggleTreated(Request $request)
+    public function treatAction($id, $treated)
     {
-        $id=$request->request->get("id");
-        if($id)
-        {
-            $db=$this->get("database_connection");
-            $s=$db->prepare("UPDATE raw_data SET rd_treated = !rd_treated WHERE rd_id = :id");
-            $s->bindValue("id", $id, \PDO::PARAM_INT);
-            $s->execute();
-            return new Response();
+        $treated=!$treated;
+        $db=$this->get("database_connection");
+        $s=$db->prepare("UPDATE raw_data SET rd_treated = :treated WHERE rd_id = :id");
+        $s->bindValue("id", $id, \PDO::PARAM_INT);
+        $s->bindValue("treated", $treated, \PDO::PARAM_BOOL);
+        $s->execute();
+
+        if($treated){
+            $result=$db->query("
+                SELECT rd_id
+                FROM raw_data
+                JOIN student ON rd_st_id = st_id
+                JOIN class ON cl_id = rd_cl_id
+                WHERE NOT rd_treated
+                ORDER BY cl_desc, st_name
+                LIMIT 1
+            ")->fetch();
+            if($result){
+                return $this->redirectToRoute("rawdata_details", array("id"=>$result["rd_id"]));
+            }
         }
-        else{
-            throw new \Exception("no id provided");
-        }
+        return $this->redirectToRoute("homepage");
     }
 }
