@@ -17,6 +17,12 @@
 {% block body %}
     <h1>Identification</h1>
 
+    {% if app.session.flashbag.get("bad_password") %}
+    <p class="error">
+        Mot de passe incorrect
+    </p>
+    {% endif %}
+
     <form method="POST">
     <p>
         <label>Entrez votre nom</label><br/>

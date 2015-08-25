@@ -26,4 +26,13 @@ abstract class Controller extends sfController
     {
         return $this->get("request_stack")->getCurrentRequest();
     }
+
+    /**
+     * Return the flash bag.
+     * Shorthand to get the session's flashbag.
+     */
+    protected function flash()
+    {
+        return $this->get("session")->getFlashBag();
+    }
 }

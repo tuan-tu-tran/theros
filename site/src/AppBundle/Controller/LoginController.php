@@ -23,6 +23,7 @@ class LoginController extends Controller
             if (!$t) {
                 throw $this->createNotFoundException("no such teacher: $id");
             } elseif ($t->password != md5($password)) {
+                $this->flash()->set("bad_password", "1");
                 return $this->redirectToRoute("login");
             } else {
                 return $this->redirectToRoute("homepage");
