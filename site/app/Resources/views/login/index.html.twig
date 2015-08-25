@@ -1,5 +1,13 @@
 {% extends "base.html.twig" %}
 
+{% block pre_head %}
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/ui-lightness/jquery-ui.css" type="text/css"/>
+    <script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+{% endblock %}
+
+{% set javascripts=["combobox.js","login.js"] %}
+{% set stylesheets=["combobox.css"] %}
+
 {% block body %}
 <h1>Identification</h1>
 
