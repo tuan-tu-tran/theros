@@ -13,7 +13,7 @@ abstract class Controller extends sfController
      * Return a database connection.
      * Shorthand to get the database_connection service
      */
-    protected function getDb()
+    protected function db()
     {
         return $this->get("database_connection");
     }
