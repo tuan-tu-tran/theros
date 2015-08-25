@@ -27,6 +27,34 @@ abstract class Controller extends sfController
         return $this->get("request_stack")->getCurrentRequest();
     }
 
+    private function log($level, $args)
+    {
+        if(count($args)>1){
+            $msg=call_user_func_array("sprintf", $args);
+        }else{
+            $msg=$format[0];
+        }
+        $this->get("logger")->$level($msg);
+    }
+
+    /**
+     * Format and log at debug level.
+     * Shorthand to format the parameters using sprintf, then logging it to the logger service at debug level.
+     */
+    protected function debug($format)
+    {
+        $this->log("debug", func_get_args());
+    }
+
+    /**
+     * Format and log at info level.
+     * Shorthand to format the parameters using sprintf, then logging it to the logger service at info level.
+     */
+    protected function info($format)
+    {
+        $this->log("info", func_get_args());
+    }
+
     /**
      * Return the flash bag.
      * Shorthand to get the session's flashbag.
