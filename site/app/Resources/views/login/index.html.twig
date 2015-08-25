@@ -17,11 +17,12 @@
 {% block body %}
     <h1>Identification</h1>
 
+    <form method="POST">
     <p>
         <label>Entrez votre nom</label><br/>
-        <select id="cbTeacher" style="display:none">
+        <select id="cbTeacher" style="display:none" name="teacherId">
             {% for t in teachers %}
-                <option>{{t.fullname}}</option>
+                <option value="{{t.id}}">{{t.fullname}}</option>
             {% endfor %}
         </select>
     </p>
@@ -32,5 +33,6 @@
     <p>
         <input id="bSubmit" type="submit" value="Envoyer" name="submit"/>
     </p>
+    </form>
 
 {% endblock %}

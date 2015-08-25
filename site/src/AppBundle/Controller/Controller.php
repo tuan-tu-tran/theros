@@ -17,4 +17,13 @@ abstract class Controller extends sfController
     {
         return $this->get("database_connection");
     }
+
+    /**
+     * Return the current request.
+     * Shorthand to call the request_stack service's getCurrentRequest.
+     */
+    protected function request()
+    {
+        return $this->get("request_stack")->getCurrentRequest();
+    }
 }
