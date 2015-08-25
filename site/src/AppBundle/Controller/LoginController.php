@@ -5,6 +5,8 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
+use AppBundle\Entity\Teacher;
+
 class LoginController extends Controller
 {
     /**
@@ -12,6 +14,10 @@ class LoginController extends Controller
      */
     public function indexAction()
     {
-        return $this->render("login/index.html.twig");
+        $db=$this->db();
+        $teachers=Teacher::GetAll($db);
+        return $this->render("login/index.html.twig", array(
+            "teachers"=>$teachers
+        ));
     }
 }

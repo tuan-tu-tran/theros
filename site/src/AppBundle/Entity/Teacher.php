@@ -23,6 +23,23 @@ class Teacher
             return NULL;
         }
     }
+
+    /**
+     * Get a list of all teachers using the given database connection
+     */
+    public static function GetAll($db)
+    {
+        $list=[];
+        $result=$db->query("
+            SELECT *
+            FROM teacher
+            ORDER BY tea_fullname
+        ")->fetchAll();
+        foreach($result as $row){
+            $list[]=self::FromRow($row);
+        }
+        return $list;
+    }
 }
 
 

@@ -3,4 +3,13 @@
 {% block body %}
 <h1>Identification</h1>
 
+<p>
+    <label>Entrez votre nom</label><br/>
+    <select id="cbTeacher">
+        {% for t in teachers %}
+        <option>{{t.fullname}}</option>
+        {% endfor %}
+    </select>
+</p>
+
 {% endblock %}
