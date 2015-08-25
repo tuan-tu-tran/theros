@@ -9,15 +9,15 @@
 {% set stylesheets=["combobox.css"] %}
 
 {% block body %}
-<h1>Identification</h1>
+    <h1>Identification</h1>
 
-<p>
-    <label>Entrez votre nom</label><br/>
-    <select id="cbTeacher">
-        {% for t in teachers %}
-        <option>{{t.fullname}}</option>
-        {% endfor %}
-    </select>
-</p>
+    <p>
+        <label>Entrez votre nom</label><br/>
+        <select id="cbTeacher" style="display:none">
+            {% for t in teachers %}
+                <option>{{t.fullname}}</option>
+            {% endfor %}
+        </select>
+    </p>
 
 {% endblock %}
