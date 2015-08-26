@@ -6,20 +6,35 @@
         <link rel="stylesheet" type="text/css" href="{{asset("css/global.css")}}"/>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         <script type="text/javascript" src="{{asset("js/jquery-2.1.4.min.js")}}"></script>
+
+        {% if jquery_ui is defined and jquery_ui %}
+            <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/ui-lightness/jquery-ui.css" type="text/css"/>
+            <script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        {% endif %}
+
         <script type="text/javascript" src="{{asset("js/global.js")}}"></script>
+
+        {% if jquery_ui is defined and jquery_ui %}
+            <script type="text/javascript" src="{{asset("js/global-ui.js")}}"></script>
+        {% endif %}
+
         {% block pre_head %}{%endblock%}
+
         {% if stylesheets is defined %}
             {% for s in stylesheets %}
                 <link rel="stylesheet" type="text/css" href="{{asset("css/"~s)}}"/>
             {% endfor %}
         {% endif %}
+
         {% if javascripts is defined %}
             {% for s in javascripts %}
                 <script type="text/javascript" src="{{asset("js/"~s)}}"></script>
             {% endfor %}
         {% endif %}
+
         {% block post_head %}
         {% endblock %}
+
     </head>
     <body>
         {% block body %}{% endblock %}
