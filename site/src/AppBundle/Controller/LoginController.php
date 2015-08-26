@@ -56,6 +56,19 @@ class LoginController extends Controller
         } else if ($user->passwordChanged) {
             return $this->redirectToRoute("homepage");
         }
-        return $this->render("login/init_password.html.twig");
+
+        $request = $this->request();
+        if ($request->getMethod() == "POST") {
+            $password = $request->request->get("password");
+            if (!$password) {
+                throw new \Exception("no password provided ".var_export($password, TRUE));
+            }
+            $user->initPassword($this->db(), $password);
+            return $this->redirectToRoute("homepage");
+        } else {
+            $this->info("%d %d %d", (bool)"0", "" == NULL, "0" == NULL);
+            return $this->render("login/init_password.html.twig");
+        }
+
     }
 }
