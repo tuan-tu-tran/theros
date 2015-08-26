@@ -16,7 +16,12 @@ class TeacherController extends Controller implements IProtected
      */
     public function indexAction()
     {
-        return $this->render("teacher/index.html.twig");
+        $teacher=$this->user();
+        $works=[];
+        return $this->render("teacher/index.html.twig", array(
+            "teacher"=>$teacher
+            , "works"=>$works
+        ));
     }
 
     /**
