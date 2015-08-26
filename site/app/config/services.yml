@@ -8,3 +8,9 @@ services:
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+
+    kernel_lister:
+        class: AppBundle\KernelListener
+        arguments: ["@router"]
+        tags:
+            - {name: kernel.event_listener, event: kernel.controller, method: "onControllerEvent"}
