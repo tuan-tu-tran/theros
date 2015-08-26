@@ -26,9 +26,15 @@ class LoginController extends Controller
                 $this->flash()->set("bad_password", "1");
                 return $this->redirectToRoute("login");
             } else {
-                return $this->redirectToRoute("homepage");
+                $this->session()->set("user", $t);
+                if ($t->passwordChanged) {
+                    return $this->redirectToRoute("homepage");
+                } else {
+                    return $this->redirectToRoute("init_password");
+                }
             }
         } else {
+            $this->session()->set("user", NULL);
             $teachers=Teacher::GetAll($db);
             return $this->render("login/index.html.twig", array(
                 "teachers"=>$teachers
@@ -44,6 +50,12 @@ class LoginController extends Controller
      */
     public function initPasswordAction()
     {
+        $user=$this->user();
+        if (!$user) {
+            return $this->redirectToRoute("login");
+        } else if ($user->passwordChanged) {
+            return $this->redirectToRoute("homepage");
+        }
         return $this->render("login/init_password.html.twig");
     }
 }

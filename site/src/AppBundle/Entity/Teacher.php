@@ -8,11 +8,13 @@ class Teacher
     public $id;
     public $fullname;
     public $password;
+    public $passwordChanged;
     public function __construct($row)
     {
         $this->id = $row["tea_id"];
         $this->fullname = $row["tea_fullname"];
         $this->password = $row["tea_password"];
+        $this->passwordChanged = (bool)$row["tea_pwd_changed"];
     }
 
     /**
