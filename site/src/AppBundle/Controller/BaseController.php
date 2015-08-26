@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller as sfController;
 /**
  * Base class for all controllers
  */
-abstract class Controller extends sfController
+abstract class BaseController extends sfController
 {
     /**
      * Return a database connection.
