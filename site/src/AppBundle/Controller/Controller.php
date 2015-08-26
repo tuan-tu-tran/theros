@@ -63,4 +63,12 @@ abstract class Controller extends sfController
     {
         return $this->get("session")->getFlashBag();
     }
+
+    /**
+     * Return the session service
+     */
+    protected function session()
+    {
+        return $this->get("session");
+    }
 }
