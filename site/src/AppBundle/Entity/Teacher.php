@@ -8,11 +8,13 @@ class Teacher
     public $id;
     public $fullname;
     public $password;
+    public $passwordChanged;
     public function __construct($row)
     {
         $this->id = $row["tea_id"];
         $this->fullname = $row["tea_fullname"];
         $this->password = $row["tea_password"];
+        $this->passwordChanged = (bool)$row["tea_pwd_changed"];
     }
 
     /**
@@ -53,6 +55,23 @@ class Teacher
         $s->bindValue("id", $id, \PDO::PARAM_INT);
         $s->execute();
         return self::FromRow($s->fetch());
+    }
+
+    /**
+     * Set the teacher's password and flag it as initd
+     */
+    public function initPassword(Db $db, $password)
+    {
+        $s=$db->prepare("
+            UPDATE teacher SET
+            tea_password = :password
+            , tea_pwd_changed = 1
+            WHERE tea_id = :id
+        ");
+        $s->bindValue("password", md5($password), \PDO::PARAM_STR);
+        $s->bindValue("id", $this->id, \PDO::PARAM_INT);
+        $s->execute();
+        $this->passwordChanged = TRUE;
     }
 }
 
