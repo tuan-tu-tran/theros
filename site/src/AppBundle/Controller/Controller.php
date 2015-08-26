@@ -14,4 +14,13 @@ abstract class Controller extends BaseController
     {
         return $this->session()->get("user");
     }
+
+    /**
+     * Return the current schoolyear (description).
+     * Shorthand to get the schoolyear parameter
+     */
+    protected function getSchoolYear()
+    {
+        return $this->getParameter("schoolyear");
+    }
 }

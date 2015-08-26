@@ -11,7 +11,41 @@
     <h2>Liste de travaux</h2>
     {% if not works %}
         <p>Il n'y a aucun travail vous concernant.</p>
+        {% if not subjects %}
+            <p>Aucun cours ne vous est associé.</p>
+        {% else %}
+            <p>Vous êtes enregistré(e) dans {{subjects|length}} cours.</p>
+            <ul>
+                {% for s in subjects %}
+                    <li>
+                        {{s.code}} - {{s.description}} :
+                        {% for c in s.classes %}
+                            {{c.code ~ (loop.last?"":", ")}}
+                        {% endfor %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     {% else %}
+        <table>
+            <tr>
+                <th>Elève</th>
+                <th>Classe</th>
+                <th>Cours</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Professeur</th>
+            </tr>
+            {% for w in works %}
+                <tr>
+                    <td>{{w.student.name}}</td>
+                    <td>{{w.class.code}}</td>
+                    <td>{{w.subject.code}} - {{w.subject.description}}</td>
+                    <td>{{w.type}}</td>
+                    <td>{{w.description}}</td>
+                    <td>{{w.teacher?w.teacher.fullname:""}} </td>
+            {% endfor %}
+        </table>
     {% endif %}
 
 {% endblock %}
