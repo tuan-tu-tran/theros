@@ -16,7 +16,7 @@ class TeacherController extends Controller implements IProtected
      */
     public function indexAction()
     {
-        return new \Symfony\Component\HttpFoundation\Response("<h1>It works!</h1>");
+        return $this->render("teacher/index.html.twig");
     }
 
     /**
