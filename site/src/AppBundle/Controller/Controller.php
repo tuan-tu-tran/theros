@@ -32,7 +32,7 @@ abstract class Controller extends sfController
         if(count($args)>1){
             $msg=call_user_func_array("sprintf", $args);
         }else{
-            $msg=$format[0];
+            $msg=$args[0];
         }
         $this->get("logger")->$level($msg);
     }
