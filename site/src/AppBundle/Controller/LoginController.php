@@ -35,4 +35,15 @@ class LoginController extends Controller
             ));
         }
     }
+
+    /**
+     * Reinitialize the teacher password upon first login
+     * or redirect to home page if not the first login
+     *
+     * @Route("/init-password", name="init_password")
+     */
+    public function initPasswordAction()
+    {
+        return $this->render("login/init_password.html.twig");
+    }
 }
