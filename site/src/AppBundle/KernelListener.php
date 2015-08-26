@@ -19,6 +19,7 @@ class KernelListener
 
     /**
      * Check if the controller requires a logged user.
+     * Also, if there is a logged user, check that he has initd his password
      */
     public function onControllerEvent(FilterControllerEvent $event)
     {
@@ -35,6 +36,12 @@ class KernelListener
                     $event->setController(function(){
                         return new RedirectResponse($this->router->generate("login"));
                     });
+                } else {
+                    if (!$user->passwordChanged && $request->get("_route") != "init_password") {
+                        $event->setController(function(){
+                            return new RedirectResponse($this->router->generate("init_password"));
+                        });
+                    }
                 }
             }
         }
