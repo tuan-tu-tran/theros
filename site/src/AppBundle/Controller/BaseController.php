@@ -5,7 +5,7 @@ namespace AppBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as sfController;
 
 /**
- * Base class for all controllers
+ * Base class for all controllers that exposes convenience methods for all sf apps
  */
 abstract class BaseController extends sfController
 {
