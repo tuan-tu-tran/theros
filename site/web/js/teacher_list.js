@@ -9,6 +9,10 @@ $(function(){
     function getText(item){
         return $(item).text();
     }
+    function onFiltered(e){
+        $("#lCountVisible").text(e.count);
+        $("#lCountTotal").text(e.total);
+    }
     function _clear()
     {
         $(this).val("");
@@ -34,7 +38,8 @@ $(function(){
             if(!enabled){
                 return;
             }
-            var terms=$(this).val().trim().split(/\s+/g);
+            var search=$(this).val().trim();
+            var terms=search.split(/\s+/g);
             terms=$(terms).filter(function(){ return this!="";}).map(function(i,s){ return RegExp(s,"i"); });
             console.log("match terms "+terms.toArray());
             var count=0;
@@ -60,6 +65,11 @@ $(function(){
                 } else {
                     $(this).hide();
                 }
+            });
+            onFiltered({
+                text:search,
+                count:count,
+                total:items.length
             });
         })
         .change(function(){
