@@ -1,5 +1,7 @@
 {% extends "base.html.twig" %}
 
+{% set stylesheets=["teacher_list.css"] %}
+
 {% block body %}
     <h1>Encodage des résultats</h1>
     <h2>Professeur: {{teacher.fullname}}</h2>
@@ -27,7 +29,7 @@
             </ul>
         {% endif %}
     {% else %}
-        <table>
+        <table id="works">
             <tr>
                 <th>Elève</th>
                 <th>Classe</th>
