@@ -1,4 +1,4 @@
-{% extends "base.html.twig" %}
+{% extends "base-ui.html.twig" %}
 
 {% set stylesheets=["teacher_list.css"] %}
 
@@ -29,6 +29,10 @@
             </ul>
         {% endif %}
     {% else %}
+        <p>
+            <label for="tbFilter">Recherche: </label>
+            <input type="text" id="tbFilter" size="40" class="custom-ui-textfield"/>
+        </p>
         <table id="works">
             <tr>
                 <th>Elève</th>
