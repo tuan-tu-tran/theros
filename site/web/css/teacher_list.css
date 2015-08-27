@@ -4,8 +4,8 @@ table#works
     border-collapse:collapse;
 }
 
-table#works tr:nth-child(odd) { background-color:#A3D1FF; }
-table#works tr:nth-child(even) { background-color:#FFFFFF; }
+table#works tr.odd { background-color:#A3D1FF; }
+table#works tr.even { background-color:#FFFFFF; }
 table#works tr:nth-child(1)
 {
     background-color:#CCCCCC;
