@@ -1,4 +1,14 @@
 $(function(){
+    $("#bClear")
+        .button({
+            icons:{primary:"ui-icon-closethick"},
+            text:false
+        })
+        .hide()
+        .click(function(){
+            $("#tbFilter").val("").focus().trigger("keyup");
+        })
+        .parent().buttonset();
     var items=$("#works tr:not(:first)");
     items.each(function(i){
         $(this).removeClass("odd even").addClass(i%2?"odd":"even");
@@ -9,9 +19,21 @@ $(function(){
     function getText(item){
         return $(item).text();
     }
+    function onSearch(e){
+        if(e.text){
+            $("#bClear").show();
+        } else {
+            $("#bClear").hide();
+        }
+    }
     function onFiltered(e){
         $("#lCountVisible").text(e.count);
         $("#lCountTotal").text(e.total);
+        if(e.count){
+            $("#works").show();
+        } else {
+            $("#works").hide();
+        }
     }
     function _clear()
     {
@@ -39,6 +61,9 @@ $(function(){
                 return;
             }
             var search=$(this).val().trim();
+            onSearch({
+                text:search
+            })
             var terms=search.split(/\s+/g);
             terms=$(terms).filter(function(){ return this!="";}).map(function(i,s){ return RegExp(s,"i"); });
             console.log("match terms "+terms.toArray());
