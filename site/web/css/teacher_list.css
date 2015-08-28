@@ -26,3 +26,20 @@ table#works td, table#works th
     padding:5px;
     border:1pt solid black;
 }
+
+#filters > div
+{
+    margin-bottom:10px;
+}
+
+#pnCount, #pnSearch
+{
+    display:inline-block;
+    background-color:lightgreen;
+    padding-left:5px;
+}
+
+#pnCount
+{
+    padding-right:5px;
+}

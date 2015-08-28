@@ -30,16 +30,22 @@
             </ul>
         {% endif %}
     {% else %}
-        <p>
-            <label for="tbFilter">Recherche: </label>
-            <input type="text" id="tbFilter" size="40" class="custom-ui-textfield"/>
-            <button id="bClear">Effacer</button>
-        </p>
-        <p>
-            <span id="lCountVisible">{{works|length}}</span>
-            travaux affichés sur
-            <span id="lCountTotal">{{works|length}}</span>
-        </p>
+        <div id="filters">
+            <div>
+                <div id="pnSearch">
+                    <label id="lSearch" for="tbFilter">Rechercher</label>
+                    <input type="text" id="tbFilter" size="40" class="custom-ui-textfield"/>
+                    <button id="bClear">Effacer</button>
+                </div>
+            </div>
+            <div>
+                <div id="pnCount">
+                    <span id="lCountVisible">{{works|length}}</span>
+                    travaux affichés sur
+                    <span id="lCountTotal">{{works|length}}</span>
+                </div>
+            </div>
+        </div>
         <table id="works">
             <tr>
                 <th>Elève</th>
