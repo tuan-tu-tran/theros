@@ -9,6 +9,10 @@ $(function(){
             $("#tbFilter").val("").focus().trigger("keyup");
         })
         .parent().buttonset();
+
+    $("#works").css("table-layout","fixed").find("th").each(function(){
+        $(this).css("width",$(this).width()+10);
+    });
     var items=$("#works tr:not(:first)");
     items.each(function(i){
         $(this).removeClass("odd even").addClass(i%2?"odd":"even");
