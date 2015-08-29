@@ -117,6 +117,7 @@ class TeacherController extends Controller implements IProtected
             return $this->render("teacher/init_password.html.twig");
         }
     }
+
     /**
      * Encode the results for a work
      *
@@ -124,6 +125,13 @@ class TeacherController extends Controller implements IProtected
      */
     public function encodeResultAction($id)
     {
-        return $this->render("teacher/encode_result.html.twig");
+        $work = Work::GetFullById($this->db(), $id);
+        if (!$work) {
+            throw $this->createNotFoundException("no such work: $id");
+        }
+
+        return $this->render("teacher/encode_result.html.twig", array(
+            "work"=>$work
+        ));
     }
 }
