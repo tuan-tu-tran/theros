@@ -14,7 +14,7 @@ use AppBundle\Entity\Subject;
 use AppBundle\Entity\Teaching;
 use AppBundle\Entity\Work;
 
-class DefaultController extends Controller
+class DefaultController extends Controller implements IProtected
 {
     /**
      * @Route("/", name="homepage")

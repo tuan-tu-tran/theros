@@ -1,0 +1,66 @@
+{% extends "base-ui.html.twig" %}
+
+{% set stylesheets=["teacher_list.css"] %}
+{% set javascripts=["teacher_list.js"] %}
+
+{% block body %}
+    <h1>Encodage des résultats</h1>
+    <h2>Professeur: {{teacher.fullname}}</h2>
+    <p>Cette page vous permet d'encoder les résultats pour les travaux de vacances ou remises à niveau concernant un élève d'une de vos classes.</p>
+    <h2>Liste de travaux</h2>
+    {% if not works %}
+        <p>Il n'y a aucun travail vous concernant.</p>
+        {% if not subjects %}
+            <p>Aucun cours ne vous est associé.</p>
+        {% else %}
+            <p>Vous êtes enregistré(e) dans {{subjects|length}} cours.</p>
+            <ul>
+                {% for s in subjects %}
+                    <li>
+                        {{s.code}} - {{s.description}} :
+                        {% for c in s.classes %}
+                            {{c.code ~ (loop.last?"":", ")}}
+                        {% endfor %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% else %}
+        <div id="filters">
+            <div>
+                <div id="pnSearch">
+                    <label id="lSearch" for="tbFilter">Rechercher</label>
+                    <input type="text" id="tbFilter" size="40" class="custom-ui-textfield"/>
+                    <button id="bClear">Effacer</button>
+                </div>
+            </div>
+            <div>
+                <div id="pnCount">
+                    <span id="lCountVisible">{{works|length}}</span>
+                    travaux affichés sur
+                    <span id="lCountTotal">{{works|length}}</span>
+                </div>
+            </div>
+        </div>
+        <table id="works">
+            <tr>
+                <th>Elève</th>
+                <th>Classe</th>
+                <th>Cours</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Professeur</th>
+            </tr>
+            {% for w in works %}
+                <tr>
+                    <td>{{w.student.name}}</td>
+                    <td>{{w.class.code}}</td>
+                    <td>{{w.subject.code}} - {{w.subject.description}}</td>
+                    <td>{{w.type}}</td>
+                    <td>{{w.description}}</td>
+                    <td>{{w.teacher?w.teacher.fullname:""}} </td>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+{% endblock %}
