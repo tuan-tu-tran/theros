@@ -1,5 +1,44 @@
-{% extends "base.html.twig" %}
+{% extends "base-ui.html.twig" %}
+
+{% set javascripts=["teacher_encode_result.js"] %}
 
 {% block body %}
-<h1>Encodage de résultat</h1>
+    <h1>{{work.student.name}} - {{work.student.class.code}}</h1>
+
+    <p>
+        {% if work.type == "TDV" %}
+            Travail de vacances
+        {% else %}
+            Remise à niveau
+        {% endif %}
+        en
+        {{work.subject.code}} - {{work.subject.description}}
+    </p>
+    <p>
+        <label for="tbDescription">Description</label><br/>
+        <textarea id="tbDescription" autocomplete="off" rows="5" cols="30" class="custom-ui-textfield" style="padding:5px">{{work.description}}</textarea>
+    </p>
+        <p id="pnHasResult">
+            {% set text = work.type == "TDV" ? ["Rendu", "Non rendu"] : ["Présent", "Absent"] %}
+            <input id="rbResult" type="radio" name="hasResult" value="1" checked/><label for="rbResult">{{text[0]}}</label>
+            <input id="rbNoResult" type="radio" name="hasResult" value="0"/><label for="rbNoResult">{{text[1]}}</label>
+        </p>
+        <p>
+        <div class="margin" id="pnResult">
+            <label>Note</label>
+            {% if work.type == "TDV" %}
+                <input id="tbResult" name="result" class="custom-ui-textfield" size="1"/>/100
+            {% else %}
+                <div style="vertical-align:middle; display:inline-block">
+                    <select id="ddlResult" name="result" class="custom-ui-select" style="width:5em">
+                        {% for res in ["A","B","C","D"] %}
+                            <option>{{res}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endif %}
+        </div>
+
+
+
 {% endblock %}

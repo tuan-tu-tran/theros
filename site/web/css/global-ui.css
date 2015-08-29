@@ -5,5 +5,11 @@
     text-align: inherit;
     outline: none;
     cursor:text;
+    background:white;
+}
+
+textarea.custom-ui-textfield
+{
+    padding:5px;
 }
 
