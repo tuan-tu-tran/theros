@@ -117,4 +117,13 @@ class TeacherController extends Controller implements IProtected
             return $this->render("teacher/init_password.html.twig");
         }
     }
+    /**
+     * Encode the results for a work
+     *
+     * @Route("/encode-result/{id}", name="encode_result", requirements={"id":"\d+"})
+     */
+    public function encodeResultAction($id)
+    {
+        return $this->render("teacher/encode_result.html.twig");
+    }
 }
