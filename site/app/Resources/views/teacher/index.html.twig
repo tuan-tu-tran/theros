@@ -6,11 +6,7 @@
 {% block body %}
     <h1>Encodage des résultats</h1>
     <h2>Professeur: {{teacher.fullname}}</h2>
-    <p>Cette page vous permet d'encoder les résultats pour les travaux de vacances ou remises à niveau:</p>
-    <ul>
-        <li>qui vous sont assignés</li>
-        <li>ou qui concernent (potentiellement) un de vos cours.</li>
-    </ul>
+    <p>Cette page vous permet d'encoder les résultats pour les travaux de vacances ou remises à niveau concernant un élève d'une de vos classes.</p>
     <h2>Liste de travaux</h2>
     {% if not works %}
         <p>Il n'y a aucun travail vous concernant.</p>
