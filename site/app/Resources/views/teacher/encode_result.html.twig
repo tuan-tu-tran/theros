@@ -11,8 +11,8 @@
     <div class="margin">
         <div class="inline valign-middle">
             <select id="ddlType" name="type" class="custom-ui-select">
-                <option value="1" {{work.type=="TDV"?"selected":""}}>Travail de vacances</option>
-                <option value="2" {{work.type=="RAN"?"selected":""}}>Remise à niveau</option>
+                <option value="1" {{isTdv?"selected":""}}>Travail de vacances</option>
+                <option value="2" {{not isTdv?"selected":""}}>Remise à niveau</option>
             </select>
         </div>
         en

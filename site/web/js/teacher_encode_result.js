@@ -29,19 +29,19 @@ $(function(){
     $("#pnHasResult").buttonset();
     showResult();
 
-    $("#rbNoResult").change(function(){
-        $("#pnResult").slideUp();
+    rbNoResult.change(function(){
+        pnResult.slideUp();
     });
-    $("#rbResult").change(function(){
-        $("#pnResult").slideDown();
+    rbResult.change(function(){
+        pnResult.slideDown();
     });
-    if ( $("#rbNoResult").is(":checked") ) {
-        $("#pnResult").hide();
+    if ( rbNoResult.is(":checked") ) {
+        pnResult.hide();
     }
     $("#bSubmit").click(function(){
-        if ( !$("#ddlType").val() ) {
+        if ( !ddlType.val() ) {
             alert("Veuillez sélectionner un type de travail");
-            $("#ddlType").focus();
+            ddlType.selectmenu("widget").focus().click();
             return false;
         }
         if ( !$("#ddlSubject").val() ) {
@@ -49,8 +49,8 @@ $(function(){
             $("#ddlSubject").selectmenu("widget").focus().click();
             return false;
         }
-        if ( $("#rbResult").is(":checked") ) {
-            if ( $("#ddlType").val() == "1" ) {
+        if ( rbResult.is(":checked") ) {
+            if ( isTdv() ) {
                 var result = $("#tbResult").val().trim();
                 if ( !result ) {
                     alert("Veuillez entrer une note");
