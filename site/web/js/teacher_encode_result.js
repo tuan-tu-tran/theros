@@ -64,7 +64,7 @@ $(function(){
                 }
             } else if ( !$("#ddlResult").val() ) {
                 alert("Veuillez sélectionner une note");
-                $("#ddlResult").focus();
+                $("#ddlResult").selectmenu("widget").focus().click();
                 return false;
             }
         }
