@@ -41,12 +41,12 @@
         <div class="margin" id="pnResult">
             <label>Note</label>
             {% if work.type == "TDV" %}
-                <input id="tbResult" name="result" class="custom-ui-textfield" size="1"/>/100
+                <input id="tbResult" name="result" class="custom-ui-textfield" size="1" value={{work.result}}/>/100
             {% else %}
                 <div style="vertical-align:middle; display:inline-block">
                     <select id="ddlResult" name="result" class="custom-ui-select">
                         {% for res in ["A","B","C","D"] %}
-                            <option>{{res}}</option>
+                            <option {{work.result == res ? "selected":""}}>{{res}}</option>
                         {% endfor %}
                     </select>
                 </div>

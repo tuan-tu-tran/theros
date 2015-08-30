@@ -13,6 +13,7 @@ class Work
     public $schoolyear;
     public $teacher;
     public $description;
+    public $result;
 
     public function __construct($row)
     {
@@ -23,6 +24,7 @@ class Work
         $this->schoolyear = $row["w_sy_id"];
         $this->teacher = $row["w_tea_id"];
         $this->description = $row["w_description"];
+        $this->result = $row["w_result"];
     }
 
     public static function GetFull($row)
