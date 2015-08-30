@@ -5,6 +5,7 @@ $(function(){
     var ddlType = $("#ddlType");
     var rbResult = $("#rbResult");
     var rbNoResult = $("#rbNoResult");
+    var ddlSubject = $("#ddlSubject");
     function isTdv() {
         return ddlType.val() == "1";
     }
@@ -44,9 +45,9 @@ $(function(){
             ddlType.selectmenu("widget").focus().click();
             return false;
         }
-        if ( !$("#ddlSubject").val() ) {
+        if ( !ddlSubject.val() ) {
             alert("Veuillez sélectionner un cours");
-            $("#ddlSubject").selectmenu("widget").focus().click();
+            ddlSubject.selectmenu("widget").focus().click();
             return false;
         }
         if ( rbResult.is(":checked") ) {
@@ -65,6 +66,13 @@ $(function(){
             } else if ( !$("#ddlResult").val() ) {
                 alert("Veuillez sélectionner une note");
                 $("#ddlResult").selectmenu("widget").focus().click();
+                return false;
+            }
+        }
+        if ( ddlSubject.val() != $("#hfOrigSubjectId").val() ) {
+            var from = $("#hfOrgSubjectDescription").val();
+            var to = ddlSubject.find(":selected").text();
+            if ( !confirm("Etes-vous sûr de vouloir changer le cours de \""+from+"\" à \""+to+"\"?") ) {
                 return false;
             }
         }
