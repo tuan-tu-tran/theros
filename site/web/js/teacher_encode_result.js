@@ -6,4 +6,7 @@ $(function(){
     $("#rbResult").change(function(){
         $("#pnResult").slideDown();
     });
+    if ( $("#rbNoResult").is(":checked") ) {
+        $("#pnResult").hide();
+    }
 });
