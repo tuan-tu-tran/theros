@@ -6,6 +6,7 @@
     <a href="javascript:window.history.back()">&lt;&lt;&lt; Revenir à la liste des travaux</a>
     <h1>{{work.student.name}} - {{work.student.class.code}}</h1>
 
+    <form method="POST">
     <div class="margin">
         <div class="inline valign-middle">
             <select id="ddlType" name="type" class="custom-ui-select">
@@ -57,4 +58,8 @@
                 </div>
             {% endif %}
         </div>
+        <p>
+            <input type="submit" id="bSubmit" value="Envoyer" class="custom-ui-button"/>
+        </p>
+    </form>
 {% endblock %}

@@ -131,6 +131,41 @@ class TeacherController extends Controller implements IProtected
         if (!$work) {
             throw $this->createNotFoundException("no such work: $id");
         }
+        $request = $this->request();
+        if ( $request->getMethod() == "POST" ) {
+            $type = $request->request->get("type");
+            $subjectId = $request->request->get("subjectId");
+            $description = $request->request->get("description");
+            $hasResult = (bool)$request->request->get("hasResult");
+
+            if ( $type != "1" && $type != "2" ) {
+                throw new \Exception("bad type: $type while updating work $id by ".$teacher->id);
+            }
+            if ( !$hasResult ) {
+                $result = NULL;
+            } else {
+                $result = $request->request->get("result");
+            }
+
+            $s = $db->prepare("
+                UPDATE work SET
+                    w_type = :type
+                    , w_sub_id = :subjectId
+                    , w_description = :description
+                    , w_tea_id = :teacherId
+                    , w_result = :result
+                    , w_has_result = 1
+                WHERE w_id = :id
+            ");
+            $s->bindValue("type", $type, \PDO::PARAM_INT);
+            $s->bindValue("subjectId", $subjectId, \PDO::PARAM_INT);
+            $s->bindValue("description", $description, \PDO::PARAM_STR);
+            $s->bindValue("teacherId", $teacher->id, \PDO::PARAM_INT);
+            $s->bindValue("result", $result, \PDO::PARAM_STR);
+            $s->bindValue("id", $id, \PDO::PARAM_INT);
+            $s->execute();
+            return $this->redirectToRoute("teacher_home");
+        }
         $schoolyear = $this->getSchoolYear();
         $classId = $work->student->class->id;
         $subjects=$teacher->getSubjects($db, $schoolyear, $classId);
