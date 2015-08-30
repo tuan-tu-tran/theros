@@ -68,4 +68,28 @@ class Work
             return NULL;
         }
     }
+
+    public function update(Db $db)
+    {
+        $s = $db->prepare("
+            UPDATE work SET
+                w_type = :type
+                , w_sub_id = :subjectId
+                , w_description = :description
+                , w_tea_id = :teacherId
+                , w_result = :result
+                , w_has_result = :hasResult
+                , w_st_id = :studentId
+            WHERE w_id = :id
+        ");
+        $s->bindValue("type", $this->type, \PDO::PARAM_INT);
+        $s->bindValue("subjectId", is_object($this->subject)? $this->subject->id : $this->subject, \PDO::PARAM_INT);
+        $s->bindValue("description", $this->description, \PDO::PARAM_STR);
+        $s->bindValue("teacherId", is_object($this->teacher)? $this->teacher->id : $this->teacher, \PDO::PARAM_INT);
+        $s->bindValue("studentId", is_object($this->student)? $this->student->id : $this->student, \PDO::PARAM_INT);
+        $s->bindValue("result", $this->result, \PDO::PARAM_STR);
+        $s->bindValue("hasResult", $this->hasResult, \PDO::PARAM_BOOL);
+        $s->bindValue("id", $this->id, \PDO::PARAM_INT);
+        $s->execute();
+    }
 }
