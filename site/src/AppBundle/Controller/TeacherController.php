@@ -89,6 +89,7 @@ class TeacherController extends Controller implements IProtected
             "teacher"=>$teacher
             , "works"=>$works
             , "subjects"=>$subjects
+            , "errors" => $this->flash()->get("errors")
         ));
     }
 
@@ -130,6 +131,11 @@ class TeacherController extends Controller implements IProtected
         $work = Work::GetFullById($db, $id);
         if (!$work) {
             throw $this->createNotFoundException("no such work: $id");
+        }
+        //if work already assigned to other teacher, show error message
+        if ( $work->teacher && $work->teacher->id != $teacher->id ) {
+            $this->flash()->add("errors", "Le travail sélectionné est déjà attribué à ".$work->teacher->fullname.".");
+            return $this->redirectToRoute("teacher_home");
         }
         $request = $this->request();
         if ( $request->getMethod() == "POST" ) {
