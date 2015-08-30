@@ -125,13 +125,22 @@ class TeacherController extends Controller implements IProtected
      */
     public function encodeResultAction($id)
     {
-        $work = Work::GetFullById($this->db(), $id);
+        $db=$this->db();
+        $teacher=$this->user();
+        $work = Work::GetFullById($db, $id);
         if (!$work) {
             throw $this->createNotFoundException("no such work: $id");
+        }
+        $schoolyear = $this->getSchoolYear();
+        $classId = $work->student->class->id;
+        $subjects=$teacher->getSubjects($db, $schoolyear, $classId);
+        if (!$subjects) {
+            throw new \Exception("teacher ".$teacher->id." does not teach in class $classId");
         }
 
         return $this->render("teacher/encode_result.html.twig", array(
             "work"=>$work
+            , "subjects" => $subjects
         ));
     }
 }

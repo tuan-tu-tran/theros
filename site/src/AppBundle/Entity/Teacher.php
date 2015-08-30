@@ -73,6 +73,15 @@ class Teacher
         $s->execute();
         $this->passwordChanged = TRUE;
     }
+
+    /**
+     * Return an array of Subject instances teached by $this Teacher in the given $schoolyear (given by description)
+     * in the given class
+     */
+    public function getSubjects(Db $db, $schoolyear, $classId)
+    {
+        return Subject::GetByTeacherAndClass($db, $schoolyear, $this->id, $classId);
+    }
 }
 
 

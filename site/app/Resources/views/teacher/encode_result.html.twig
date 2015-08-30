@@ -13,7 +13,16 @@
             </select>
         </div>
         en
-        {{work.subject.code}} - {{work.subject.description}}
+        <div class="inline valign-middle">
+            <select id="ddlSubject" name="subjectId" class="custom-ui-select">
+                {% for s in subjects %}
+                    <option
+                        value="{{s.id}}"
+                        {{s.id == work.subject.id?"selected":""}}
+                        >{{work.subject.code}} - {{work.subject.description}}</option>
+                {% endfor %}
+            </select>
+        </div>
     </div>
     <p>
         <label for="tbDescription">Description</label><br/>
