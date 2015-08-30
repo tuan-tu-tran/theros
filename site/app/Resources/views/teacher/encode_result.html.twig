@@ -35,8 +35,9 @@
     </p>
         <p id="pnHasResult">
             {% set text = work.type == "TDV" ? ["Rendu", "Non rendu"] : ["Présent", "Absent"] %}
-            <input id="rbResult" type="radio" name="hasResult" value="1" checked/><label for="rbResult">{{text[0]}}</label>
-            <input id="rbNoResult" type="radio" name="hasResult" value="0"/><label for="rbNoResult">{{text[1]}}</label>
+            {% set hasResult = not work.hasResult or work.result %}
+            <input id="rbResult" type="radio" name="hasResult" value="1" {{hasResult?"checked":""}}/><label for="rbResult">{{text[0]}}</label>
+            <input id="rbNoResult" type="radio" name="hasResult" value="0" {{not hasResult?"checked":""}}/><label for="rbNoResult">{{text[1]}}</label>
         </p>
         <p>
         <div class="margin" id="pnResult">

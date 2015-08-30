@@ -14,6 +14,7 @@ class Work
     public $teacher;
     public $description;
     public $result;
+    public $hasResult;
 
     public function __construct($row)
     {
@@ -25,6 +26,7 @@ class Work
         $this->teacher = $row["w_tea_id"];
         $this->description = $row["w_description"];
         $this->result = $row["w_result"];
+        $this->hasResult = (bool)$row["w_has_result"];
     }
 
     public static function GetFull($row)
