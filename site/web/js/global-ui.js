@@ -22,6 +22,11 @@ $(function(){
         var paddingLeft=parseFloat(innerButton.css("padding-left"));
         var total=width+paddingLeft+paddingRight + 3;
         $this.selectmenu("option","width", total);
+
+        //forward change event
+        $this.on("selectmenuchange", function(){
+            $this.trigger("change");
+        });
     })
 });
 

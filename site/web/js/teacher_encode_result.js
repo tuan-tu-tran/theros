@@ -1,5 +1,34 @@
 $(function(){
+    var pnResultRan = $("#pnResultRan").detach();
+    var pnResultTdv = $("#pnResultTdv").detach();
+    var pnResult = $("#pnResult");
+    var ddlType = $("#ddlType");
+    var rbResult = $("#rbResult");
+    var rbNoResult = $("#rbNoResult");
+    function isTdv() {
+        return ddlType.val() == "1";
+    }
+
+    function showResult() {
+        if ( isTdv() ) {
+            rbResult.button("option","label","Rendu");
+            rbNoResult.button("option","label","Non rendu");
+            pnResultTdv.appendTo(pnResult).show();
+            pnResultRan.detach();
+        } else {
+            rbResult.button("option","label","Présent");
+            rbNoResult.button("option","label","Absent");
+            pnResultRan.appendTo(pnResult).show();
+            pnResultTdv.detach();
+        }
+    }
+    ddlType.change(function(){
+        showResult();
+    });
+
     $("#pnHasResult").buttonset();
+    showResult();
+
     $("#rbNoResult").change(function(){
         $("#pnResult").slideUp();
     });
