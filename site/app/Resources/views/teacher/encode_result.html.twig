@@ -30,7 +30,7 @@
                 <input id="tbResult" name="result" class="custom-ui-textfield" size="1"/>/100
             {% else %}
                 <div style="vertical-align:middle; display:inline-block">
-                    <select id="ddlResult" name="result" class="custom-ui-select" style="width:5em">
+                    <select id="ddlResult" name="result" class="custom-ui-select">
                         {% for res in ["A","B","C","D"] %}
                             <option>{{res}}</option>
                         {% endfor %}
@@ -38,7 +38,4 @@
                 </div>
             {% endif %}
         </div>
-
-
-
 {% endblock %}
