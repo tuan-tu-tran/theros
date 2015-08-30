@@ -15,6 +15,10 @@
         en
         <div class="inline valign-middle">
             <select id="ddlSubject" name="subjectId" class="custom-ui-select">
+                {% for s in subjects if s.id == work.subject.id %}
+                {% else %}
+                    <option value="" selected disabled>Choisissez un cours ({{work.subject.code}} - {{work.subject.description}})</option>
+                {% endfor %}
                 {% for s in subjects %}
                     <option
                         value="{{s.id}}"

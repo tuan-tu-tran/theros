@@ -20,7 +20,7 @@ $(function(){
         var innerButton = button.find(".ui-selectmenu-text");
         var paddingRight=parseFloat(innerButton.css("padding-right"));
         var paddingLeft=parseFloat(innerButton.css("padding-left"));
-        var total=width+paddingLeft+paddingRight + 2;
+        var total=width+paddingLeft+paddingRight + 3;
         $this.selectmenu("option","width", total);
     })
 });
