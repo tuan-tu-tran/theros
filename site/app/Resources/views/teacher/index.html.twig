@@ -50,15 +50,18 @@
                 <th>Type</th>
                 <th>Description</th>
                 <th>Professeur</th>
+                <th>Résultat</th>
             </tr>
             {% for w in works %}
-                <tr>
+                <tr onclick="window.location.href='{{path("encode_result", {"id":w.id})}}'">
                     <td>{{w.student.name}}</td>
                     <td>{{w.class.code}}</td>
                     <td>{{w.subject.code}} - {{w.subject.description}}</td>
                     <td>{{w.type}}</td>
                     <td>{{w.description}}</td>
                     <td>{{w.teacher?w.teacher.fullname:""}} </td>
+                    <td>{{w.hasResult and not w.result ? "N/A" : w.result}}</td>
+                </tr>
             {% endfor %}
         </table>
     {% endif %}
