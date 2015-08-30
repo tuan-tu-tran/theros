@@ -10,3 +10,6 @@ p.error {
     font-weight:bold;
     color:red;
 }
+
+.inline { display:inline-block; }
+.valign-middle { vertical-align:middle; }
