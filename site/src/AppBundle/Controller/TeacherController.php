@@ -24,21 +24,27 @@ class TeacherController extends Controller implements IProtected
         $works=[];
         $db=$this->db();
         $s=$db->prepare("
-            SELECT *
-            FROM work
-            JOIN schoolyear ON sy_id = w_sy_id
-            JOIN student ON st_id = w_st_id
-            JOIN student_class ON sc_st_id = st_id AND sc_sy_id = sy_id
-            JOIN class ON cl_id = sc_cl_id
-            JOIN subject ON sub_id = w_sub_id
-            LEFT JOIN teacher ON tea_id = w_tea_id
-            JOIN teacher_subject
-                ON ts_sub_id = sub_id
-                AND ts_cl_id = cl_id
-                AND ts_sy_id = sy_id
+            SELECT DISTINCT w.*, st.*, sy.*, cl.*, sub.*, t.*
+            FROM teacher_subject
+            JOIN schoolyear sy
+                ON ts_sy_id = sy_id
+                AND sy_desc = :schoolyear
                 AND ts_tea_id = :id
-            WHERE sy_desc = :schoolyear
-            ORDER BY cl_desc, st_name
+            JOIN class cl
+                ON cl_id = ts_cl_id
+            JOIN student_class
+                ON sc_cl_id = cl_id
+                AND sc_sy_id = sy_id
+            JOIN student st
+                ON st_id = sc_st_id
+            JOIN work w
+                ON w_sy_id = sy_id
+                AND w_st_id = st_id
+            JOIN subject sub
+                ON w_sub_id = sub_id
+            LEFT JOIN teacher t
+                ON tea_id = w_tea_id
+            ORDER BY cl_desc, st_name, sub_code
         ");
         $s->bindValue("id",$teacher->id, \PDO::PARAM_INT);
         $s->bindValue("schoolyear",$this->getSchoolYear(), \PDO::PARAM_STR);
