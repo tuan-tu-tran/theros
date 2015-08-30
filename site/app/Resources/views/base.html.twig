@@ -9,7 +9,7 @@
 
         {% if jquery_ui is defined and jquery_ui %}
             <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/sunny/jquery-ui.css" type="text/css"/>
-            <script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+            <script type="text/javascript" src="{{asset("js/jquery-ui.min.js")}}"></script>
             <link rel="stylesheet" href="{{asset("css/global-ui.css")}}" type="text/css"/>
         {% endif %}
 
