@@ -35,7 +35,7 @@
     </div>
     <p>
         <label for="tbDescription">Description</label><br/>
-        <textarea id="tbDescription" autocomplete="off" rows="5" cols="30" class="custom-ui-textfield" style="padding:5px">{{work.description}}</textarea>
+        <textarea id="tbDescription" autocomplete="off" rows="5" cols="30" class="custom-ui-textfield" name="description" style="padding:5px">{{work.description}}</textarea>
     </p>
         <p id="pnHasResult">
             {% set hasResult = not work.hasResult or work.result %}
@@ -45,12 +45,12 @@
         <p>
         <div class="margin" id="pnResult">
             <label>Note</label>
-            <div class="inline valign-middle" style="display:none" id="pnResultTdv">
-                <input id="tbResult" name="result" class="custom-ui-textfield" size="1" maxlength="3" value="{{ isTdv ? work.result : ""}}" autocomplete="off"/>/100
+            <div class="inline valign-middle" style="display:none" id="pnResultRan">
+                <input id="tbResult" name="result" class="custom-ui-textfield" size="1" maxlength="3" value="{{ not isTdv ? work.result : ""}}" autocomplete="off"/>/100
             </div>
-                <div class="inline valign-middle" style="display:none" id="pnResultRan">
+                <div class="inline valign-middle" style="display:none" id="pnResultTdv">
                     <select id="ddlResult" name="result" class="custom-ui-select" >
-                        {% if not work.result or isTdv %}
+                        {% if not work.result or not isTdv %}
                             <option value="" disabled selected>Sélectionner une note</option>
                         {% endif %}
                         {% for res in ["A","B","C","D"] %}
