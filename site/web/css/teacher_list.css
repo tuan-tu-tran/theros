@@ -1,6 +1,5 @@
 table#works
 {
-    border:1pt solid black;
     border-collapse:collapse;
 }
 
@@ -11,14 +10,15 @@ table#works tr:nth-child(1)
     background-color:#CCCCCC;
 }
 
-table#works tr:nth-child(n+2)
-{
+table#works tr.editable:hover{
+    background-color:yellow;
     cursor:pointer;
 }
 
-table#works tr:nth-child(n+2):hover{
-    background-color:yellow;
-
+table#works tr.disabled{
+    cursor:default;
+    opacity:0.5;
+    background-color:lightsalmon;
 }
 
 table#works td, table#works th

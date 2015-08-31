@@ -89,6 +89,7 @@ class TeacherController extends Controller implements IProtected
             "teacher"=>$teacher
             , "works"=>$works
             , "subjects"=>$subjects
+            , "errors" => $this->flash()->get("errors")
         ));
     }
 
@@ -131,39 +132,30 @@ class TeacherController extends Controller implements IProtected
         if (!$work) {
             throw $this->createNotFoundException("no such work: $id");
         }
+        //if work already assigned to other teacher, show error message
+        if ( $work->teacher && $work->teacher->id != $teacher->id ) {
+            $this->flash()->add("errors", "Le travail sélectionné est déjà attribué à ".$work->teacher->fullname.".");
+            return $this->redirectToRoute("teacher_home");
+        }
         $request = $this->request();
         if ( $request->getMethod() == "POST" ) {
             $type = $request->request->get("type");
-            $subjectId = $request->request->get("subjectId");
-            $description = $request->request->get("description");
+            $work->subject = $request->request->get("subjectId");
+            $work->description = $request->request->get("description");
             $hasResult = (bool)$request->request->get("hasResult");
 
             if ( $type != "1" && $type != "2" ) {
                 throw new \Exception("bad type: $type while updating work $id by ".$teacher->id);
             }
+            $work->type=$type;
             if ( !$hasResult ) {
-                $result = NULL;
+                $work->result = NULL;
             } else {
-                $result = $request->request->get("result");
+                $work->result = $request->request->get("result");
             }
-
-            $s = $db->prepare("
-                UPDATE work SET
-                    w_type = :type
-                    , w_sub_id = :subjectId
-                    , w_description = :description
-                    , w_tea_id = :teacherId
-                    , w_result = :result
-                    , w_has_result = 1
-                WHERE w_id = :id
-            ");
-            $s->bindValue("type", $type, \PDO::PARAM_INT);
-            $s->bindValue("subjectId", $subjectId, \PDO::PARAM_INT);
-            $s->bindValue("description", $description, \PDO::PARAM_STR);
-            $s->bindValue("teacherId", $teacher->id, \PDO::PARAM_INT);
-            $s->bindValue("result", $result, \PDO::PARAM_STR);
-            $s->bindValue("id", $id, \PDO::PARAM_INT);
-            $s->execute();
+            $work->hasResult = TRUE;
+            $work->teacher = $teacher;
+            $work->update($db);
             return $this->redirectToRoute("teacher_home");
         }
         $schoolyear = $this->getSchoolYear();
@@ -177,5 +169,30 @@ class TeacherController extends Controller implements IProtected
             "work"=>$work
             , "subjects" => $subjects
         ));
+    }
+
+    /**
+     * Reset the result of a work (and relinquish its ownership)
+     *
+     * @Route("/reset-result/{id}", name="reset_result", requirements={"id":"\d+"})
+     * @Method({"POST"})
+     */
+    public function resetResult($id)
+    {
+        $db=$this->db();
+        $teacher=$this->user();
+        $work = Work::GetFullById($db, $id);
+        if (!$work) {
+            throw $this->createNotFoundException("no such work: $id");
+        }
+        //if work already assigned to other teacher, show error message
+        if ( $work->teacher && $work->teacher->id != $teacher->id ) {
+            $this->flash()->add("errors", "Le travail sélectionné est déjà attribué à ".$work->teacher->fullname.".");
+        }
+        $work->hasResult=FALSE;
+        $work->result=NULL;
+        $work->teacher = NULL;
+        $work->update($db);
+        return $this->redirectToRoute("teacher_home");
     }
 }

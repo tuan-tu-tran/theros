@@ -105,4 +105,15 @@ $(function(){
             console.log("change");
         })
     ;
+    $("button.delete").button().tooltip({
+        content:"Supprimer le résultat encodé",
+        items:"*"
+    }).click(function(event){
+        if ( !confirm("Etes-vous sûr de vouloir supprimer le résultat encodé pour ce travail ?") ) {
+            event.stopPropagation();
+            event.preventDefault();
+            $(this).tooltip("close");
+            return false;
+        }
+    });
 });

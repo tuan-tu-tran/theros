@@ -7,6 +7,9 @@
     <h1>Encodage des résultats</h1>
     <h2>Professeur: {{teacher.fullname}}</h2>
     <p>Cette page vous permet d'encoder les résultats pour les travaux de vacances ou remises à niveau concernant un élève d'une de vos classes.</p>
+    {% for e in errors %}
+        <p class="error">{{e}}</p>
+    {% endfor %}
     <h2>Liste de travaux</h2>
     {% if not works %}
         <p>Il n'y a aucun travail vous concernant.</p>
@@ -53,7 +56,14 @@
                 <th>Résultat</th>
             </tr>
             {% for w in works %}
-                <tr onclick="window.location.href='{{path("encode_result", {"id":w.id})}}'">
+                <tr
+                    {% if not w.teacher or w.teacher.id == teacher.id %}
+                        class="editable"
+                        onclick="window.location.href='{{path("encode_result", {"id":w.id})}}'"
+                    {%else%}
+                        class="disabled"
+                    {% endif %}
+                    >
                     <td>{{w.student.name}}</td>
                     <td>{{w.class.code}}</td>
                     <td>{{w.subject.code}} - {{w.subject.description}}</td>
@@ -61,6 +71,13 @@
                     <td>{{w.description}}</td>
                     <td>{{w.teacher?w.teacher.fullname:""}} </td>
                     <td>{{w.hasResult and not w.result ? "N/A" : w.result}}</td>
+                    {% if w.teacher and w.teacher.id == teacher.id %}
+                    <td>
+                        <form class="inline" method="POST" action="{{path("reset_result", {"id":w.id})}}">
+                            <button class="delete">Effacer</button>
+                        </form>
+                    </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </table>
