@@ -51,7 +51,7 @@ $(function(){
             return false;
         }
         if ( rbResult.is(":checked") ) {
-            if ( isTdv() ) {
+            if ( !isTdv() ) {
                 var result = $("#tbResult").val().trim();
                 if ( !result ) {
                     alert("Veuillez entrer une note");
