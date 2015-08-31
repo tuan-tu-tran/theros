@@ -1,4 +1,4 @@
-.custom-ui-textfield
+.custom-ui-textfield, .custom-ui-textarea
 {
     font-weight:normal;
     color: inherit;
@@ -8,7 +8,7 @@
     background:white;
 }
 
-textarea.custom-ui-textfield
+textarea.custom-ui-textarea
 {
     padding:5px;
 }

@@ -35,7 +35,7 @@
     </div>
     <p>
         <label for="tbDescription">Description</label><br/>
-        <textarea id="tbDescription" autocomplete="off" rows="5" cols="30" class="custom-ui-textfield" name="description" style="padding:5px">{{work.description}}</textarea>
+        <textarea id="tbDescription" autocomplete="off" rows="5" cols="30" class="custom-ui-textarea" name="description" style="padding:5px">{{work.description}}</textarea>
     </p>
         <p id="pnHasResult">
             {% set hasResult = not work.hasResult or work.result %}
