@@ -38,6 +38,7 @@ $(function(){
         } else {
             $("#works").hide();
         }
+        Cookies.set("searchFilter", e.text, {path:""});
     }
     function _clear()
     {
@@ -116,4 +117,9 @@ $(function(){
             return false;
         }
     });
+
+    var searchFilter = Cookies.get("searchFilter");
+    if(searchFilter){
+        $("#tbFilter").focus().val(searchFilter).trigger("keyup");
+    }
 });
