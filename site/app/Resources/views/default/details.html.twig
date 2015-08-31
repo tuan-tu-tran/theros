@@ -1,0 +1,93 @@
+{% extends  "base.html.twig" %}
+
+{% set stylesheets=["rawdata_details.css"] %}
+{% set javascripts=["rawdata_details.js"] %}
+
+{% block body %}
+
+<p><a href="{{path("homepage")}}">&lt;&lt;&lt; Retourner à la liste</a></p>
+
+<h2>{{raw.student.name}} ({{raw.class.code}})</h2>
+
+<p>
+    <form action="{{path("rawdata_treat", {"id":raw.id, "treated":raw.treated})}}" method="POST">
+        <button id="bTreated">{{raw.treated?"Marquer comme non-traité et revenir à la liste":"Marquer comme traité et passer au suivant"}}</button>
+    </form>
+</p>
+
+<fieldset id="fsDescription">
+    <legend>Description</legend>
+    {{raw.description}}
+</fieldset>
+
+{% if works %}
+    <fieldset id="fsWorks">
+        <legend>Travaux encodés</legend>
+        <table>
+            <tr>
+                <th style="width:2em">Type</th>
+                <th colspan="2" style="width:10em">Branche</th>
+                <th>Description</th>
+            </tr>
+            {% for w in works %}
+                <tr>
+                    <td>{{w.type}}</td>
+                    <td>{{w.subject.code}}</td>
+                    <td>{{w.subject.description}}</td>
+                    <td>{{w.description}}</td>
+                    <td class="delete">
+                        <form action="{{path("rawdata_delete", {"id":w.id, "rawDataId":raw.id})}}" method="POST">
+                        <input type="image"  src="{{asset("img/delete.gif")}}"/>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </fieldset>
+{% endif %}
+
+<fieldset id="fsAddNew">
+    <legend>Ajouter un travail</legend>
+    <form action="{{path("rawdata_add")}}" method="POST">
+    <input type="hidden" id="hRawDesc" value="{{raw.description}}"/>
+    <p>
+        <span id="pnType">
+            <label for="rbTdv">
+                <input type="radio" name="type" value="1" id="rbTdv"/>Travail de vacances
+            </label>
+            <label for="rbRan">
+                <input type="radio" name="type" value="2" id="rbRan"/>Remise à niveau
+            </label>
+        </span>
+        <span id="selectedSubjectText" style="margin-left:3em; background-color:lightblue; padding:5px; display:none;"></span>
+    </p>
+    <p>
+        <label for="tbFilter">Filtre:</label>
+        <input id="tbFilter" size="60"/>
+        <img id="pbClear" src="{{asset("img/delete.gif")}}"/>
+        <span id="lFilterCounts"></span>
+    </p>
+    <div id="subject">
+        <table >
+            {% for s in subjects %}
+                <tr>
+                    <td>{{s.code}}</td>
+                    <td>{{s.description}}
+                    <input type="radio" name="subjectId" value="{{s.id}}" style="display:none"/>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <div id="pnAddDesc" >
+        <label for="tbDescription">Description (optionnel)</label><br/>
+        <textarea id="tbDescription" name="description" rows="5" cols="60"></textarea><br/>
+        <button id="bAdd">Ajouter</button>
+    </div>
+    <input name="studentId" type="hidden" value="{{raw.student.id}}"/>
+    <input name="rawDataId" type="hidden" value="{{raw.id}}"/>
+    </form>
+
+</fieldset>
+
+{%endblock%}

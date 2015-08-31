@@ -1,0 +1,45 @@
+table#works
+{
+    border-collapse:collapse;
+}
+
+table#works tr.odd { background-color:#A3D1FF; }
+table#works tr.even { background-color:#FFFFFF; }
+table#works tr:nth-child(1)
+{
+    background-color:#CCCCCC;
+}
+
+table#works tr.editable:hover{
+    background-color:yellow;
+    cursor:pointer;
+}
+
+table#works tr.disabled{
+    cursor:default;
+    opacity:0.5;
+    background-color:lightsalmon;
+}
+
+table#works td, table#works th
+{
+    padding:5px;
+    border:1pt solid black;
+}
+
+#filters > div
+{
+    margin-bottom:10px;
+}
+
+#pnCount, #pnSearch
+{
+    display:inline-block;
+    background-color:lightgreen;
+    padding-left:5px;
+}
+
+#pnCount
+{
+    padding-right:5px;
+}

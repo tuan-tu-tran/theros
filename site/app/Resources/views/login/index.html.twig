@@ -1,0 +1,41 @@
+{% extends "base-ui.html.twig" %}
+
+{% block pre_head %}
+    <style type="text/css">
+        body{
+            display:none;
+        }
+    </style>
+{% endblock %}
+
+{% set javascripts=["combobox.js","login.js"] %}
+{% set stylesheets=["combobox.css"] %}
+
+{% block body %}
+    <h1>Identification</h1>
+
+    {% if app.session.flashbag.get("bad_password") %}
+    <p class="error">
+        Mot de passe incorrect
+    </p>
+    {% endif %}
+
+    <form method="POST">
+    <p>
+        <label>Entrez votre nom</label><br/>
+        <select id="cbTeacher" style="display:none" name="teacherId">
+            {% for t in teachers %}
+                <option value="{{t.id}}">{{t.fullname}}</option>
+            {% endfor %}
+        </select>
+    </p>
+    <p>
+        <label>Entrez votre mot de passe</label><br/>
+        <input type="password" id="tbPassword" name="password" class="ui-corner-all ui-widget-content custom-combobox-input"/>
+    </p>
+    <p>
+        <input id="bSubmit" type="submit" value="Envoyer" name="submit"/>
+    </p>
+    </form>
+
+{% endblock %}

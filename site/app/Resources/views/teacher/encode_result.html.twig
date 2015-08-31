@@ -1,0 +1,66 @@
+{% extends "base-ui.html.twig" %}
+
+{% set javascripts=["teacher_encode_result.js"] %}
+
+{% block body %}
+    {% set isTdv = work.type == "TDV" %}
+    <a href="javascript:window.history.back()">&lt;&lt;&lt; Revenir à la liste des travaux</a>
+    <h1>{{work.student.name}} - {{work.student.class.code}}</h1>
+
+    <input type="hidden" id="hfOrigSubjectId" value="{{work.subject.id}}" />
+    <input type="hidden" id="hfOrgSubjectDescription" value="{{work.subject.code}} - {{work.subject.description}}" />
+    <form method="POST">
+    <div class="margin">
+        <div class="inline valign-middle">
+            <select id="ddlType" name="type" class="custom-ui-select">
+                <option value="1" {{isTdv?"selected":""}}>Travail de vacances</option>
+                <option value="2" {{not isTdv?"selected":""}}>Remise à niveau</option>
+            </select>
+        </div>
+        en
+        <div class="inline valign-middle">
+            <select id="ddlSubject" name="subjectId" class="custom-ui-select">
+                {% for s in subjects if s.id == work.subject.id %}
+                {% else %}
+                    <option value="" selected disabled>Choisissez un cours ({{work.subject.code}} - {{work.subject.description}})</option>
+                {% endfor %}
+                {% for s in subjects %}
+                    <option
+                        value="{{s.id}}"
+                        {{s.id == work.subject.id?"selected":""}}
+                        >{{s.code}} - {{s.description}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <p>
+        <label for="tbDescription">Description</label><br/>
+        <textarea id="tbDescription" autocomplete="off" rows="5" cols="30" class="custom-ui-textfield" name="description" style="padding:5px">{{work.description}}</textarea>
+    </p>
+        <p id="pnHasResult">
+            {% set hasResult = not work.hasResult or work.result %}
+            <input id="rbResult" type="radio" name="hasResult" value="1" {{hasResult?"checked":""}}/><label for="rbResult"></label>
+            <input id="rbNoResult" type="radio" name="hasResult" value="0" {{not hasResult?"checked":""}}/><label for="rbNoResult"></label>
+        </p>
+        <p>
+        <div class="margin" id="pnResult">
+            <label>Note</label>
+            <div class="inline valign-middle" style="display:none" id="pnResultRan">
+                <input id="tbResult" name="result" class="custom-ui-textfield" size="1" maxlength="3" value="{{ not isTdv ? work.result : ""}}" autocomplete="off"/>/100
+            </div>
+                <div class="inline valign-middle" style="display:none" id="pnResultTdv">
+                    <select id="ddlResult" name="result" class="custom-ui-select" >
+                        {% if not work.result or not isTdv %}
+                            <option value="" disabled selected>Sélectionner une note</option>
+                        {% endif %}
+                        {% for res in ["A","B","C","D"] %}
+                            <option {{work.result == res ? "selected":""}}>{{res}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+        </div>
+        <p>
+            <input type="submit" id="bSubmit" value="Envoyer" class="custom-ui-button"/>
+        </p>
+    </form>
+{% endblock %}
