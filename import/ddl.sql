@@ -191,6 +191,7 @@ CREATE TABLE `work` (
   `w_sy_id` int(11) NOT NULL,
   `w_result` varchar(45) DEFAULT NULL,
   `w_has_result` tinyint(4) NOT NULL DEFAULT '0',
+  `w_remark` text,
   PRIMARY KEY (`w_id`),
   KEY `fk_work_2_idx` (`w_st_id`),
   KEY `fk_work_1_idx` (`w_sub_id`),

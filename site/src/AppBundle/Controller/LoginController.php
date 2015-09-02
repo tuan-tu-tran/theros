@@ -11,6 +11,7 @@ class LoginController extends Controller
 {
     /**
      * @Route("/login", name="login")
+     * @Route("/", name="home")
      */
     public function indexAction()
     {

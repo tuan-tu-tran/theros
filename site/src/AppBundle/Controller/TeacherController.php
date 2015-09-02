@@ -141,7 +141,7 @@ class TeacherController extends Controller implements IProtected
         if ( $request->getMethod() == "POST" ) {
             $type = $request->request->get("type");
             $work->subject = $request->request->get("subjectId");
-            $work->description = $request->request->get("description");
+            $work->remark = $request->request->get("remark");
             $hasResult = (bool)$request->request->get("hasResult");
 
             if ( $type != "1" && $type != "2" ) {
@@ -188,11 +188,13 @@ class TeacherController extends Controller implements IProtected
         //if work already assigned to other teacher, show error message
         if ( $work->teacher && $work->teacher->id != $teacher->id ) {
             $this->flash()->add("errors", "Le travail sélectionné est déjà attribué à ".$work->teacher->fullname.".");
-        }
+        } else {
         $work->hasResult=FALSE;
         $work->result=NULL;
         $work->teacher = NULL;
+        $work->remark = NULL;
         $work->update($db);
+        }
         return $this->redirectToRoute("teacher_home");
     }
 }
