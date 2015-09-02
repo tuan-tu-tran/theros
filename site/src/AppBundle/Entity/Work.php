@@ -13,6 +13,7 @@ class Work
     public $schoolyear;
     public $teacher;
     public $description;
+    public $remark;
     public $result;
     public $hasResult;
 
@@ -25,6 +26,7 @@ class Work
         $this->schoolyear = $row["w_sy_id"];
         $this->teacher = $row["w_tea_id"];
         $this->description = $row["w_description"];
+        $this->remark = $row["w_remark"];
         $this->result = $row["w_result"];
         $this->hasResult = (bool)$row["w_has_result"];
     }
@@ -80,6 +82,7 @@ class Work
                 , w_result = :result
                 , w_has_result = :hasResult
                 , w_st_id = :studentId
+                , w_remark = :remark
             WHERE w_id = :id
         ");
         $s->bindValue("type", $this->type, \PDO::PARAM_INT);
@@ -89,6 +92,7 @@ class Work
         $s->bindValue("studentId", is_object($this->student)? $this->student->id : $this->student, \PDO::PARAM_INT);
         $s->bindValue("result", $this->result, \PDO::PARAM_STR);
         $s->bindValue("hasResult", $this->hasResult, \PDO::PARAM_BOOL);
+        $s->bindValue("remark", $this->remark, \PDO::PARAM_STR);
         $s->bindValue("id", $this->id, \PDO::PARAM_INT);
         $s->execute();
     }
