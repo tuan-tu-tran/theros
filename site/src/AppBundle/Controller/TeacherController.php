@@ -141,7 +141,7 @@ class TeacherController extends Controller implements IProtected
         if ( $request->getMethod() == "POST" ) {
             $type = $request->request->get("type");
             $work->subject = $request->request->get("subjectId");
-            $work->description = $request->request->get("description");
+            $work->remark = $request->request->get("remark");
             $hasResult = (bool)$request->request->get("hasResult");
 
             if ( $type != "1" && $type != "2" ) {
