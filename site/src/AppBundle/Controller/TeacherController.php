@@ -188,11 +188,13 @@ class TeacherController extends Controller implements IProtected
         //if work already assigned to other teacher, show error message
         if ( $work->teacher && $work->teacher->id != $teacher->id ) {
             $this->flash()->add("errors", "Le travail sélectionné est déjà attribué à ".$work->teacher->fullname.".");
-        }
+        } else {
         $work->hasResult=FALSE;
         $work->result=NULL;
         $work->teacher = NULL;
+        $work->remark = NULL;
         $work->update($db);
+        }
         return $this->redirectToRoute("teacher_home");
     }
 }
