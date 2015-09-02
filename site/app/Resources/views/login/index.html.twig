@@ -12,7 +12,26 @@
 {% set stylesheets=["combobox.css"] %}
 
 {% block body %}
-    <h1>Identification</h1>
+    <h1>Theros</h1>
+
+    <p>Plate-forme d'encodage des points des Remises à Niveau et Travaux de Vacances</p>
+
+    <div class="margin">
+        <div class="inline valign-middle">
+            <img src="{{asset("img/logo.png")}}" style="height:4em" class="valign-middle" />
+        </div>
+        <div class="inline valign-middle">
+            Institut Saint-Dominique<br/>
+            Rue Caporal Claes, 38<br/>
+            1030 Scharbeek
+        </div>
+    </div>
+
+    <p>
+        Année Scolaire 2015-2016
+    </p>
+
+    <h2>Identification</h2>
 
     {% if app.session.flashbag.get("bad_password") %}
     <p class="error">
