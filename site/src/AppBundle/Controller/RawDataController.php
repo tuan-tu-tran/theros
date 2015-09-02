@@ -13,10 +13,13 @@ use AppBundle\Entity\Subject;
 use AppBundle\Entity\Teaching;
 use AppBundle\Entity\Work;
 
-class DefaultController extends Controller implements IProtected
+/**
+ * @Route("/rawdata")
+ */
+class RawDataController extends Controller implements IProtected
 {
     /**
-     * @Route("/", name="homepage")
+     * @Route("/", name="rawdata_home")
      */
     public function indexAction(Request $request)
     {
@@ -35,7 +38,7 @@ class DefaultController extends Controller implements IProtected
         }
 
         // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', array(
+        return $this->render('rawdata/index.html.twig', array(
             "works"=>$works,
             'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
         ));
@@ -99,7 +102,7 @@ class DefaultController extends Controller implements IProtected
             $subjects[] = new Subject($row);
         }
 
-        return $this->render("default/details.html.twig", array(
+        return $this->render("rawdata/details.html.twig", array(
             "raw"=>$raw,
             "subjects"=>$subjects,
             "works"=>$works,
@@ -191,6 +194,6 @@ class DefaultController extends Controller implements IProtected
                 return $this->redirectToRoute("rawdata_details", array("id"=>$result["rd_id"]));
             }
         }
-        return $this->redirectToRoute("homepage");
+        return $this->redirectToRoute("rawdata_home");
     }
 }
