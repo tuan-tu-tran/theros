@@ -143,4 +143,11 @@ $(function(){
         }, function(){
             $(this).parent().removeClass("selected");
         });
+
+        //confirm deletion of work with teacher or result
+        $("#fsWorks input.confirm_delete").click(function(){
+            if(!confirm("ATTENTION! Ce travail a déjà été noté ou est déjà associé à un professeur!\nÊtes-vous sûr de vouloir le supprimer?")){
+                return false;
+            }
+        });
 });

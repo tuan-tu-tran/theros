@@ -41,7 +41,12 @@
                     <td>{{w.hasResult?w.result|default("N/A"):""}}</td>
                     <td class="delete">
                         <form action="{{path("rawdata_delete", {"id":w.id, "rawDataId":raw.id})}}" method="POST">
-                        <input type="image"  src="{{asset("img/delete.gif")}}"/>
+                        <input type="image"
+                            {% if w.teacher or w.hasResult %}
+                                class="confirm_delete"
+                            {% endif %}
+                            src="{{asset("img/delete.gif")}}"
+                        />
                         </form>
                     </td>
                 </tr>
