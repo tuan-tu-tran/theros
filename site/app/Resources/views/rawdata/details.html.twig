@@ -28,6 +28,8 @@
                 <th style="width:2em">Type</th>
                 <th colspan="2" style="width:10em">Branche</th>
                 <th>Description</th>
+                <th>Professeur</th>
+                <th>Résultat</th>
             </tr>
             {% for w in works %}
                 <tr>
@@ -35,9 +37,16 @@
                     <td>{{w.subject.code}}</td>
                     <td>{{w.subject.description}}</td>
                     <td>{{w.description}}</td>
+                    <td>{{w.teacher?w.teacher.fullname:""}}</td>
+                    <td>{{w.hasResult?w.result|default("N/A"):""}}</td>
                     <td class="delete">
                         <form action="{{path("rawdata_delete", {"id":w.id, "rawDataId":raw.id})}}" method="POST">
-                        <input type="image"  src="{{asset("img/delete.gif")}}"/>
+                        <input type="image"
+                            {% if w.teacher or w.hasResult %}
+                                class="confirm_delete"
+                            {% endif %}
+                            src="{{asset("img/delete.gif")}}"
+                        />
                         </form>
                     </td>
                 </tr>
