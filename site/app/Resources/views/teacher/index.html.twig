@@ -70,7 +70,7 @@
                     <td>{{w.type}}</td>
                     <td>{{w.teacher?w.teacher.fullname:""}} </td>
                     <td>{{w.hasResult and not w.result ? "N/A" : w.result}}</td>
-                    <td>{{w.remark}}</td>
+                    <td>{{w.remark|nl2br}}</td>
                     {% if w.teacher and w.teacher.id == teacher.id %}
                     <td>
                         <form class="inline" method="POST" action="{{path("reset_result", {"id":w.id})}}">
