@@ -16,7 +16,7 @@ use AppBundle\Entity\Work;
 /**
  * @Route("/rawdata")
  */
-class RawDataController extends Controller implements IProtected
+class RawDataController extends Controller implements IAdminPage
 {
     /**
      * @Route("/", name="rawdata_home")
