@@ -41,6 +41,12 @@ class KernelListener
                         $event->setController(function(){
                             return new RedirectResponse($this->router->generate("init_password"));
                         });
+                    } else if(is_a($instance, "AppBundle\\Controller\\IAdminPage")){
+                        if (!$user->isAdmin()) {
+                            $event->setController(function(){
+                                return new RedirectResponse($this->router->generate("not_authorized"));
+                            });
+                        }
                     }
                 }
             }

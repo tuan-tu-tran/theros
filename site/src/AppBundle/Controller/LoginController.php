@@ -43,4 +43,13 @@ class LoginController extends Controller
             ));
         }
     }
+
+    /**
+     * The page that is redirected to in case a user tries to access an unauthorized page
+     * @Route("/not-authorized", name="not_authorized")
+     */
+    public function notAuthorizedAction()
+    {
+        return $this->render("login/not_authorized.html.twig");
+    }
 }
