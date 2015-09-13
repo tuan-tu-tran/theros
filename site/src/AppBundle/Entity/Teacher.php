@@ -9,6 +9,7 @@ class Teacher
     public $fullname;
     public $password;
     public $passwordChanged;
+    private $roles;
     public function __construct($row)
     {
         $this->id = $row["tea_id"];
@@ -82,6 +83,37 @@ class Teacher
     {
         return Subject::GetByTeacherAndClass($db, $schoolyear, $this->id, $classId);
     }
+
+    /**
+     * Populate the roles array from db.
+     * After this, hasRole can be called.
+     */
+    public function getRoles(Db $db)
+    {
+        $query= "SELECT ro_role "
+            ." FROM role "
+            ." JOIN teacher_role "
+            ." ON ro_id = tr_ro_id "
+            ." WHERE tr_tea_id = :id"
+        ;
+        $s=$db->prepare($query);
+        $s->bindValue("id", $this->id, \PDO::PARAM_INT);
+        $s->execute();
+        $result = $s->fetchAll();
+        $this->roles=array();
+        foreach ($result as $row) {
+            $this->roles[] = $row["ro_role"];
+        }
+
+        $this->_isAdmin = in_array(Role::ADMIN, $this->roles);
+    }
+
+    private $_isAdmin = FALSE;
+    public function isAdmin()
+    {
+        return $this->_isAdmin;
+    }
+
 }
 
 

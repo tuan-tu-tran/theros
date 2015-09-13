@@ -27,6 +27,7 @@ class LoginController extends Controller
                 $this->flash()->set("bad_password", "1");
                 return $this->redirectToRoute("login");
             } else {
+                $t->getRoles($db);
                 $this->session()->set("user", $t);
                 if ($t->passwordChanged) {
                     return $this->redirectToRoute("teacher_home");
