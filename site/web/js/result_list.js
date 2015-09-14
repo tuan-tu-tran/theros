@@ -7,6 +7,22 @@ $(function(){
     }).filter(":checked").each(function(){
         selectedType = this.value;
     });
+
+    var resultDoneType = null;
+    var _setResultDoneType = function(value){
+        if (value === "") {
+            resultDoneType = null;
+        } else {
+            resultDoneType = value == "1";
+        }
+    }
+    $("#rbResultDone, #rbResultNotDone, #rbResultDoneOrNot").change(function(){
+        _setResultDoneType(this.value);
+        applyFilter();
+    }).filter(":checked").each(function(){
+        _setResultDoneType(this.value);
+    });
+
     works=$(works);
     var worksById={};
     works.each(function(){
@@ -29,6 +45,7 @@ $(function(){
             var data = $this.data("work");
             var visible = true;
             visible = visible && (!selectedType || data.type == selectedType);
+            visible = visible && (resultDoneType === null || data.hasResult == resultDoneType);
             if(visible) {
                 $this.show();
                 $this.removeClass("even odd").addClass(curClass);

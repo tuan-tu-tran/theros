@@ -16,9 +16,9 @@
     Résultat:
 
     <div class="inline custom-ui-buttonset">
-        <input type="radio" id="rbResultDone" name="rbResultDone" /><label for="rbResultDone">Encodé</label>
-        <input type="radio" id="rbResultNotDone" name="rbResultDone" /><label for="rbResultNotDone">Non-encodé</label>
-        <input type="radio" id="rbResultDoneOrNot" name="rbResultDone" checked /><label for="rbResultDoneOrNot">Tous</label>
+        <input type="radio" id="rbResultDone" name="rbResultDone" value="1"/><label for="rbResultDone">Encodé</label>
+        <input type="radio" id="rbResultNotDone" name="rbResultDone" value="0" /><label for="rbResultNotDone">Non-encodé</label>
+        <input type="radio" id="rbResultDoneOrNot" name="rbResultDone" value="" checked /><label for="rbResultDoneOrNot">Tous</label>
     </div>
 
     <div class="inline custom-ui-buttonset">
@@ -60,6 +60,7 @@
     {% set arr={
         id:w.id,
         type:w.type
+        , hasResult:w.hasResult
     } %}
     {% set worksArray = worksArray|merge([arr]) %}
 {% endfor %}
