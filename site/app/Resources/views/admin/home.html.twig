@@ -1,6 +1,17 @@
-{% extends "base.html.twig" %}
+{% extends "base-ui.html.twig" %}
+
+{% set stylesheets=["admin_home.css"] %}
+{% set javascripts=["admin_home.js"] %}
 
 {% block body %}
 
+<p><a href="{{path("login")}}">&lt;&lt;&lt; Retour à la page de login</a></p>
+
 <h1>Menu principal</h1>
+
+<div id="menu">
+    <div><a href="{{path("teacher_home")}}">Encodage de résultats</a></div>
+    <div><a href="{{path("rawdata_home")}}">Réencodage de travaux bruts</a></div>
+</div>
+
 {% endblock %}
