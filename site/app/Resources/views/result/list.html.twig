@@ -4,4 +4,28 @@
 
 <h1>Consultation de résultats encodés</h1>
 
+<table class="standardTable zebra">
+    <thead>
+        <tr>
+            <th>Elève</th>
+            <th>Classe</th>
+            <th>Type</th>
+            <th>Cours</th>
+            <th>Professeur</th>
+            <th>Résultat</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for w in works %}
+        <tr>
+            <td>{{w.student.name}}</td>
+            <td>{{w.student.class.code}}</td>
+            <td>{{w.type}}</td>
+            <td>{{w.subject.code}} - {{w.subject.description}}</td>
+            <td>{{w.teacher?w.teacher.fullname:""}}</td>
+            <td>{{w.hasResult? w.result|default("N/A"):""}}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+
 {% endblock %}
