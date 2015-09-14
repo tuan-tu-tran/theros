@@ -13,3 +13,16 @@ p.error {
 
 .inline { display:inline-block; }
 .valign-middle { vertical-align:middle; }
+
+table.standardTable {
+    border-collapse:collapse
+}
+
+table.standardTable tr:nth-child(1) {
+    background-color:#cccccc
+}
+
+table.standardTable td, table.standardTable th {
+    border: 1pt solid black;
+    padding: 5px;
+}

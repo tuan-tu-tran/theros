@@ -1,0 +1,26 @@
+{% extends "admin/layout.html.twig" %}
+
+{% block content %}
+
+<h1>Gestion des utilisateurs</h1>
+
+<table class="standardTable">
+    <tr>
+        <th>Nom</th>
+        <th>Admin</th>
+    </tr>
+    {% for t in teachers %}
+        <tr>
+            <td>{{t.fullname}}</td>
+            <td>
+                <input type="checkbox"
+                {% if t.isAdmin() %}
+                    checked
+                {% endif %}
+                />
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
