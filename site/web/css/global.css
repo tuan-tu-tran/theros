@@ -18,7 +18,17 @@ table.standardTable {
     border-collapse:collapse
 }
 
-table.standardTable tr:nth-child(1) {
+table.standardTable.zebra tr:nth-child(odd) {
+    background-color:white;
+}
+
+table.standardTable.zebra tr:nth-child(even) {
+    background-color:#a3d1ff;
+}
+
+table.standardTable tr:nth-child(1)
+, table.standardTable.zebra tr:nth-child(1)
+{
     background-color:#cccccc
 }
 
