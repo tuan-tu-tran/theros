@@ -22,6 +22,8 @@ $(function(){
     });
 
     applyFilter=function(){
+        var curClass="even";
+        var otherClass="odd";
         rows.each(function(){
             var $this=$(this);
             var data = $this.data("work");
@@ -29,6 +31,10 @@ $(function(){
             visible = visible && (!selectedType || data.type == selectedType);
             if(visible) {
                 $this.show();
+                $this.removeClass("even odd").addClass(curClass);
+                var tmp = curClass;
+                curClass = otherClass;
+                otherClass = tmp;
             } else {
                 $this.hide();
             }
