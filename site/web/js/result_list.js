@@ -8,12 +8,18 @@ $(function(){
         selectedType = this.value;
     });
 
+    var pnHasResult=$("#pnHasResult");
     var resultDoneType = null;
     var _setResultDoneType = function(value){
         if (value === "") {
             resultDoneType = null;
         } else {
             resultDoneType = value == "1";
+        }
+        if(resultDoneType === false) {
+            pnHasResult.hide();
+        } else {
+            pnHasResult.show();
         }
     }
     $("#rbResultDone, #rbResultNotDone, #rbResultDoneOrNot").change(function(){
