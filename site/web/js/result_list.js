@@ -51,9 +51,11 @@ $(function(){
         $this.data("work", data);
     });
 
+    var lCount = $("#lCount");
     applyFilter=function(){
         var curClass="even";
         var otherClass="odd";
+        var visibleCount = 0;
         rows.each(function(){
             var $this=$(this);
             var data = $this.data("work");
@@ -81,10 +83,12 @@ $(function(){
                 var tmp = curClass;
                 curClass = otherClass;
                 otherClass = tmp;
+                ++visibleCount;
             } else {
                 $this.hide();
             }
         });
+        lCount.text(visibleCount);
     }
 
     $("#gvResult").css("table-layout","fixed").find("thead th").each(function(){
