@@ -18,16 +18,15 @@ table.standardTable {
     border-collapse:collapse
 }
 
-table.standardTable.zebra tr:nth-child(odd) {
+table.standardTable.zebra tbody tr:nth-child(odd) {
     background-color:white;
 }
 
-table.standardTable.zebra tr:nth-child(even) {
+table.standardTable.zebra tbody tr:nth-child(even) {
     background-color:#a3d1ff;
 }
 
-table.standardTable tr:nth-child(1)
-, table.standardTable.zebra tr:nth-child(1)
+table.standardTable thead tr
 {
     background-color:#cccccc
 }
@@ -35,4 +34,9 @@ table.standardTable tr:nth-child(1)
 table.standardTable td, table.standardTable th {
     border: 1pt solid black;
     padding: 5px;
+}
+
+table.standardTable.highlightable tbody tr:hover {
+    cursor:pointer;
+    background-color:yellow;
 }

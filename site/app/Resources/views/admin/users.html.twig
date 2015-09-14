@@ -7,11 +7,13 @@
 
 <h1>Gestion des utilisateurs</h1>
 
-<table class="standardTable zebra">
-    <tr>
-        <th>Nom</th>
-        <th>Admin</th>
-    </tr>
+<table class="standardTable zebra highlightable">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Admin</th>
+        </tr>
+    </thead>
     {% for t in teachers %}
         <tr>
             <td>{{t.fullname}}</td>
