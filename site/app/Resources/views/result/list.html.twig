@@ -1,14 +1,16 @@
 {% extends "admin/layout.html.twig" %}
 
+{% set javascripts=["result_list.js"] %}
+
 {% block content %}
 
 <h1>Consultation de résultats encodés</h1>
 
 <div class="margin custom-ui-buttonset">
     Type:
-    <input type="radio" id="rbTypeTdv" name="rbType" /><label for="rbTypeTdv">TDV</label>
-    <input type="radio" id="rbTypeRan" name="rbType" /><label for="rbTypeRan">RAN</label>
-    <input type="radio" id="rbTypeAll" name="rbType" checked /><label for="rbTypeAll">Tous</label>
+    <input type="radio" id="rbTypeTdv" name="rbType" value="TDV"/><label for="rbTypeTdv">TDV</label>
+    <input type="radio" id="rbTypeRan" name="rbType" value="RAN"/><label for="rbTypeRan">RAN</label>
+    <input type="radio" id="rbTypeAll" name="rbType" value="" checked /><label for="rbTypeAll">Tous</label>
 </div>
 <div class="margin">
     Résultat:
@@ -46,8 +48,24 @@
             <td>{{w.subject.code}} - {{w.subject.description}}</td>
             <td>{{w.teacher?w.teacher.fullname:""}}</td>
             <td>{{w.hasResult? w.result|default("N/A"):""}}</td>
+            <input type="hidden" name="hfWorkId" value="{{w.id}}"/>
         </tr>
     {% endfor %}
     </tbody>
 
+{% endblock %}
+
+{% set worksArray={} %}
+{% for w in works %}
+    {% set arr={
+        id:w.id,
+        type:w.type
+    } %}
+    {% set worksArray = worksArray|merge([arr]) %}
+{% endfor %}
+
+{% block post_head %}
+    <script type="text/javascript">
+        var works={{worksArray|json_encode|raw}};
+    </script>
 {% endblock %}
