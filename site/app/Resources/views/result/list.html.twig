@@ -22,9 +22,9 @@
     </div>
 
     <div class="inline custom-ui-buttonset">
-        <input type="radio" id="rbResultYes" name="rbResult" /><label for="rbResultYes">Présent/Rendu</label>
-        <input type="radio" id="rbResultNo" name="rbResult" /><label for="rbResultNo">Absent/Non-rendu</label>
-        <input type="radio" id="rbResultAll" name="rbResult" checked /><label for="rbResultAll">Tous</label>
+        <input type="radio" id="rbResultYes" name="rbResult" value="1"/><label for="rbResultYes">Présent/Rendu</label>
+        <input type="radio" id="rbResultNo" name="rbResult" value="0"/><label for="rbResultNo">Absent/Non-rendu</label>
+        <input type="radio" id="rbResultAll" name="rbResult" value=""checked /><label for="rbResultAll">Tous</label>
     </div>
 
 </diV>
@@ -61,6 +61,7 @@
         id:w.id,
         type:w.type
         , hasResult:w.hasResult
+        , result:w.result
     } %}
     {% set worksArray = worksArray|merge([arr]) %}
 {% endfor %}

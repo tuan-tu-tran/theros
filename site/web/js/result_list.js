@@ -23,6 +23,20 @@ $(function(){
         _setResultDoneType(this.value);
     });
 
+    var hasResultType;
+    function _setHasResultType(value){
+        if (value === "") {
+            hasResultType = null;
+        } else {
+            hasResultType = value == "1";
+        }
+    }
+    $("#rbResultYes, #rbResultNo, #rbResultAll").change(function(){
+        _setHasResultType(this.value);
+        applyFilter();
+    }).filter(":checked").each(function(){
+        _setHasResultType(this.value);
+    });
     works=$(works);
     var worksById={};
     works.each(function(){
@@ -46,6 +60,21 @@ $(function(){
             var visible = true;
             visible = visible && (!selectedType || data.type == selectedType);
             visible = visible && (resultDoneType === null || data.hasResult == resultDoneType);
+            if (visible && hasResultType !== null) {
+                if (resultDoneType === null) {
+                    if (hasResultType) {
+                        visible = !data.hasResult || data.result;
+                    } else {
+                        visible = !data.hasResult || !data.result;
+                    }
+                } else if (resultDoneType) {
+                    if (hasResultType) {
+                        visible = data.result;
+                    } else {
+                        visible = !data.result;
+                    }
+                }
+            }
             if(visible) {
                 $this.show();
                 $this.removeClass("even odd").addClass(curClass);
