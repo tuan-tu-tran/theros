@@ -30,7 +30,7 @@ class LoginController extends Controller
                 $t->getRoles($db);
                 $this->session()->set("user", $t);
                 if ($t->passwordChanged) {
-                    return $this->redirectToRoute("teacher_home");
+                    return $this->redirectToRoute(HomeController::GetHomeRoute($t));
                 } else {
                     return $this->redirectToRoute("init_password");
                 }
