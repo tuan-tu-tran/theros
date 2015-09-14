@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'admin/layout.html.twig' %}
 
 {% set stylesheets=["rawdata_list.css"] %}
 {% set javascripts=["rawdata_list.js","js.cookie-2.0.3.min.js"] %}
@@ -11,9 +11,7 @@
     </style>
 {% endblock %}
 
-{% block body %}
-
-    <a href="{{path("admin_home")}}">&lt;&lt;&lt; Retour au menu principal</a>
+{% block content %}
 
     <h1>Liste brute des travaux</h1>
 
