@@ -27,4 +27,7 @@ $(function(){
             }
         });
     });
+    $("tbody tr").click(function(){
+        $(this).find(".switch-button-background").click();
+    });
 });
