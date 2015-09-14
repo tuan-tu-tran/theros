@@ -87,5 +87,9 @@ $(function(){
         });
     }
 
+    $("#gvResult").css("table-layout","fixed").find("thead th").each(function(){
+        $(this).css("width",$(this).width()+10);
+    });
+
     applyFilter();
 });
