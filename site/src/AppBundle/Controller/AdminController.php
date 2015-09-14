@@ -21,7 +21,7 @@ class AdminController extends Controller implements IAdminPage
     public function userAction()
     {
         $db = $this->db();
-        $teachers=Teacher::GetAll($db);
+        $teachers=Teacher::GetAll($db, TRUE);
         return $this->render("admin/users.html.twig", array(
             "teachers" => $teachers
         ));
