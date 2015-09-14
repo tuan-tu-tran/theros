@@ -128,6 +128,30 @@ class Teacher
         return $this->_isAdmin;
     }
 
+    public function setAdmin(Db $db, $admin)
+    {
+        if ($admin) {
+            $query=
+                " INSERT INTO teacher_role(tr_tea_id, tr_ro_id) "
+                ." SELECT :id, ro_id "
+                ." FROM role "
+                ." WHERE ro_role = :role "
+            ;
+        } else {
+            $query =
+                " DELETE teacher_role "
+                ." FROM teacher_role "
+                ." JOIN role ON ro_id = tr_ro_id  "
+                ." WHERE tr_tea_id = :id "
+                ." AND ro_role = :role "
+            ;
+        }
+        $s = $db->prepare($query);
+        $s->bindValue("id",$this->id, \PDO::PARAM_INT);
+        $s->bindValue("role", Role::ADMIN, \PDO::PARAM_STR);
+        $s->execute();
+    }
+
 }
 
 
