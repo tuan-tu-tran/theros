@@ -4,6 +4,15 @@
 {% set javascripts=["teacher_list.js", "js.cookie-2.0.3.min.js"] %}
 
 {% block body %}
+    <p>
+    {% if teacher.isAdmin() %}
+        <a href="{{path("admin_home")}}">&lt;&lt;&lt; Retour au menu principal</a>
+    {% else %}
+        <a href="{{path("login")}}">&lt;&lt;&lt; Retour à la page de login</a>
+    {%endif%}
+    </p>
+
+    </p>
     <h1>Encodage des résultats</h1>
     <h2>Professeur: {{teacher.fullname}}</h2>
     <p>Cette page vous permet d'encoder les résultats pour les travaux de vacances ou remises à niveau concernant un élève d'une de vos classes.</p>
