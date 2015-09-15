@@ -34,6 +34,7 @@
             this._trigger( "select", event, {
               item: ui.item.option
             });
+            this.element.change();
           },
  
           autocompletechange: "_removeIfInvalid"
@@ -90,6 +91,7 @@
  
         // Selected an item, nothing to do
         if ( ui.item ) {
+          this.element.change();
           return;
         }
  
@@ -97,9 +99,11 @@
         var value = this.input.val(),
           valueLowerCase = value.toLowerCase(),
           valid = false;
+        var element = this.element;
         this.element.children( "option" ).each(function() {
           if ( $( this ).text().toLowerCase() === valueLowerCase ) {
             this.selected = valid = true;
+            element.change();
             return false;
           }
         });
@@ -115,6 +119,7 @@
           .attr( "title", value + " didn't match any item" )
           .tooltip( "open" );
         this.element.val( "" );
+        this.element.change()
         this._delay(function() {
           this.input.tooltip( "close" ).attr( "title", "" );
         }, 2500 );

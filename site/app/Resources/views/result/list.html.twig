@@ -1,6 +1,7 @@
 {% extends "admin/layout.html.twig" %}
 
-{% set javascripts=["result_list.js"] %}
+{% set stylesheets=["combobox.css"] %}
+{% set javascripts=["combobox.js", "result_list.js"] %}
 
 {% block content %}
 
@@ -30,6 +31,16 @@
     </div>
 
 </diV>
+
+<div class="margin">
+    Elève:
+    <select id="ddlStudent">
+        <option value="-1">TOUS</option>
+        {% for s in students %}
+            <option value="{{s.id}}">{{s.name}}</option>
+        {% endfor %}
+    </select>
+</div>
 
 <div class="margin">
     <div id="lCount" class="inline" style="min-width:2em; text-align:right"></div>/{{works|length}} résultat(s) affiché(s)

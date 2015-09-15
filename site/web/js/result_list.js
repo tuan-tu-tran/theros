@@ -43,6 +43,10 @@ $(function(){
     }).filter(":checked").each(function(){
         _setHasResultType(this.value);
     });
+
+    $("#ddlStudent").combobox().change(function(){
+        console.log("changed student to "+this.value);
+    });
     works=$(works);
     var worksById={};
     works.each(function(){
