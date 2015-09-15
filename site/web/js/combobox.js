@@ -5,6 +5,7 @@
           clear:false,
           blurOnSelect:true,
           selectOnFocus:true,
+          resetOnInvalid:false,
       },
       _create: function() {
         this.wrapper = $( "<span>" )
@@ -77,6 +78,19 @@
         });
       },
  
+      _resetSelectedElement: function(){
+        var selectedIndex = this.element.prop("selectedIndex");
+        var option = this.element.children("option").first();
+        var change = false;
+        if (selectedIndex != 0) {
+          this.element.prop("selectedIndex", 0);
+          change = true;
+        }
+        this.input.val(option.text());
+        if (change) {
+          this.element.change();
+        }
+      },
       _createShowAllButton: function() {
         var input = this.input,
           wasOpen = false;
@@ -95,17 +109,7 @@
             .removeClass("ui-corner-all")
             .addClass("custom-combobox-toggle")
             .click(function(){
-              var selectedIndex = _this.element.prop("selectedIndex");
-              var option = _this.element.children("option").first();
-              var change = false;
-              if (selectedIndex != 0) {
-                _this.element.prop("selectedIndex", 0);
-                change = true;
-              }
-              _this.input.val(option.text());
-              if (change) {
-                _this.element.change();
-              }
+              _this._resetSelectedElement();
             })
           ;
         }
@@ -182,6 +186,10 @@
           return;
         }
  
+        if (this.options.resetOnInvalid) {
+          this._resetSelectedElement();
+          return;
+        }
         // Remove invalid value
         this.input
           .val( "" )
