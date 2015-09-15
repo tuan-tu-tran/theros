@@ -44,9 +44,11 @@ $(function(){
         _setHasResultType(this.value);
     });
 
-    $("#ddlStudent").combobox().change(function(){
-        console.log("changed student to "+this.value);
-    });
+    var selectedStudent=null;
+    selectedStudent = $("#ddlStudent").combobox().change(function(){
+        selectedStudent = this.value;
+        applyFilter();
+    }).val();
     works=$(works);
     var worksById={};
     works.each(function(){
@@ -87,6 +89,7 @@ $(function(){
                     }
                 }
             }
+            visible = visible && (!selectedStudent || selectedStudent == "-1" || data.studentId == selectedStudent);
             if(visible) {
                 $this.show();
                 $this.removeClass("even odd").addClass(curClass);
