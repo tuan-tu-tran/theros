@@ -4,6 +4,7 @@
           size:"",
           clear:false,
           blurOnSelect:true,
+          selectOnFocus:true,
       },
       _create: function() {
         this.wrapper = $( "<span>" )
@@ -45,6 +46,19 @@
           .tooltip({
             tooltipClass: "ui-state-highlight"
           });
+        if (this.options.selectOnFocus) {
+          (function(input){
+            var selected = false;
+            input.click(function(){
+              if (!selected) {
+                this.setSelectionRange(0, this.value.length);
+                selected = true;
+              }
+            }).blur(function(){
+              selected = false;
+            });
+          })(this.input);
+        }
  
         this._on( this.input, {
           autocompleteselect: function( event, ui ) {
