@@ -18,11 +18,11 @@ table.standardTable {
     border-collapse:collapse
 }
 
-table.standardTable.zebra tbody tr:nth-child(odd) {
+table.standardTable.zebra tbody tr:nth-child(odd), table.standardTable tbody tr.odd {
     background-color:white;
 }
 
-table.standardTable.zebra tbody tr:nth-child(even) {
+table.standardTable.zebra tbody tr:nth-child(even), table.standardTable tbody tr.even {
     background-color:#a3d1ff;
 }
 
