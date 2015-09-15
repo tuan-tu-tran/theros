@@ -45,25 +45,25 @@ $(function(){
     });
 
     var selectedStudent=null;
-    selectedStudent = $("#ddlStudent").combobox().change(function(){
+    selectedStudent = $("#ddlStudent").combobox({clear:true}).change(function(){
         selectedStudent = this.value;
         applyFilter();
     }).val();
 
     var selectedClass = null;
-    selectedClass = $("#ddlClass").combobox({size:"auto"}).change(function(){
+    selectedClass = $("#ddlClass").combobox({clear:true, size:"auto"}).change(function(){
         selectedClass = this.value;
         applyFilter();
     }).val();
 
     var selectedTeacher = null;
-    selectedTeacher = $("#ddlTeacher").combobox({size:"auto"}).change(function(){
+    selectedTeacher = $("#ddlTeacher").combobox({clear:true, size:"auto"}).change(function(){
         selectedTeacher = this.value;
         applyFilter();
     }).val();
 
     var selectedSubject = null;
-    selectedSubject = $("#ddlSubject").combobox().change(function(){
+    selectedSubject = $("#ddlSubject").combobox({clear:true}).change(function(){
         selectedSubject = this.value;
         applyFilter();
     }).val();

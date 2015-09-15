@@ -2,6 +2,7 @@
     $.widget( "custom.combobox", {
       options:{
           size:"",
+          clear:false,
           blurOnSelect:true,
       },
       _create: function() {
@@ -61,7 +62,37 @@
       _createShowAllButton: function() {
         var input = this.input,
           wasOpen = false;
+        var _this = this;
+
+        var clearButton;
+        if (this.options.clear) {
+          clearButton = $("<a>")
+            .appendTo( this.wrapper )
+            .button({
+              icons: {
+                primary: "ui-icon-closethick"
+              },
+              text: false
+            })
+            .removeClass("ui-corner-all")
+            .addClass("custom-combobox-toggle")
+            .click(function(){
+              var selectedIndex = _this.element.prop("selectedIndex");
+              var option = _this.element.children("option").first();
+              var change = false;
+              if (selectedIndex != 0) {
+                _this.element.prop("selectedIndex", 0);
+                change = true;
+              }
+              _this.input.val(option.text());
+              if (change) {
+                _this.element.change();
+              }
+            })
+          ;
+        }
  
+        this.toggleButton=
         $( "<a>" )
           .attr( "tabIndex", -1 )
           .attr( "title", "Show All Items" )
@@ -89,6 +120,9 @@
             // Pass empty string as value to search for, displaying all results
             input.autocomplete( "search", "" );
           });
+        if (this.options.clear) {
+          this.toggleButton.css("margin-left", clearButton.outerWidth()-2);
+        }
       },
  
       _source: function( request, response ) {
