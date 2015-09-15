@@ -32,7 +32,8 @@
 
 </diV>
 
-<div class="inline margin">
+<div class="margin">
+<div class="inline">
     Elève:
     <select id="ddlStudent">
         <option value="-1">TOUS</option>
@@ -41,7 +42,7 @@
         {% endfor %}
     </select>
 </div>
-<div class="inline margin" style="margin-left:3em">
+<div class="inline" style="margin-left:3em">
     Classe:
     <select id="ddlClass">
         <option value="-1">TOUTES</option>
@@ -49,6 +50,18 @@
             <option value="{{c.id}}">{{c.code}}</option>
         {% endfor %}
     </select>
+</div>
+</div>
+<div class="margin">
+    <div class="inline">
+        Professeur:
+        <select id="ddlTeacher">
+            <option value="-1">TOUS</option>
+            {% for t in teachers %}
+                <option value="{{t.id}}">{{t.fullname}}</option>
+            {% endfor %}
+        </select>
+    </div>
 </div>
 
 <div class="margin">
@@ -90,6 +103,7 @@
         , result:w.result
         , studentId:w.student.id
         , classId:w.student.class.id
+        , teacherId : w.teacher ? w.teacher.id : ""
     } %}
     {% set worksArray = worksArray|merge([arr]) %}
 {% endfor %}
