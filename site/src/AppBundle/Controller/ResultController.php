@@ -19,17 +19,25 @@ class ResultController extends Controller implements IAdminPage
 
         $studentIds=array();
         $students=array();
+        $classIds = array();
+        $classes = array();
         foreach ($works as $w) {
             self::addIfNotIn($w->student, $studentIds, $students);
+            self::addIfNotIn($w->student->class, $classIds, $classes);
         }
 
         usort($students, function($x, $y){
             return strcmp($x->name, $y->name);
         });
 
+        usort($classes, function($x, $y){
+            return strcmp($x->code, $y->code);
+        });
+
         return $this->render("result/list.html.twig", array(
             "works" => $works
             , "students" => $students
+            , "classes" => $classes
         ));
     }
 

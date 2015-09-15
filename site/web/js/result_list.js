@@ -49,6 +49,12 @@ $(function(){
         selectedStudent = this.value;
         applyFilter();
     }).val();
+
+    var selectedClass = null;
+    selectedClass = $("#ddlClass").combobox({size:"auto"}).change(function(){
+        selectedClass = this.value;
+        applyFilter();
+    }).val();
     works=$(works);
     var worksById={};
     works.each(function(){
@@ -90,6 +96,7 @@ $(function(){
                 }
             }
             visible = visible && (!selectedStudent || selectedStudent == "-1" || data.studentId == selectedStudent);
+            visible = visible && (!selectedClass || selectedClass == "-1" || data.classId == selectedClass);
             if(visible) {
                 $this.show();
                 $this.removeClass("even odd").addClass(curClass);

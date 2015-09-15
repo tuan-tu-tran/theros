@@ -1,5 +1,8 @@
   (function( $ ) {
     $.widget( "custom.combobox", {
+      options:{
+          size:""
+      },
       _create: function() {
         this.wrapper = $( "<span>" )
           .addClass( "custom-combobox" )
@@ -14,10 +17,19 @@
         var selected = this.element.children( ":selected" ),
           value = selected.val() ? selected.text() : "";
  
+        var size=this.options.size;
+        if (size == "auto") {
+          size=0;
+          this.element.children("option").each(function(){
+            if(!size) size = this.text.length;
+            else size = Math.max(size, this.text.length);
+          });
+        }
         this.input = $( "<input>" )
           .appendTo( this.wrapper )
           .val( value )
           .attr( "title", "" )
+          .attr("size", size)
           .addClass( "custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left" )
           .autocomplete({
             delay: 0,

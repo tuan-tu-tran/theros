@@ -32,12 +32,21 @@
 
 </diV>
 
-<div class="margin">
+<div class="inline margin">
     Elève:
     <select id="ddlStudent">
         <option value="-1">TOUS</option>
         {% for s in students %}
             <option value="{{s.id}}">{{s.name}}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="inline margin" style="margin-left:3em">
+    Classe:
+    <select id="ddlClass">
+        <option value="-1">TOUTES</option>
+        {% for c in classes %}
+            <option value="{{c.id}}">{{c.code}}</option>
         {% endfor %}
     </select>
 </div>
@@ -80,6 +89,7 @@
         , hasResult:w.hasResult
         , result:w.result
         , studentId:w.student.id
+        , classId:w.student.class.id
     } %}
     {% set worksArray = worksArray|merge([arr]) %}
 {% endfor %}
