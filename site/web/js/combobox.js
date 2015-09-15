@@ -13,6 +13,10 @@
         this.element.hide();
         this._createAutocomplete();
         this._createShowAllButton();
+        var left,right;
+        left = this.input[0].getBoundingClientRect().left;
+        right = this.toggleButton[0].getBoundingClientRect().right;
+        this.wrapper.width(right - left);
       },
  
       _createAutocomplete: function() {
