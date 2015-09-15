@@ -8,6 +8,7 @@
 <h1>Consultation de résultats encodés</h1>
 
 <div id="pnMain" style="opacity:0">
+
     <div class="margin custom-ui-buttonset">
         Type:
         <input type="radio" id="rbTypeTdv" name="rbType" value="TDV"/><label for="rbTypeTdv">TDV</label>
@@ -73,34 +74,36 @@
         </div>
     </div>
 
-<div class="inline margin" style="background-color:lightgreen; padding:3px">
-    <div id="lCount" class="inline" style="min-width:2em; text-align:right"></div>/{{works|length}} enregistrement(s) affiché(s)
-</div>
-<table class="standardTable" id="gvResult">
-    <thead>
-        <tr>
-            <th>Elève</th>
-            <th>Classe</th>
-            <th>Type</th>
-            <th>Cours</th>
-            <th>Professeur</th>
-            <th>Résultat</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for w in works %}
-        <tr>
-            <td>{{w.student.name}}</td>
-            <td>{{w.student.class.code}}</td>
-            <td>{{w.type}}</td>
-            <td>{{w.subject.code}} - {{w.subject.description}}</td>
-            <td>{{w.teacher?w.teacher.fullname:""}}</td>
-            <td>{{w.hasResult? w.result|default("N/A"):""}}</td>
-            <input type="hidden" name="hfWorkId" value="{{w.id}}"/>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+    <div class="inline margin" style="background-color:lightgreen; padding:3px">
+        <div id="lCount" class="inline" style="min-width:2em; text-align:right"></div>/{{works|length}} enregistrement(s) affiché(s)
+    </div>
+
+    <table class="standardTable" id="gvResult">
+        <thead>
+            <tr>
+                <th>Elève</th>
+                <th>Classe</th>
+                <th>Type</th>
+                <th>Cours</th>
+                <th>Professeur</th>
+                <th>Résultat</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for w in works %}
+            <tr>
+                <td>{{w.student.name}}</td>
+                <td>{{w.student.class.code}}</td>
+                <td>{{w.type}}</td>
+                <td>{{w.subject.code}} - {{w.subject.description}}</td>
+                <td>{{w.teacher?w.teacher.fullname:""}}</td>
+                <td>{{w.hasResult? w.result|default("N/A"):""}}</td>
+                <input type="hidden" name="hfWorkId" value="{{w.id}}"/>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
 </div>
 
 {% endblock %}
