@@ -136,7 +136,8 @@ $(function(){
     $("#gvResult").css("table-layout","fixed").find("thead th").each(function(){
         $(this).css("width",$(this).width()+10);
     });
-    $("#pnFilters").css("opacity",1);
 
     applyFilter();
+
+    $("#pnMain").css("opacity",1);
 });

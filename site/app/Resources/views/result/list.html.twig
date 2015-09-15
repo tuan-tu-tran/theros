@@ -7,7 +7,7 @@
 
 <h1>Consultation de résultats encodés</h1>
 
-<div id="pnFilters" style="opacity:0">
+<div id="pnMain" style="opacity:0">
     <div class="margin custom-ui-buttonset">
         Type:
         <input type="radio" id="rbTypeTdv" name="rbType" value="TDV"/><label for="rbTypeTdv">TDV</label>
@@ -72,7 +72,6 @@
             </select>
         </div>
     </div>
-</div>
 
 <div class="inline margin" style="background-color:lightgreen; padding:3px">
     <div id="lCount" class="inline" style="min-width:2em; text-align:right"></div>/{{works|length}} enregistrement(s) affiché(s)
@@ -102,6 +101,7 @@
     {% endfor %}
     </tbody>
 </table>
+</div>
 
 {% endblock %}
 
