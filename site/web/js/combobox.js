@@ -1,7 +1,8 @@
   (function( $ ) {
     $.widget( "custom.combobox", {
       options:{
-          size:""
+          size:"",
+          blurOnSelect:true,
       },
       _create: function() {
         this.wrapper = $( "<span>" )
@@ -46,6 +47,10 @@
             this._trigger( "select", event, {
               item: ui.item.option
             });
+            if (this.options.blurOnSelect) {
+              this.input.val(ui.item.label);
+              this.input.blur();
+            }
             this.element.change();
           },
  
