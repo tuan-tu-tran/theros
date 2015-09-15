@@ -62,6 +62,15 @@
             {% endfor %}
         </select>
     </div>
+    <div class="inline" style="margin-left:3em">
+        Cours:
+        <select id="ddlSubject">
+            <option value="-1">TOUS</option>
+            {% for s in subjects %}
+                <option value="{{s.id}}">{{s.code}} - {{s.description}}</option>
+            {% endfor %}
+        </select>
+    </div>
 </div>
 
 <div class="margin">
@@ -104,6 +113,7 @@
         , studentId:w.student.id
         , classId:w.student.class.id
         , teacherId : w.teacher ? w.teacher.id : ""
+        , subjectId : w.subject.id
     } %}
     {% set worksArray = worksArray|merge([arr]) %}
 {% endfor %}

@@ -62,6 +62,12 @@ $(function(){
         applyFilter();
     }).val();
 
+    var selectedSubject = null;
+    selectedSubject = $("#ddlSubject").combobox().change(function(){
+        selectedSubject = this.value;
+        applyFilter();
+    }).val();
+
     works=$(works);
     var worksById={};
     works.each(function(){
@@ -105,6 +111,7 @@ $(function(){
             visible = visible && (!selectedStudent || selectedStudent == "-1" || data.studentId == selectedStudent);
             visible = visible && (!selectedClass || selectedClass == "-1" || data.classId == selectedClass);
             visible = visible && (!selectedTeacher || selectedTeacher == "-1" || data.teacherId == selectedTeacher);
+            visible = visible && (!selectedSubject || selectedSubject == "-1" || data.subjectId == selectedSubject);
             if(visible) {
                 $this.show();
                 $this.removeClass("even odd").addClass(curClass);
