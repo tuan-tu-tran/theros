@@ -44,26 +44,33 @@ $(function(){
         _setHasResultType(this.value);
     });
 
+    var comboxOptions = {
+        resetOnInvalid:true,
+        clear:true,
+    };
+    var autoSizeComboxOptions = $.extend({}, comboxOptions, {
+        size:"auto",
+    });
     var selectedStudent=null;
-    selectedStudent = $("#ddlStudent").combobox({resetOnInvalid:true, clear:true}).change(function(){
+    selectedStudent = $("#ddlStudent").combobox(comboxOptions).change(function(){
         selectedStudent = this.value;
         applyFilter();
     }).val();
 
     var selectedClass = null;
-    selectedClass = $("#ddlClass").combobox({resetOnInvalid:true, clear:true, size:"auto"}).change(function(){
+    selectedClass = $("#ddlClass").combobox(autoSizeComboxOptions).change(function(){
         selectedClass = this.value;
         applyFilter();
     }).val();
 
     var selectedTeacher = null;
-    selectedTeacher = $("#ddlTeacher").combobox({resetOnInvalid:true, clear:true, size:"auto"}).change(function(){
+    selectedTeacher = $("#ddlTeacher").combobox(autoSizeComboxOptions).change(function(){
         selectedTeacher = this.value;
         applyFilter();
     }).val();
 
     var selectedSubject = null;
-    selectedSubject = $("#ddlSubject").combobox({resetOnInvalid:true, clear:true}).change(function(){
+    selectedSubject = $("#ddlSubject").combobox(comboxOptions).change(function(){
         selectedSubject = this.value;
         applyFilter();
     }).val();
