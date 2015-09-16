@@ -13,3 +13,30 @@ p.error {
 
 .inline { display:inline-block; }
 .valign-middle { vertical-align:middle; }
+
+table.standardTable {
+    border-collapse:collapse
+}
+
+table.standardTable.zebra tbody tr:nth-child(odd) {
+    background-color:white;
+}
+
+table.standardTable.zebra tbody tr:nth-child(even) {
+    background-color:#a3d1ff;
+}
+
+table.standardTable thead tr
+{
+    background-color:#cccccc
+}
+
+table.standardTable td, table.standardTable th {
+    border: 1pt solid black;
+    padding: 5px;
+}
+
+table.standardTable.highlightable tbody tr:hover {
+    cursor:pointer;
+    background-color:yellow;
+}

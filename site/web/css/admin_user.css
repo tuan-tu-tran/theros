@@ -1,0 +1,26 @@
+.switch-button-background
+{
+    display: inline-block;
+    float:none;
+    vertical-align:middle;
+}
+
+.switch-button-label
+{
+    width:2.5em;
+    padding: 3px;
+    display: inline-block;
+    text-align:center;
+    float:none;
+}
+.switch-button-label.on
+{
+    background-color:green;
+    color:white;
+}
+
+.switch-button-label.off
+{
+    background-color:red;
+    color:white;
+}

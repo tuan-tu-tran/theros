@@ -9,7 +9,7 @@ class Teacher
     public $fullname;
     public $password;
     public $passwordChanged;
-    private $roles;
+    private $roles = array();
     public function __construct($row)
     {
         $this->id = $row["tea_id"];
@@ -33,7 +33,7 @@ class Teacher
     /**
      * Get a list of all teachers using the given database connection
      */
-    public static function GetAll(Db $db)
+    public static function GetAll(Db $db, $withRoles = FALSE)
     {
         $list=[];
         $result=$db->query("
@@ -43,6 +43,16 @@ class Teacher
         ")->fetchAll();
         foreach($result as $row){
             $list[]=self::FromRow($row);
+        }
+        if ($withRoles) {
+            $byId = array();
+            foreach ($list as $t) {
+                $byId[$t->id] = $t;
+            }
+            $result = $db->query(" SELECT tr_tea_id, ro_role FROM teacher_role JOIN role ON ro_id = tr_ro_id ")->fetchAll();
+            foreach ($result as $row) {
+                $byId[$row["tr_tea_id"]]->addRole($row["ro_role"]);
+            }
         }
         return $list;
     }
@@ -100,18 +110,46 @@ class Teacher
         $s->bindValue("id", $this->id, \PDO::PARAM_INT);
         $s->execute();
         $result = $s->fetchAll();
-        $this->roles=array();
         foreach ($result as $row) {
-            $this->roles[] = $row["ro_role"];
+            $this->addRole($row["ro_role"]);
         }
+    }
 
-        $this->_isAdmin = in_array(Role::ADMIN, $this->roles);
+    private function addRole($role) {
+        $this->roles[] = $role;
+        if ($role == Role::ADMIN) {
+            $this->_isAdmin = TRUE;
+        }
     }
 
     private $_isAdmin = FALSE;
     public function isAdmin()
     {
         return $this->_isAdmin;
+    }
+
+    public function setAdmin(Db $db, $admin)
+    {
+        if ($admin) {
+            $query=
+                " INSERT INTO teacher_role(tr_tea_id, tr_ro_id) "
+                ." SELECT :id, ro_id "
+                ." FROM role "
+                ." WHERE ro_role = :role "
+            ;
+        } else {
+            $query =
+                " DELETE teacher_role "
+                ." FROM teacher_role "
+                ." JOIN role ON ro_id = tr_ro_id  "
+                ." WHERE tr_tea_id = :id "
+                ." AND ro_role = :role "
+            ;
+        }
+        $s = $db->prepare($query);
+        $s->bindValue("id",$this->id, \PDO::PARAM_INT);
+        $s->bindValue("role", Role::ADMIN, \PDO::PARAM_STR);
+        $s->execute();
     }
 
 }
