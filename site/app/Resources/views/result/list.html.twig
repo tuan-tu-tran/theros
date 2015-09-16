@@ -1,6 +1,6 @@
 {% extends "admin/layout.html.twig" %}
 
-{% set stylesheets=["combobox.css"] %}
+{% set stylesheets=["combobox.css", "result_list.css"] %}
 {% set javascripts=["combobox.js", "result_list.js"] %}
 
 {% block content %}
@@ -87,24 +87,37 @@
                 <th>Cours</th>
                 <th>Professeur</th>
                 <th>Résultat</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
         {% for w in works %}
             <tr>
+                <input type="hidden" name="hfWorkId" value="{{w.id}}"/>
                 <td>{{w.student.name}}</td>
                 <td>{{w.student.class.code}}</td>
                 <td>{{w.type}}</td>
                 <td>{{w.subject.code}} - {{w.subject.description}}</td>
                 <td>{{w.teacher?w.teacher.fullname:""}}</td>
                 <td>{{w.hasResult? w.result|default("N/A"):""}}</td>
-                <input type="hidden" name="hfWorkId" value="{{w.id}}"/>
+                <td>
+                    {% if w.remark %}
+                        <img src="{{asset("img/comment.png")}}" class="view_icon"/>
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
 </div>
+
+<div id="pnCommentDialog" class="hidden">
+    <p class="bold"><span id="lCommentType"></span> - <span id="lCommentSubject"></span><span id="lCommentResult"></span></p>
+    <div><span id="lCommentTeacher" class="bold"></span> dit:</div>
+    <div id="pnComment" class="ui-widget ui-widget-content ui-corner-all"></div>
+</div>
+<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>             is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
 
 {% endblock %}
 
@@ -119,6 +132,11 @@
         , classId:w.student.class.id
         , teacherId : w.teacher ? w.teacher.id : ""
         , subjectId : w.subject.id
+        , comment : w.remark|nl2br
+        , student : w.student.name
+        , class : w.student.class.code
+        , teacher : w.teacher ? w.teacher.fullname
+        , subject : w.subject.code ~ " - " ~ w.subject.description
     } %}
     {% set worksArray = worksArray|merge([arr]) %}
 {% endfor %}

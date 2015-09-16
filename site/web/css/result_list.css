@@ -1,0 +1,16 @@
+#gvResult tbody td:last-child {
+  text-align: center;
+}
+img.view_icon {
+  padding:5px;
+}
+
+#pnComment {
+  text-align: justify;
+  background: white;
+  padding: 8px;
+}
+
+.ui-dialog-titlebar-close {
+  visibility: hidden;
+}
