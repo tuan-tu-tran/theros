@@ -27,9 +27,10 @@ class LoginController extends Controller
                 $this->flash()->set("bad_password", "1");
                 return $this->redirectToRoute("login");
             } else {
+                $t->getRoles($db);
                 $this->session()->set("user", $t);
                 if ($t->passwordChanged) {
-                    return $this->redirectToRoute("teacher_home");
+                    return $this->redirectToRoute(HomeController::GetHomeRoute($t));
                 } else {
                     return $this->redirectToRoute("init_password");
                 }
@@ -41,5 +42,14 @@ class LoginController extends Controller
                 "teachers"=>$teachers
             ));
         }
+    }
+
+    /**
+     * The page that is redirected to in case a user tries to access an unauthorized page
+     * @Route("/not-authorized", name="not_authorized")
+     */
+    public function notAuthorizedAction()
+    {
+        return $this->render("login/not_authorized.html.twig");
     }
 }

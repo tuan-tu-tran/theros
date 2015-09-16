@@ -1,0 +1,32 @@
+{% extends "admin/layout.html.twig" %}
+
+{% set stylesheets=["switchButton.css", "admin_user.css"] %}
+{% set javascripts=["switchButton.js", "admin_user.js"] %}
+
+{% block content %}
+
+<h1>Gestion des utilisateurs</h1>
+
+<table class="standardTable zebra highlightable">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Admin</th>
+        </tr>
+    </thead>
+    {% for t in teachers %}
+        <tr>
+            <td>{{t.fullname}}</td>
+            <td>
+                <input type="checkbox"
+                {% if t.isAdmin() %}
+                    checked
+                {% endif %}
+                />
+                <input type="hidden" name="hfTeacherId" value="{{t.id}}"/>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

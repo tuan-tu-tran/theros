@@ -1,0 +1,148 @@
+{% extends "admin/layout.html.twig" %}
+
+{% set stylesheets=["combobox.css", "result_list.css"] %}
+{% set javascripts=["combobox.js", "result_list.js"] %}
+
+{% block content %}
+
+<h1>Consultation de résultats encodés</h1>
+
+<div id="pnMain" style="opacity:0">
+
+    <div class="margin custom-ui-buttonset">
+        Type:
+        <input type="radio" id="rbTypeTdv" name="rbType" value="TDV"/><label for="rbTypeTdv">TDV</label>
+        <input type="radio" id="rbTypeRan" name="rbType" value="RAN"/><label for="rbTypeRan">RAN</label>
+        <input type="radio" id="rbTypeAll" name="rbType" value="" checked /><label for="rbTypeAll">Tous</label>
+    </div>
+    <div class="margin">
+        <div class="inline valign-middle">
+            Résultat:
+        </div>
+
+        <div class="inline custom-ui-buttonset">
+            <input type="radio" id="rbResultDone" name="rbResultDone" value="1"/><label for="rbResultDone">Encodé</label>
+            <input type="radio" id="rbResultNotDone" name="rbResultDone" value="0" /><label for="rbResultNotDone">Non-encodé</label>
+            <input type="radio" id="rbResultDoneOrNot" name="rbResultDone" value="" checked /><label for="rbResultDoneOrNot">Tous</label>
+        </div>
+
+        <div class="inline custom-ui-buttonset" id="pnHasResult">
+            <input type="radio" id="rbResultYes" name="rbResult" value="1"/><label for="rbResultYes">Présent/Rendu</label>
+            <input type="radio" id="rbResultNo" name="rbResult" value="0"/><label for="rbResultNo">Absent/Non-rendu</label>
+            <input type="radio" id="rbResultAll" name="rbResult" value=""checked /><label for="rbResultAll">Tous</label>
+        </div>
+    </div>
+
+    <div class="margin">
+        <div class="inline">
+            Elève:
+            <select id="ddlStudent">
+                <option value="-1">TOUS</option>
+                {% for s in students %}
+                    <option value="{{s.id}}">{{s.name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="inline" >
+            Classe:
+            <select id="ddlClass">
+                <option value="-1">TOUTES</option>
+                {% for c in classes %}
+                    <option value="{{c.id}}">{{c.code}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="margin">
+        <div class="inline">
+            Professeur:
+            <select id="ddlTeacher">
+                <option value="-1">TOUS</option>
+                {% for t in teachers %}
+                    <option value="{{t.id}}">{{t.fullname}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="inline" >
+            Cours:
+            <select id="ddlSubject">
+                <option value="-1">TOUS</option>
+                {% for s in subjects %}
+                    <option value="{{s.id}}">{{s.code}} - {{s.description}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="inline margin" style="background-color:lightgreen; padding:3px">
+        <div id="lCount" class="inline" style="min-width:2em; text-align:right"></div>/{{works|length}} enregistrement(s) affiché(s)
+    </div>
+
+    <table class="standardTable" id="gvResult">
+        <thead>
+            <tr>
+                <th>Elève</th>
+                <th>Classe</th>
+                <th>Type</th>
+                <th>Cours</th>
+                <th>Professeur</th>
+                <th>Résultat</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for w in works %}
+            <tr>
+                <input type="hidden" name="hfWorkId" value="{{w.id}}"/>
+                <td>{{w.student.name}}</td>
+                <td>{{w.student.class.code}}</td>
+                <td>{{w.type}}</td>
+                <td>{{w.subject.code}} - {{w.subject.description}}</td>
+                <td>{{w.teacher?w.teacher.fullname:""}}</td>
+                <td>{{w.hasResult? w.result|default("N/A"):""}}</td>
+                <td>
+                    {% if w.remark %}
+                        <img src="{{asset("img/comment.png")}}" class="view_icon"/>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+<div id="pnCommentDialog" class="hidden">
+    <p class="bold"><span id="lCommentType"></span> - <span id="lCommentSubject"></span><span id="lCommentResult"></span></p>
+    <div><span id="lCommentTeacher" class="bold"></span> dit:</div>
+    <div id="pnComment" class="ui-widget ui-widget-content ui-corner-all"></div>
+</div>
+<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>             is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
+
+{% endblock %}
+
+{% set worksArray={} %}
+{% for w in works %}
+    {% set arr={
+        id:w.id,
+        type:w.type
+        , hasResult:w.hasResult
+        , result:w.result
+        , studentId:w.student.id
+        , classId:w.student.class.id
+        , teacherId : w.teacher ? w.teacher.id : ""
+        , subjectId : w.subject.id
+        , comment : w.remark|nl2br
+        , student : w.student.name
+        , class : w.student.class.code
+        , teacher : w.teacher ? w.teacher.fullname
+        , subject : w.subject.code ~ " - " ~ w.subject.description
+    } %}
+    {% set worksArray = worksArray|merge([arr]) %}
+{% endfor %}
+
+{% block post_head %}
+    <script type="text/javascript">
+        var works={{worksArray|json_encode|raw}};
+    </script>
+{% endblock %}

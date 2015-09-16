@@ -1,0 +1,10 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <h1>Accès refusé</h1>
+
+    <p>Vous n'êtes pas autorisé à accéder à cette page</p>
+
+    <p><a href="{{path("login")}}">Retour au login</a></p>
+    <p><a href="javascript:history.back()">Retour à la page précédente</a></p>
+{% endblock %}

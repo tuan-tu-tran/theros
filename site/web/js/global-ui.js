@@ -31,5 +31,6 @@ $(function(){
     $(".custom-ui-textarea")
         .addClass("ui-widget ui-corner-all ui-widget-content")
     ;
+    $(".custom-ui-buttonset").buttonset();
 });
 
