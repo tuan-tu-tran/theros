@@ -71,4 +71,15 @@ abstract class BaseController extends sfController
     {
         return $this->get("session");
     }
+
+
+    /**
+     * Return a path rooted in the web dir
+     *
+     * @param string path the path to root in the web dir without leading /. Default is null.
+     */
+    protected function webdir($path=NULL)
+    {
+        return $this->get("kernel")->getRootDir()."/../web".($path?"/".$path:"");
+    }
 }
