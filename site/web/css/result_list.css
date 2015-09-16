@@ -4,3 +4,13 @@
 img.view_icon {
   padding:5px;
 }
+
+#pnComment {
+  text-align: justify;
+  background: white;
+  padding: 5px;
+}
+
+.ui-dialog-titlebar-close {
+  visibility: hidden;
+}

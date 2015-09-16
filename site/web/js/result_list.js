@@ -137,6 +137,34 @@ $(function(){
         $(this).css("width",$(this).width()+10);
     });
 
+    var pnComment = $("#pnComment")
+        , lCommentType = $("#lCommentType")
+        , lCommentSubject = $("#lCommentSubject")
+        , lCommentTeacher = $("#lCommentTeacher")
+        , lCommentResult = $("#lCommentResult")
+        , pnCommentDialog = $("#pnCommentDialog")
+    ;
+    pnCommentDialog.dialog({
+        autoOpen:false,
+        buttons:{Fermer:function(){
+            $(this).dialog("close");
+        }}
+    });
+    $("#gvResult .view_icon").button().click(function(){
+        var $this = $(this);
+        var data = $this.parents("tr").first().data("work");
+        var title = data.student + " - "+ data.class;
+        lCommentType.text(data.type);
+        lCommentSubject.text(data.subject);
+        lCommentTeacher.text(data.teacher);
+        lCommentResult.text(data.result);
+        pnComment.html(data.comment);
+        pnCommentDialog.dialog({
+            title:title,
+            width:$(window).width()/2,
+        }).dialog("open");
+    });
+
     applyFilter();
 
     $("#pnMain").css("opacity",1);

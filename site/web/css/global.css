@@ -13,6 +13,7 @@ p.error {
 
 .inline { display:inline-block; }
 .valign-middle { vertical-align:middle; }
+.bold { font-weight: bold; }
 
 table.standardTable {
     border-collapse:collapse
