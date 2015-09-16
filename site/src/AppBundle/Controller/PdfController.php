@@ -8,6 +8,21 @@ use fpdf\FPDF;
 
 class PdfController extends Controller
 {
+    static $months=array(
+        null,
+        "janvier",
+        "février",
+        "mars",
+        "avril",
+        "mai",
+        "juin",
+        "juillet",
+        "août",
+        "septembre",
+        "octobre",
+        "novembre",
+        "décembre",
+    );
     /**
      * @Route("/pdf")
      */
@@ -40,7 +55,8 @@ class PdfController extends Controller
         $pdf->SetX($pdf->GetX()+$contentWidth * 0.5);
         $pdf->MultiCell(0, $height, utf8_decode("Destinataire\nRue, n°\nCode postal - Ville"));
         $pdf->Ln();
-        $pdf->Cell(0, $height, "Schaerbeek, le jj/mm/yyyy", 0, 1, "R");
+        $date = date("j ").utf8_decode(self::$months[date("n")]).date(" Y");
+        $pdf->Cell(0, $height, "Schaerbeek, le $date", 0, 1, "R");
         $pdf->Ln();
         $pdf->Ln();
         $pdf->MultiCell(0, $height, utf8_decode("Chers parents, cher élève,
