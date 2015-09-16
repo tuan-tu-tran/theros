@@ -102,8 +102,9 @@ class TeacherController extends Controller implements IProtected
     public function initPasswordAction()
     {
         $user=$this->user();
+        $route = HomeController::GetHomeRoute($user);
         if ($user->passwordChanged) {
-            return $this->redirectToRoute("teacher_home");
+            return $this->redirectToRoute($route);
         }
 
         $request = $this->request();
@@ -113,7 +114,7 @@ class TeacherController extends Controller implements IProtected
                 throw new \Exception("no password provided ".var_export($password, TRUE));
             }
             $user->initPassword($this->db(), $password);
-            return $this->redirectToRoute("teacher_home");
+            return $this->redirectToRoute($route);
         } else {
             return $this->render("teacher/init_password.html.twig");
         }
