@@ -1,6 +1,6 @@
 {% extends "admin/layout.html.twig" %}
 
-{% set stylesheets=["combobox.css"] %}
+{% set stylesheets=["combobox.css", "result_list.css"] %}
 {% set javascripts=["combobox.js", "result_list.js"] %}
 
 {% block content %}
@@ -87,24 +87,31 @@
                 <th>Cours</th>
                 <th>Professeur</th>
                 <th>Résultat</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
         {% for w in works %}
             <tr>
+                <input type="hidden" name="hfWorkId" value="{{w.id}}"/>
                 <td>{{w.student.name}}</td>
                 <td>{{w.student.class.code}}</td>
                 <td>{{w.type}}</td>
                 <td>{{w.subject.code}} - {{w.subject.description}}</td>
                 <td>{{w.teacher?w.teacher.fullname:""}}</td>
                 <td>{{w.hasResult? w.result|default("N/A"):""}}</td>
-                <input type="hidden" name="hfWorkId" value="{{w.id}}"/>
+                <td>
+                    {% if w.remark %}
+                        <img src="{{asset("img/comment.png")}}" class="view_icon custom-ui-button"/>
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
 </div>
+<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>             is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
 
 {% endblock %}
 

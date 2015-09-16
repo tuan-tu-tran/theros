@@ -1,0 +1,6 @@
+#gvResult tbody td:last-child {
+  text-align: center;
+}
+img.view_icon {
+  padding:5px;
+}
