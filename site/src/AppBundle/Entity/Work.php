@@ -31,13 +31,16 @@ class Work
         $this->hasResult = (bool)$row["w_has_result"];
     }
 
-    public static function GetFull($row)
+    public static function GetFull($row, $withClass=FALSE)
     {
         $w=new Work($row);
         $w->student = new Student($row);
         $w->subject = new Subject($row);
         $w->schoolyear = new SchoolYear($row);
         $w->teacher = Teacher::FromRow($row);
+        if ($withClass) {
+            $w->student->class = new Klass($row);
+        }
         return $w;
     }
 
@@ -63,8 +66,7 @@ class Work
         $s->execute();
         $row=$s->fetch();
         if($row){
-            $w=self::GetFull($row);
-            $w->student->class=new Klass($row);
+            $w=self::GetFull($row, TRUE);
             return $w;
         } else {
             return NULL;
@@ -95,5 +97,33 @@ class Work
         $s->bindValue("remark", $this->remark, \PDO::PARAM_STR);
         $s->bindValue("id", $this->id, \PDO::PARAM_INT);
         $s->execute();
+    }
+
+    /**
+     * Retrieve a list of all Work instance associated to the given schoolyear (desc)
+     */
+    public static function GetListBySchoolYear(Db $db, $schoolyear)
+    {
+        $query =
+            " SELECT * "
+            ." FROM work "
+            ." JOIN schoolyear ON sy_id = w_sy_id "
+            ." JOIN student ON st_id = w_st_id "
+            ." JOIN student_class ON sc_st_id = st_id AND sc_sy_id = sy_id "
+            ." JOIN class ON cl_id = sc_cl_id "
+            ." JOIN subject ON sub_id = w_sub_id "
+            ." LEFT JOIN teacher ON tea_id = w_tea_id "
+            ." WHERE sy_desc = :schoolyear "
+            ." ORDER BY cl_desc, st_name, sub_code"
+        ;
+        $s = $db->prepare($query);
+        $s->bindValue("schoolyear", $schoolyear, \PDO::PARAM_STR);
+        $s->execute();
+        $result = $s->fetchAll();
+        $list=array();
+        foreach ($result as $row) {
+            $list[] = self::GetFull($row, TRUE);
+        }
+        return $list;
     }
 }
