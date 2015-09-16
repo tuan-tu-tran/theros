@@ -6,6 +6,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 use fpdf\FPDF;
 
+use AppBundle\Entity\Student;
 class PdfController extends Controller
 {
     static $months=array(
@@ -28,6 +29,8 @@ class PdfController extends Controller
      */
     public function indexAction()
     {
+        $db = $this->db();
+        $student = new Student($db->query("SELECT * FROM student WHERE st_id = 1")->fetch());
         $pageWidth=210;
         $pageHeight=297;
         $rightMargin=10;
@@ -59,10 +62,11 @@ class PdfController extends Controller
         $pdf->Cell(0, $height, "Schaerbeek, le $date", 0, 1, "R");
         $pdf->Ln();
         $pdf->Ln();
+        $name=$student->name;
         $pdf->MultiCell(0, $height, utf8_decode("Chers parents, cher élève,
  
 
-Vous trouverez ci-joint les résultats des travaux de vacances et remises à niveau.
+Vous trouverez ci-joint les résultats des travaux de vacances et remises à niveau de $name.
 
 Si votre enfant est en réussite, le contrat a été rempli et nous considérons que les lacunes observées en juin ont été totalement ou partiellement levées (voir commentaire éventuel laissé par le professeur).
 
