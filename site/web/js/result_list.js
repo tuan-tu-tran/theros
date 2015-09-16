@@ -157,7 +157,7 @@ $(function(){
         lCommentType.text(data.type);
         lCommentSubject.text(data.subject);
         lCommentTeacher.text(data.teacher);
-        lCommentResult.text(data.result);
+        lCommentResult.text(data.result ? ": " + data.result : "");
         pnComment.html(data.comment);
         pnCommentDialog.dialog({
             title:title,
