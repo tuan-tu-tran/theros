@@ -113,7 +113,7 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
         foreach ($works as $w) {
             $content="";
             $tdv = $w->isTdv();
-            $type = $tdv ? "Travail de vacances":"Remise à niveau";
+            $type = $tdv ? "TRAVAIL DE VACANCES":"REMISE À NIVEAU";
             $subject = $w->subject->description." [".$w->subject->code."]";
             $teacherName = $w->teacher->fullname;
             if ($w->result) {
@@ -121,27 +121,48 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
                 if (!$tdv) {
                     $result.="/100";
                 }
+                $hasResult = TRUE;
             } else {
-                 $result=$tdv?"Non rendu":"Absent";
+                 $result=$tdv?"NON-RENDU":"ABSENT";
+                 $hasResult = FALSE;
             }
-            $content = "$type en $subject
-
-Professeur: $teacherName
-
-Résultat: $result
-";
-            if ($w->remark!==NULL && $w->remark!="") {
-                $content.="\nCommentaire du professeur:\n";
-                $content.=rtrim($w->remark);
+            $hasRemark = $w->remark!==NULL && $w->remark!="";
+            if ($hasRemark) {
+                $remark = rtrim($w->remark);
+                $linesCount = 7 + substr_count($remark,PHP_EOL) +1;
+            } else {
+                $linesCount = 5;
             }
             $remainingSpace = $pageHeight - $pdf->GetY() - $rightMargin;
-            $linesCount = substr_count($content,PHP_EOL) +1;
-            //dump(sprintf("remaining space: %d, lines count %d, must break: %d, content:\n%s", $remainingSpace, $linesCount, $remainingSpace < $linesCount * $height, $content));
-            if($remainingSpace < $linesCount * $height) {
+            $expectedHeight = $linesCount * $height + 2; //+2 to account for border
+            $mustBreak = $remainingSpace <= $expectedHeight;
+            //dump(sprintf("remaining space: %d, lines count %d, expectedHeight: %d, must break: %d, content:\n%s", $remainingSpace, $linesCount, $expectedHeight, $mustBreak, $content));
+            if($mustBreak) {
                 $pdf->AddPage();
                 $pageHeader();
             }
-            $pdf->MultiCell(0, $height, utf8_decode($content), 1);
+            $top = $pdf->GetY();
+            $pdf->SetFont("", "B");
+            $pdf->Write($height, utf8_decode($type));
+            $pdf->SetFont("", "");
+            $pdf->Write($height, utf8_decode(" en $subject"));
+            $pdf->Ln();
+            $pdf->Ln();
+            $pdf->Write($height, utf8_decode("Professeur: $teacherName"));
+            $pdf->Ln();
+            $pdf->Ln();
+            $pdf->Write($height, utf8_decode("Résultat: "));
+            if (!$hasResult) {
+                $pdf->SetFont("", "B");
+            }
+            $pdf->Write($height, $result);
+            $pdf->SetFont("", "");
+            $pdf->Ln();
+            if ($hasRemark) {
+                $pdf->Ln();
+                $pdf->MultiCell(0, $height, utf8_decode("Commentaire du professeur:\n$remark"));
+            }
+            $pdf->Rect($rightMargin, $top - 1, $contentWidth, $pdf->GetY() - $top + 2);
             $pdf->Ln();
         }
         foreach ($works as $w) {
