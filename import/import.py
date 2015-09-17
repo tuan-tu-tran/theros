@@ -18,6 +18,8 @@ parser.add_argument("--dsn", help="the dsn to use for db operations", action="st
 parser.add_argument("-i", "--insert", help="insert (ignoring duplicates) data into database (see --dsn)", action="store_true", dest="insertData")
 parser.add_argument("-y", "--shoolyear", help="specify the current school year", action="store", dest="schoolyear", default="2014-15")
 parser.add_argument("-t", "--truncate", help="truncate all tables", action="store_true", dest="truncate")
+parser.add_argument("-d", "--drop", help="drop all tables", action="store_true", dest="drop")
+parser.add_argument("--no-tutors", help="do not process tutors information", action="store_false", dest="tutors")
 args=parser.parse_args()
 logging.basicConfig(level=args.logging, stream=sys.stdout, format="%(levelname)7s : %(message)s")
 logger=logging.getLogger()
@@ -37,7 +39,7 @@ def iterCsv(fname, header=True):
 worksFile=args.worksFile
 works=[]
 classes=set()
-students=set()
+students={}
 compositions=[]
 class Work:
     def __init__(self, klass, student, desc, line):
@@ -47,13 +49,13 @@ class Work:
         self.line=line
 
 for i,line in enumerate(iterCsv(worksFile)):
-    klass,student, dummy, foo, desc, grp = line
+    klass,student, dummy, foo, desc, tutor, address, zipCode, city = line
     klass=klass.replace(" ","").upper()
     if not re.search(r"^\d[A-Z]+$", klass):
         raise ValueError, "line %i contains bad class: %s"%(i+1, klass)
     student=student.replace("  "," ")
     classes.add(klass)
-    students.add(student)
+    students[student]=(student, tutor, address, zipCode, city)
     compositions.append(Work(klass, student, desc, i+1))
     if desc:
         works.append(compositions[-1])
@@ -92,25 +94,39 @@ for i,line in enumerate(iterCsv(args.teachersFile)):
 logger.info("got %i teachers and %i teachings", len(teachers), len(teachings))
 teachings=sorted(teachings)
 
-if args.insertData or args.truncate:
+if args.insertData or args.truncate or args.drop:
     logging.info("connecting to database")
     import pyodbc
     conn=pyodbc.connect(dsn=args.dsn)
     try:
         db=conn.cursor()
 
-        if args.truncate:
-            logging.info("truncate tables")
+        if args.truncate or args.drop:
             result=db.execute("SHOW TABLES").fetchall()
             db.execute("set foreign_key_checks=0")
+            if args.drop:
+                logging.info("drop tables")
+                cmd="DROP TABLE"
+            else:
+                logging.info("truncate tables")
+                cmd="TRUNCATE"
             for row in result:
-                db.execute("TRUNCATE %s"%row[0])
+                db.execute("%s %s"%(cmd,row[0]))
             db.execute("set foreign_key_checks=1")
 
         if args.insertData:
             logging.info("inserting students")
-            params=[(s,) for s in sorted(students)]
-            db.executemany("INSERT IGNORE INTO student(st_name) VALUES (?)", params)
+            students=sorted(students.values(), key=lambda t:t[0])
+            if args.tutors:
+                params=[s+s[1:] for s in students]
+                db.executemany("""
+                INSERT INTO student(st_name, st_tutor, st_address, st_zip, st_city)
+                VALUES (?,?,?,?,?)
+                ON DUPLICATE KEY UPDATE st_tutor = ?, st_address = ?, st_zip = ?, st_city = ?
+                """, params)
+            else:
+                params=[(s[0],) for s in students]
+                db.executemany("INSERT IGNORE INTO student(st_name) VALUES (?)", params)
 
             logging.info("inserting classes")
             params=[(c,) for c in sorted(classes)]
