@@ -99,7 +99,7 @@ Si votre $name est en réussite, le contrat a été rempli et nous considérons 
 En cas d'échec, par contre, nous encourageons l'élève à poursuivre le travail de remédiation dans les matières concernées. En effet, vous savez que l'accumulation d'échecs dans une même discipline compromet le bon déroulement des apprentissages.
 
 
-Valériane Wiot et Vincent Sterpin
+Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
 "));
         $pdf->AddPage();
         $pdf->SetFont("", "B");
