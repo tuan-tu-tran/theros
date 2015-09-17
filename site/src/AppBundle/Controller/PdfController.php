@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Response;
 use fpdf\FPDF;
 
 use AppBundle\Entity\Student;
+use AppBundle\Entity\Work;
+
 class PdfController extends Controller
 {
     static $months=array(
@@ -30,7 +32,13 @@ class PdfController extends Controller
     public function indexAction()
     {
         $db = $this->db();
-        $student = new Student($db->query("SELECT * FROM student WHERE st_id = 1")->fetch());
+        $student = new Student($db->query("SELECT * FROM student WHERE st_name like 'Pepa%'")->fetch());
+        $works = array();
+        foreach ($db->query("SELECT w_id FROM work WHERE w_st_id = ".$student->id." AND w_has_result") as $row) {
+            $works[] = Work::GetFullById($db, $row["w_id"]);
+        }
+        $schoolyear = $this->getSchoolYear();
+
         $pageWidth=210;
         $pageHeight=297;
         $rightMargin=10;
@@ -75,6 +83,40 @@ En cas d'échec, par contre, nous encourageons l'élève à poursuivre le travai
 
 Valériane Wiot et Vincent Sterpin
 "));
+        foreach ($works as $w) {
+            $pdf->AddPage();
+            $pdf->SetFont("", "B");
+            $pdf->Write($height, utf8_decode("Fiche de résultat $schoolyear: ".$w->student->name." [".$w->student->class->code."]"));
+            $pdf->Ln();
+            $tdv = $w->isTdv();
+            $type = $tdv ? "Travail de vacances":"Remise à niveau";
+            $subject = $w->subject->description." [".$w->subject->code."]";
+            $pdf->SetFont("", "");
+            $pdf->Ln();
+            $pdf->Write($height, utf8_decode("$type en $subject"));
+            $pdf->Ln();
+            $pdf->Ln();
+            $teacherName = $w->teacher->fullname;
+            $pdf->Write($height, utf8_decode("Professeur: $teacherName"));
+            $pdf->Ln();
+            $pdf->Ln();
+            $pdf->Write($height, utf8_decode("Résultat: "));
+            if ($w->result) {
+                $pdf->Write($height, $w->result);
+                if (!$tdv) {
+                    $pdf->Write($height, "/100");
+                }
+            } else {
+                $pdf->Write($height, $tdv?"Non rendu":"Absent");
+            }
+            $pdf->Ln();
+            if ($w->remark!==NULL && $w->remark!="") {
+                $pdf->Ln();
+                $pdf->Write($height, "Commentaire du professeur:");
+                $pdf->Ln();
+                $pdf->MultiCell(0, $height, utf8_decode($w->remark));
+            }
+        }
 
         $response = new Response();
         $response->headers->set("Content-Type","application/pdf");

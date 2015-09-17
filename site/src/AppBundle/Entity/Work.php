@@ -126,4 +126,12 @@ class Work
         }
         return $list;
     }
+
+    /**
+     * Return whether this work is a TDV
+     */
+    public function isTdv()
+    {
+        return $this->type == "TDV";
+    }
 }
