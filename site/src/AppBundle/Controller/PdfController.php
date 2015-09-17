@@ -74,7 +74,11 @@ class PdfController extends Controller
         $pdf->Ln();
         $pdf->SetY(42);
         $pdf->SetX(112);
-        $pdf->MultiCell(0, $height, utf8_decode("Destinataire\nRue, n°\nCode postal - Ville"));
+        $tutor = $student->tutor;
+        $address = $student->address;
+        $zip = $student->zip;
+        $city = $student->city;
+        $pdf->MultiCell(0, $height, utf8_decode("$tutor\n$address\n$zip - $city"));
         $date = date("j ").utf8_decode(self::$months[date("n")]).date(" Y");
         $pdf->SetY(75);
         $pdf->Cell(0, $height, "Schaerbeek, le $date", 0, 1, "R");
