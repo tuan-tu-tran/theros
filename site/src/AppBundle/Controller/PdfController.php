@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use fpdf\FPDF;
 
 use AppBundle\Entity\Student;
+use AppBundle\Entity\Klass;
 use AppBundle\Entity\Work;
 
 class PdfController extends Controller
@@ -32,7 +33,15 @@ class PdfController extends Controller
     public function indexAction()
     {
         $db = $this->db();
-        $student = new Student($db->query("SELECT * FROM student WHERE st_name like 'Pepa%'")->fetch());
+        $student = new Student($row = $db->query("
+            SELECT *
+            FROM student
+            JOIN student_class ON sc_st_id = st_id
+            JOIN class ON sc_cl_id = cl_id
+            WHERE st_name like 'Pepa%'
+        ")->fetch());
+        $student->class = new Klass($row);
+
         $works = array();
         foreach ($db->query("SELECT w_id FROM work WHERE w_st_id = ".$student->id." AND w_has_result") as $row) {
             $works[] = Work::GetFullById($db, $row["w_id"]);
@@ -83,6 +92,45 @@ En cas d'échec, par contre, nous encourageons l'élève à poursuivre le travai
 
 Valériane Wiot et Vincent Sterpin
 "));
+        $pdf->AddPage();
+        $pdf->SetFont("", "B");
+        $pdf->Write($height, utf8_decode("Fiche de résultats $schoolyear: ".$student->name." [".$student->class->code."]"));
+        $pdf->Ln();
+        $pdf->Ln();
+        $pdf->SetFont("", "");
+        foreach ($works as $w) {
+            $content="";
+            $tdv = $w->isTdv();
+            $type = $tdv ? "Travail de vacances":"Remise à niveau";
+            $subject = $w->subject->description." [".$w->subject->code."]";
+            $teacherName = $w->teacher->fullname;
+            if ($w->result) {
+                $result = $w->result;
+                if (!$tdv) {
+                    $result.="/100";
+                }
+            } else {
+                 $result=$tdv?"Non rendu":"Absent";
+            }
+            $content = "$type en $subject
+
+Professeur: $teacherName
+
+Résultat: $result
+";
+            if ($w->remark!==NULL && $w->remark!="") {
+                $content.="\nCommentaire du professeur:\n";
+                $content.=rtrim($w->remark);
+            }
+            $remainingSpace = $pageHeight - $pdf->GetY() - $rightMargin;
+            $linesCount = substr_count($content,PHP_EOL) +1;
+            dump(sprintf("remaining space: %d, lines count %d, must break: %d, content:\n%s", $remainingSpace, $linesCount, $remainingSpace < $linesCount * $height, $content));
+            if($remainingSpace < $linesCount * $height) {
+                $pdf->AddPage();
+            }
+            $pdf->MultiCell(0, $height, utf8_decode($content), 1);
+            $pdf->Ln();
+        }
         foreach ($works as $w) {
             $pdf->AddPage();
             $pdf->SetFont("", "B");
