@@ -47,14 +47,20 @@ class PdfController extends Controller
             $works[] = Work::GetFullById($db, $row["w_id"]);
         }
         $schoolyear = $this->getSchoolYear();
+        $pdf = new FPDF();
 
+        $this->addResults($pdf, $student, $works, $schoolyear);
+
+        return $this->renderPdf($pdf);
+    }
+
+    private function addResults($pdf, $student, $works, $schoolyear)
+    {
         $pageWidth=210;
         $pageHeight=297;
         $rightMargin=10;
         $contentWidth=$pageWidth - 2*$rightMargin;
         $height=5;
-        $pdf = new FPDF();
-        $pdf->SetMargins($rightMargin, $rightMargin, $rightMargin);
         $pdf->AddPage();
         $pdf->SetFont("Times");
         $pdf->Image($this->webDir("img/logo.png"), $pdf->getX(), $pdf->getY(), 20, 20);
@@ -199,7 +205,10 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
                 $pdf->MultiCell(0, $height, utf8_decode($w->remark));
             }
         }
+    }
 
+    private function renderPdf(FPDF $pdf)
+    {
         $response = new Response();
         $response->headers->set("Content-Type","application/pdf");
         $response->setContent($pdf->Output(null,"S"));
