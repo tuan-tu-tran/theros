@@ -18,6 +18,7 @@ parser.add_argument("--dsn", help="the dsn to use for db operations", action="st
 parser.add_argument("-i", "--insert", help="insert (ignoring duplicates) data into database (see --dsn)", action="store_true", dest="insertData")
 parser.add_argument("-y", "--shoolyear", help="specify the current school year", action="store", dest="schoolyear", default="2014-15")
 parser.add_argument("-t", "--truncate", help="truncate all tables", action="store_true", dest="truncate")
+parser.add_argument("-d", "--drop", help="drop all tables", action="store_true", dest="drop")
 args=parser.parse_args()
 logging.basicConfig(level=args.logging, stream=sys.stdout, format="%(levelname)7s : %(message)s")
 logger=logging.getLogger()
@@ -92,19 +93,24 @@ for i,line in enumerate(iterCsv(args.teachersFile)):
 logger.info("got %i teachers and %i teachings", len(teachers), len(teachings))
 teachings=sorted(teachings)
 
-if args.insertData or args.truncate:
+if args.insertData or args.truncate or args.drop:
     logging.info("connecting to database")
     import pyodbc
     conn=pyodbc.connect(dsn=args.dsn)
     try:
         db=conn.cursor()
 
-        if args.truncate:
-            logging.info("truncate tables")
+        if args.truncate or args.drop:
             result=db.execute("SHOW TABLES").fetchall()
             db.execute("set foreign_key_checks=0")
+            if args.drop:
+                logging.info("drop tables")
+                cmd="DROP TABLE"
+            else:
+                logging.info("truncate tables")
+                cmd="TRUNCATE"
             for row in result:
-                db.execute("TRUNCATE %s"%row[0])
+                db.execute("%s %s"%(cmd,row[0]))
             db.execute("set foreign_key_checks=1")
 
         if args.insertData:
