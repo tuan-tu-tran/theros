@@ -104,10 +104,10 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
         $pdf->AddPage();
         $pageHeader = function() use ($pdf, $height, $schoolyear, $student)
         {
-        $pdf->SetFont("", "B", 16);
-        $pdf->Cell(0, $height, utf8_decode("Fiche de résultats $schoolyear: ".$student->name." [".$student->class->code."]"), 0, 1, "C");
-        $pdf->Ln();
-        $pdf->SetFont("", "", 12);
+            $pdf->SetFont("", "B", 16);
+            $pdf->Cell(0, $height, utf8_decode("Fiche de résultats $schoolyear: ".$student->name." [".$student->class->code."]"), 0, 1, "C");
+            $pdf->Ln();
+            $pdf->SetFont("", "", 12);
         };
         $pageHeader();
         foreach ($works as $w) {
