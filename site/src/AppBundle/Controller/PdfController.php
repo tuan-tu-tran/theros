@@ -87,8 +87,13 @@ class PdfController extends Controller
         $pdf->MultiCell(0, $height, utf8_decode("Chers parents, cher élève,
  
 
-Vous trouverez ci-joint les résultats des travaux de vacances et remise(s) à niveau de $name.
-
+"));
+        $pdf->Write($height, utf8_decode("Vous trouverez ci-joint les résultats des travaux de vacances et remise(s) à niveau de "));
+        $pdf->SetFont("", "B");
+        $pdf->Write($height, utf8_decode($name));
+        $pdf->SetFont("", "");
+        $pdf->Write($height, ".\n");
+        $pdf->MultiCell(0, $height, utf8_decode("
 Si votre enfant est en réussite, le contrat a été rempli et nous considérons que les lacunes observées en juin ont été totalement ou partiellement levées (voir commentaire éventuel laissé par le professeur).
 
 En cas d'échec, par contre, nous encourageons l'élève à poursuivre le travail de remédiation dans les matières concernées. En effet, vous savez que l'accumulation d'échecs dans une même discipline compromet le bon déroulement des apprentissages.
