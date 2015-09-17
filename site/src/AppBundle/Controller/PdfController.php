@@ -102,11 +102,10 @@ En cas d'échec, par contre, nous encourageons l'élève à poursuivre le travai
 Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
 "));
         $pdf->AddPage();
-        $pdf->SetFont("", "B");
-        $pdf->Write($height, utf8_decode("Fiche de résultats $schoolyear: ".$student->name." [".$student->class->code."]"));
+        $pdf->SetFont("", "B", 16);
+        $pdf->Cell(0, $height, utf8_decode("Fiche de résultats $schoolyear: ".$student->name." [".$student->class->code."]"), 0, 1, "C");
         $pdf->Ln();
-        $pdf->Ln();
-        $pdf->SetFont("", "");
+        $pdf->SetFont("", "", 12);
         foreach ($works as $w) {
             $content="";
             $tdv = $w->isTdv();
