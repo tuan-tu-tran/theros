@@ -128,7 +128,7 @@ Résultat: $result
             }
             $remainingSpace = $pageHeight - $pdf->GetY() - $rightMargin;
             $linesCount = substr_count($content,PHP_EOL) +1;
-            dump(sprintf("remaining space: %d, lines count %d, must break: %d, content:\n%s", $remainingSpace, $linesCount, $remainingSpace < $linesCount * $height, $content));
+            //dump(sprintf("remaining space: %d, lines count %d, must break: %d, content:\n%s", $remainingSpace, $linesCount, $remainingSpace < $linesCount * $height, $content));
             if($remainingSpace < $linesCount * $height) {
                 $pdf->AddPage();
             }
