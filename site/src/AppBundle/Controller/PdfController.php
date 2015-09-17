@@ -102,10 +102,14 @@ En cas d'échec, par contre, nous encourageons l'élève à poursuivre le travai
 Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
 "));
         $pdf->AddPage();
+        $pageHeader = function() use ($pdf, $height, $schoolyear, $student)
+        {
         $pdf->SetFont("", "B", 16);
         $pdf->Cell(0, $height, utf8_decode("Fiche de résultats $schoolyear: ".$student->name." [".$student->class->code."]"), 0, 1, "C");
         $pdf->Ln();
         $pdf->SetFont("", "", 12);
+        };
+        $pageHeader();
         foreach ($works as $w) {
             $content="";
             $tdv = $w->isTdv();
@@ -135,6 +139,7 @@ Résultat: $result
             //dump(sprintf("remaining space: %d, lines count %d, must break: %d, content:\n%s", $remainingSpace, $linesCount, $remainingSpace < $linesCount * $height, $content));
             if($remainingSpace < $linesCount * $height) {
                 $pdf->AddPage();
+                $pageHeader();
             }
             $pdf->MultiCell(0, $height, utf8_decode($content), 1);
             $pdf->Ln();
