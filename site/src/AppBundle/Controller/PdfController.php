@@ -54,6 +54,35 @@ class PdfController extends Controller
         return $this->renderPdf($pdf);
     }
 
+    /**
+     * @Route("/pdf/all")
+     */
+    public function allAction()
+    {
+        $db = $this->db();
+        $schoolyear = $this->getSchoolYear();
+        $works = Work::GetListBySchoolYear($db, $schoolyear, TRUE);
+        $students = array();
+        $byId = array();
+        foreach ($works as $w) {
+            $s = $w->student;
+            if (!isset($byId[$s->id])) {
+                $byId[$s->id] = $s;
+                $students[]=$s;
+                $s->works=array();
+            } else {
+                $s = $byId[$s->id];
+            }
+            $s->works[] = $w;
+        }
+
+        $pdf = new FPDF();
+        foreach ($students as $s) {
+            $this->addResults($pdf, $s, $s->works, $schoolyear);
+        }
+        return $this->renderPdf($pdf);
+    }
+
     private function addResults($pdf, $student, $works, $schoolyear)
     {
         $pageWidth=210;
