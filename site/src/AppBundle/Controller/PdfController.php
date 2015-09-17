@@ -94,7 +94,7 @@ class PdfController extends Controller
         $pdf->SetFont("", "");
         $pdf->Write($height, ".\n");
         $pdf->MultiCell(0, $height, utf8_decode("
-Si votre enfant est en réussite, le contrat a été rempli et nous considérons que les lacunes observées en juin ont été totalement ou partiellement levées (voir commentaire éventuel laissé par le professeur).
+Si votre $name est en réussite, le contrat a été rempli et nous considérons que les lacunes observées en juin ont été totalement ou partiellement levées (voir commentaire éventuel laissé par le professeur).
 
 En cas d'échec, par contre, nous encourageons l'élève à poursuivre le travail de remédiation dans les matières concernées. En effet, vous savez que l'accumulation d'échecs dans une même discipline compromet le bon déroulement des apprentissages.
 
