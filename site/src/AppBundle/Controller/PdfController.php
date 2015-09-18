@@ -55,7 +55,7 @@ class PdfController extends Controller
     }
 
     /**
-     * @Route("/pdf/all")
+     * @Route("/pdf/all", name="pdf_all")
      */
     public function allAction()
     {

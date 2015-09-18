@@ -137,4 +137,23 @@ class Work
     {
         return $this->type == "TDV";
     }
+
+    /**
+     * Get the number of encoded results and the total number of works for a given schoolyear
+     */
+    public static function GetCounts(Db $db, $schoolyear, &$encoded, &$total)
+    {
+        $query =
+            " SELECT SUM(w_has_result = 1) AS encoded, COUNT(*) AS total "
+            ." FROM work "
+            ." JOIN schoolyear ON sy_id = w_sy_id "
+            ." WHERE sy_desc = :schoolyear "
+        ;
+        $s = $db->prepare($query);
+        $s->bindValue("schoolyear", $schoolyear, \PDO::PARAM_STR);
+        $s->execute();
+        $result = $s->fetch();
+        $encoded = $result["encoded"];
+        $total = $result["total"];
+    }
 }
