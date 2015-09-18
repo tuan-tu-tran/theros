@@ -14,11 +14,7 @@ class AdminController extends Controller implements IAdminPage
      */
     public function homeAction()
     {
-        Work::GetCounts($this->db(), $this->getSchoolYear(), $encoded, $total);
-        return $this->render("admin/home.html.twig", array(
-            "encoded" => $encoded,
-            "total" => $total
-        ));
+        return $this->render("admin/home.html.twig");
     }
 
     /**

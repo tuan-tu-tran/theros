@@ -1,0 +1,17 @@
+{% extends "admin/layout.html.twig" %}
+
+{% set stylesheets=["pdf.css"] %}
+
+{% block content %}
+<h1>Impression de résultats</h1>
+
+<p>{{encoded}}/{{total}} résulats encodés pour {{studentCount}} élèves</p>
+<div class="margin">
+    <div><a target="_blank" href="{{path("pdf_tutors")}}" class="custom-ui-button">Lettres au parents</a></div>
+    <div><a target="_blank" href="{{path("pdf_grouped")}}" class="custom-ui-button">Résultats groupés par élève</a></div>
+    <div><a target="_blank" href="{{path("pdf_individual")}}" class="custom-ui-button">Un résultat par page</a></div>
+    <div><a target="_blank" href="{{path("pdf_all")}}" class="custom-ui-button">Tout</a></div>
+</div>
+
+{% endblock %}
+
