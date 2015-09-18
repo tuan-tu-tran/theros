@@ -28,9 +28,9 @@ class PdfController extends Controller implements IAdminPage
         "décembre",
     );
     /**
-     * @Route("/pdf")
+     * @Route("/pdf/test")
      */
-    public function indexAction()
+    public function testAction()
     {
         $db = $this->db();
         $student = new Student($row = $db->query("
@@ -52,6 +52,14 @@ class PdfController extends Controller implements IAdminPage
         $this->addResults($pdf, $student, $works, $schoolyear);
 
         return $this->renderPdf($pdf);
+    }
+
+    /**
+     * @Route("/pdf", name="pdf_home")
+     */
+    public function indexAction()
+    {
+        return $this->render("pdf/index.html.twig");
     }
 
     /**
