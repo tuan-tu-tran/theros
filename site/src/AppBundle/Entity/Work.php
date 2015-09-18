@@ -141,10 +141,10 @@ class Work
     /**
      * Get the number of encoded results and the total number of works for a given schoolyear
      */
-    public static function GetCounts(Db $db, $schoolyear, &$encoded, &$total)
+    public static function GetCounts(Db $db, $schoolyear, &$encoded, &$total, &$students = NULL)
     {
         $query =
-            " SELECT SUM(w_has_result = 1) AS encoded, COUNT(*) AS total "
+            " SELECT SUM(w_has_result = 1) AS encoded, COUNT(*) AS total, COUNT( DISTINCT w_st_id ) AS students "
             ." FROM work "
             ." JOIN schoolyear ON sy_id = w_sy_id "
             ." WHERE sy_desc = :schoolyear "
@@ -155,5 +155,6 @@ class Work
         $result = $s->fetch();
         $encoded = $result["encoded"];
         $total = $result["total"];
+        $students = $result["students"];
     }
 }

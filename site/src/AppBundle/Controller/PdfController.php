@@ -59,7 +59,14 @@ class PdfController extends Controller implements IAdminPage
      */
     public function indexAction()
     {
-        return $this->render("pdf/index.html.twig");
+        $db = $this->db();
+        $schoolyear = $this->getSchoolYear();
+        Work::GetCounts($db, $schoolyear, $encoded, $total, $students);
+        return $this->render("pdf/index.html.twig", array(
+            "encoded" => $encoded,
+            "total" => $total,
+            "studentCount" => $students
+        ));
     }
 
     /**
