@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Entity\Teacher;
+use AppBundle\Entity\Work;
 
 class AdminController extends Controller implements IAdminPage
 {
@@ -13,7 +14,11 @@ class AdminController extends Controller implements IAdminPage
      */
     public function homeAction()
     {
-        return $this->render("admin/home.html.twig");
+        Work::GetCounts($this->db(), $this->getSchoolYear(), $encoded, $total);
+        return $this->render("admin/home.html.twig", array(
+            "encoded" => $encoded,
+            "total" => $total
+        ));
     }
 
     /**
