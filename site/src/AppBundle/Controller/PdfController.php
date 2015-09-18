@@ -27,6 +27,13 @@ class PdfController extends Controller implements IAdminPage
         "novembre",
         "décembre",
     );
+
+    //batch types
+    const TUTORS="tutors";
+    const GROUPED="grouped";
+    const INDIVIDUAL="ind";
+    const ALL="all";
+
     /**
      * @Route("/pdf/test")
      */
@@ -47,10 +54,8 @@ class PdfController extends Controller implements IAdminPage
             $works[] = Work::GetFullById($db, $row["w_id"]);
         }
         $schoolyear = $this->getSchoolYear();
-        $pdf = new FPDF();
-
-        $this->addResults($pdf, $student, $works, $schoolyear);
-
+        $pdf = $this->createPdf();
+        $this->addResults($pdf, $student, $works, $schoolyear, self::ALL);
         return $this->renderPdf($pdf);
     }
 
@@ -70,9 +75,38 @@ class PdfController extends Controller implements IAdminPage
     }
 
     /**
+     * @Route("/pdf/parents", name="pdf_tutors");
+     */
+    public function tutorsAction()
+    {
+        return $this->getPdf(self::TUTORS);
+    }
+
+    /**
+     * @Route("/pdf/grouped-results", name="pdf_grouped");
+     */
+    public function groupedAction()
+    {
+        return $this->getPdf(self::GROUPED);
+    }
+
+    /**
+     * @Route("/pdf/single-results", name="pdf_individual");
+     */
+    public function individualAction()
+    {
+        return $this->getPdf(self::INDIVIDUAL);
+    }
+
+    /**
      * @Route("/pdf/all", name="pdf_all")
      */
     public function allAction()
+    {
+        return $this->getPdf(self::ALL);
+    }
+
+    private function getPdf($what)
     {
         $db = $this->db();
         $schoolyear = $this->getSchoolYear();
@@ -91,22 +125,22 @@ class PdfController extends Controller implements IAdminPage
             $s->works[] = $w;
         }
 
-        $pdf = new FPDF();
+        $pdf = $this->createPdf();
         foreach ($students as $s) {
-            $this->addResults($pdf, $s, $s->works, $schoolyear);
+            $this->addResults($pdf, $s, $s->works, $schoolyear, $what);
         }
         return $this->renderPdf($pdf);
     }
 
-    private function addResults($pdf, $student, $works, $schoolyear)
+    private function addResults($pdf, $student, $works, $schoolyear, $what)
     {
         $pageWidth=210;
         $pageHeight=297;
         $rightMargin=10;
         $contentWidth=$pageWidth - 2*$rightMargin;
         $height=5;
+        if ($what == self::ALL || $what == self::TUTORS) {
         $pdf->AddPage();
-        $pdf->SetFont("Times");
         $pdf->Image($this->webDir("img/logo.png"), $pdf->getX(), $pdf->getY(), 20, 20);
         $pdf->SetFont("", "B");
         $pdf->Cell(0, $height, "Institut Saint-Dominique - Section secondaire", 0, 1, "C");
@@ -151,6 +185,8 @@ En cas d'échec, par contre, nous encourageons l'élève à poursuivre le travai
 
 Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
 "));
+        }
+        if ($what == self::ALL || $what == self::TUTORS || $what == self::GROUPED) {
         $pdf->AddPage();
         $pageHeader = function() use ($pdf, $height, $schoolyear, $student)
         {
@@ -215,6 +251,8 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
             $pdf->Rect($rightMargin, $top - 1, $contentWidth, $pdf->GetY() - $top + 2);
             $pdf->Ln();
         }
+        }
+        if ($what == self::ALL || $what == self::INDIVIDUAL) {
         foreach ($works as $w) {
             $pdf->AddPage();
             $pdf->SetFont("", "B");
@@ -249,6 +287,7 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
                 $pdf->MultiCell(0, $height, utf8_decode($w->remark));
             }
         }
+        }
     }
 
     private function renderPdf(FPDF $pdf)
@@ -257,5 +296,12 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
         $response->headers->set("Content-Type","application/pdf");
         $response->setContent($pdf->Output(null,"S"));
         return $response;
+    }
+
+    private function createPdf()
+    {
+        $pdf = new FPDF();
+        $pdf->SetFont("Times");
+        return $pdf;
     }
 }
