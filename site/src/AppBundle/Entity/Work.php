@@ -102,7 +102,7 @@ class Work
     /**
      * Retrieve a list of all Work instance associated to the given schoolyear (desc)
      */
-    public static function GetListBySchoolYear(Db $db, $schoolyear)
+    public static function GetListBySchoolYear(Db $db, $schoolyear, $onlyWithResult = FALSE)
     {
         $query =
             " SELECT * "
@@ -114,8 +114,11 @@ class Work
             ." JOIN subject ON sub_id = w_sub_id "
             ." LEFT JOIN teacher ON tea_id = w_tea_id "
             ." WHERE sy_desc = :schoolyear "
-            ." ORDER BY cl_desc, st_name, sub_code"
         ;
+        if ($onlyWithResult) {
+            $query .= " AND w_has_result ";
+        }
+        $query .= " ORDER BY cl_desc, st_name, sub_code";
         $s = $db->prepare($query);
         $s->bindValue("schoolyear", $schoolyear, \PDO::PARAM_STR);
         $s->execute();
@@ -133,5 +136,24 @@ class Work
     public function isTdv()
     {
         return $this->type == "TDV";
+    }
+
+    /**
+     * Get the number of encoded results and the total number of works for a given schoolyear
+     */
+    public static function GetCounts(Db $db, $schoolyear, &$encoded, &$total)
+    {
+        $query =
+            " SELECT SUM(w_has_result = 1) AS encoded, COUNT(*) AS total "
+            ." FROM work "
+            ." JOIN schoolyear ON sy_id = w_sy_id "
+            ." WHERE sy_desc = :schoolyear "
+        ;
+        $s = $db->prepare($query);
+        $s->bindValue("schoolyear", $schoolyear, \PDO::PARAM_STR);
+        $s->execute();
+        $result = $s->fetch();
+        $encoded = $result["encoded"];
+        $total = $result["total"];
     }
 }

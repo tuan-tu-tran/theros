@@ -47,14 +47,49 @@ class PdfController extends Controller
             $works[] = Work::GetFullById($db, $row["w_id"]);
         }
         $schoolyear = $this->getSchoolYear();
+        $pdf = new FPDF();
 
+        $this->addResults($pdf, $student, $works, $schoolyear);
+
+        return $this->renderPdf($pdf);
+    }
+
+    /**
+     * @Route("/pdf/all", name="pdf_all")
+     */
+    public function allAction()
+    {
+        $db = $this->db();
+        $schoolyear = $this->getSchoolYear();
+        $works = Work::GetListBySchoolYear($db, $schoolyear, TRUE);
+        $students = array();
+        $byId = array();
+        foreach ($works as $w) {
+            $s = $w->student;
+            if (!isset($byId[$s->id])) {
+                $byId[$s->id] = $s;
+                $students[]=$s;
+                $s->works=array();
+            } else {
+                $s = $byId[$s->id];
+            }
+            $s->works[] = $w;
+        }
+
+        $pdf = new FPDF();
+        foreach ($students as $s) {
+            $this->addResults($pdf, $s, $s->works, $schoolyear);
+        }
+        return $this->renderPdf($pdf);
+    }
+
+    private function addResults($pdf, $student, $works, $schoolyear)
+    {
         $pageWidth=210;
         $pageHeight=297;
         $rightMargin=10;
         $contentWidth=$pageWidth - 2*$rightMargin;
         $height=5;
-        $pdf = new FPDF();
-        $pdf->SetMargins($rightMargin, $rightMargin, $rightMargin);
         $pdf->AddPage();
         $pdf->SetFont("Times");
         $pdf->Image($this->webDir("img/logo.png"), $pdf->getX(), $pdf->getY(), 20, 20);
@@ -199,7 +234,10 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
                 $pdf->MultiCell(0, $height, utf8_decode($w->remark));
             }
         }
+    }
 
+    private function renderPdf(FPDF $pdf)
+    {
         $response = new Response();
         $response->headers->set("Content-Type","application/pdf");
         $response->setContent($pdf->Output(null,"S"));
