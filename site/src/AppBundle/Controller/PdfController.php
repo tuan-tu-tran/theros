@@ -10,7 +10,7 @@ use AppBundle\Entity\Student;
 use AppBundle\Entity\Klass;
 use AppBundle\Entity\Work;
 
-class PdfController extends Controller
+class PdfController extends Controller implements IAdminPage
 {
     static $months=array(
         null,
