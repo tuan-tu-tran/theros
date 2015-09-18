@@ -102,6 +102,10 @@ DROP TABLE IF EXISTS `student`;
 CREATE TABLE `student` (
   `st_id` int(11) NOT NULL AUTO_INCREMENT,
   `st_name` varchar(255) NOT NULL,
+  `st_tutor` varchar(255) DEFAULT NULL,
+  `st_address` varchar(512) DEFAULT NULL,
+  `st_zip` varchar(45) DEFAULT NULL,
+  `st_city` varchar(128) DEFAULT NULL,
   PRIMARY KEY (`st_id`),
   UNIQUE KEY `st_name_UNIQUE` (`st_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -177,8 +181,8 @@ CREATE TABLE `teacher_role` (
   PRIMARY KEY (`tr_id`),
   UNIQUE KEY `index2` (`tr_tea_id`,`tr_ro_id`),
   KEY `fk_teacher_role_2_idx` (`tr_ro_id`),
-  CONSTRAINT `fk_teacher_role_2` FOREIGN KEY (`tr_ro_id`) REFERENCES `role` (`ro_id`),
-  CONSTRAINT `fk_teacher_role_1` FOREIGN KEY (`tr_tea_id`) REFERENCES `teacher` (`tea_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk_teacher_role_1` FOREIGN KEY (`tr_tea_id`) REFERENCES `teacher` (`tea_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_teacher_role_2` FOREIGN KEY (`tr_ro_id`) REFERENCES `role` (`ro_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
