@@ -9,6 +9,7 @@ use fpdf\FPDF;
 use AppBundle\Entity\Student;
 use AppBundle\Entity\Klass;
 use AppBundle\Entity\Work;
+use AppBundle\ResultPdf;
 
 class PdfController extends Controller implements IAdminPage
 {
@@ -134,28 +135,13 @@ class PdfController extends Controller implements IAdminPage
 
     private function addResults($pdf, $student, $works, $schoolyear, $what)
     {
-        $pageWidth=210;
-        $pageHeight=297;
-        $rightMargin=10;
-        $contentWidth=$pageWidth - 2*$rightMargin;
-        $height=5;
+        $pageWidth=ResultPdf::PAGE_WIDTH;
+        $pageHeight=ResultPdf::PAGE_HEIGHT;
+        $rightMargin=ResultPdf::MARGIN;
+        $contentWidth=ResultPdf::CONTENT_WIDTH;
+        $height=ResultPdf::LINE_HEIGHT;
         if ($what == self::ALL || $what == self::TUTORS) {
             $pdf->AddPage();
-            $pdf->Image($this->webDir("img/logo.png"), $pdf->getX(), $pdf->getY(), 20, 20);
-            $pdf->SetFont("", "B");
-            $pdf->Cell(0, $height, "Institut Saint-Dominique - Section secondaire", 0, 1, "C");
-            $pdf->SetFont("", "");
-            $pdf->MultiCell(0, $height, "Rue Caporal Claes, 38 - 1030 Bruxelles\nTel.: 02/240.14.10 - Fax: 02/240.16.11", 0, "C");
-            $email="saintdominique@ens.irisnet.be";
-            $site = "www.saintdominique.be";
-            $width = $pdf->GetStringWidth("$email - $site");
-            $pdf->SetX($pdf->GetX() + ($pageWidth - $pdf->getX() - $rightMargin - $width)/2);
-            $pdf->Write($height, $email, "mailto:$email");
-            $pdf->Write($height, " - ");
-            $pdf->Write($height, $site, $site);
-            $pdf->Ln();
-            $pdf->Line($pdf->GetX(), $pdf->GetY(), $pdf->GetX()+$contentWidth, $pdf->GetY());
-            $pdf->Ln();
             $pdf->SetY(42);
             $pdf->SetX(112);
             $tutor = $student->tutor;
@@ -300,8 +286,6 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
 
     private function createPdf()
     {
-        $pdf = new FPDF();
-        $pdf->SetFont("Times");
-        return $pdf;
+        return new ResultPdf($this->webdir("img/logo.png"));
     }
 }
