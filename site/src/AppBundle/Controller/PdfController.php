@@ -210,7 +210,6 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
     private function addResultGroup($pdf, $group, $schoolyear, $works, $groupBy)
     {
         $this->getLengths($pageWidth, $pageHeight, $rightMargin, $contentWidth, $height);
-            $pdf->AddPage();
             $byTeacher = $groupBy == self::GROUP_BY_TEACHER;
             $groupHeader="Fiche de résultats $schoolyear";
             if ($byTeacher) {
@@ -221,15 +220,22 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
                 $groupHeader.= ": ".$student->name." [".$student->class->code."]";
             }
             $groupHeader = utf8_decode($groupHeader);
-            $pageHeader = function() use ($pdf, $height, $schoolyear, $groupHeader)
+            $addPage = function($pdf) use ($height, $schoolyear, $groupHeader)
             {
+                $pdf->AddPage();
                 $pdf->SetFont("", "B", 16);
                 $pdf->MultiCell(0, $height, $groupHeader, 0, "C");
                 $pdf->Ln();
                 $pdf->SetFont("", "", 12);
             };
-            $pageHeader();
+            $draft = $this->createPdf();
+            $addPage($draft);
+            $actions=array(
+                $addPage
+            );
             foreach ($works as $w) {
+                $addWorkResult = function($pdf) use ($w, $byTeacher, $height, $rightMargin, $contentWidth)
+                {
                 $tdv = $w->isTdv();
                 $type = $tdv ? "TRAVAIL DE VACANCES":"REMISE À NIVEAU";
                 $subject = $w->subject->description." [".$w->subject->code."]";
@@ -250,13 +256,6 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
                     $linesCount = 7 + substr_count($remark,PHP_EOL) +1;
                 } else {
                     $linesCount = 5;
-                }
-                $remainingSpace = $pageHeight - $pdf->GetY() - $rightMargin;
-                $expectedHeight = $linesCount * $height + 2; //+2 to account for border
-                $mustBreak = $remainingSpace <= $expectedHeight;
-                if($mustBreak) {
-                    $pdf->AddPage();
-                    $pageHeader();
                 }
                 $top = $pdf->GetY()-1;
                 $pdf->SetFont("", "B");
@@ -291,7 +290,19 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
                     $pdf->MultiCell(0, $height, utf8_decode("$comment:\n$remark"));
                 }
                 $pdf->Rect($rightMargin, $top, $contentWidth, $pdf->GetY() - $top + 2);
+                $bottom = $pdf->GetY()+1;
                 $pdf->Ln();
+                return $bottom < $top; //new page
+                };
+                if ($addWorkResult($draft)) {
+                    $addPage($draft);
+                    $actions[] = $addPage;
+                    $addWorkResult($draft);
+                }
+                $actions[]=$addWorkResult;
+            }
+            foreach($actions as $a) {
+                $a($pdf);
             }
     }
 
