@@ -230,7 +230,6 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
             };
             $pageHeader();
             foreach ($works as $w) {
-                $content="";
                 $tdv = $w->isTdv();
                 $type = $tdv ? "TRAVAIL DE VACANCES":"REMISE À NIVEAU";
                 $subject = $w->subject->description." [".$w->subject->code."]";
@@ -255,7 +254,6 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
                 $remainingSpace = $pageHeight - $pdf->GetY() - $rightMargin;
                 $expectedHeight = $linesCount * $height + 2; //+2 to account for border
                 $mustBreak = $remainingSpace <= $expectedHeight;
-                //dump(sprintf("remaining space: %d, lines count %d, expectedHeight: %d, must break: %d, content:\n%s", $remainingSpace, $linesCount, $expectedHeight, $mustBreak, $content));
                 if($mustBreak) {
                     $pdf->AddPage();
                     $pageHeader();
