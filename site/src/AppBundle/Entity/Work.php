@@ -102,7 +102,7 @@ class Work
     /**
      * Retrieve a list of all Work instance associated to the given schoolyear (desc)
      */
-    public static function GetListBySchoolYear(Db $db, $schoolyear, $onlyWithResult = FALSE)
+    public static function GetListBySchoolYear(Db $db, $schoolyear, $onlyWithResult = FALSE, $orderByTeacher = FALSE)
     {
         $query =
             " SELECT * "
@@ -118,7 +118,11 @@ class Work
         if ($onlyWithResult) {
             $query .= " AND w_has_result ";
         }
+        if ($orderByTeacher) {
+            $query .= " ORDER BY tea_fullname, st_name, sub_code ";
+        } else {
         $query .= " ORDER BY cl_desc, st_name, sub_code";
+        }
         $s = $db->prepare($query);
         $s->bindValue("schoolyear", $schoolyear, \PDO::PARAM_STR);
         $s->execute();
