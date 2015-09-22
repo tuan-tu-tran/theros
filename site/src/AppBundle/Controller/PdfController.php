@@ -216,6 +216,7 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
             $groupHeader .= ": " . $student->name . " [" . $student->class->code . "]";
         }
         $groupHeader = utf8_decode($groupHeader);
+        $totalPages = 1;
         $addPage = function($pdf) use ($height, $schoolyear, $groupHeader)
         {
             $pdf->AddPage();
@@ -224,10 +225,22 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
             $pdf->Ln();
             $pdf->SetFont("", "", 12);
         };
+
+        $addPageNumber = function($n) use (&$totalPages)
+        {
+            return function($pdf) use ($n, &$totalPages)
+            {
+                $text = "Page $n/$totalPages";
+                $width = $pdf->GetStringWidth($text);
+                $x = (ResultPdf::PAGE_WIDTH - $width) / 2;
+                $pdf->Text($x, ResultPdf::PAGE_HEIGHT - ResultPdf::MARGIN, $text);
+            };
+        };
         $draft = $this->getDraft();
         $addPage($draft);
         $actions = array(
             $addPage
+            , $addPageNumber($totalPages)
         );
         foreach ($works as $w) {
             $addWorkResult = function($pdf) use ($w, $byTeacher, $height, $rightMargin, $contentWidth)
@@ -292,7 +305,9 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
             };
             if ($addWorkResult($draft)) {
                 $addPage($draft);
+                ++$totalPages;
                 $actions[] = $addPage;
+                $actions[] = $addPageNumber($totalPages);
                 $addWorkResult($draft);
             }
             $actions[] = $addWorkResult;
