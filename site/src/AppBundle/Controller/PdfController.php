@@ -287,6 +287,7 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
             }
             $actions[] = $addWorkResult;
         }
+        $draft->Close();
         foreach ($actions as $a) {
             $a($pdf);
         }
