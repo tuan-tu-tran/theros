@@ -258,7 +258,7 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
                     $pdf->AddPage();
                     $pageHeader();
                 }
-                $top = $pdf->GetY();
+                $top = $pdf->GetY()-1;
                 $pdf->SetFont("", "B");
                 if ($byTeacher) {
                     $pdf->Write($height, utf8_decode($w->student->name." [".$w->student->class->code."]"));
@@ -290,7 +290,7 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
                     }
                     $pdf->MultiCell(0, $height, utf8_decode("$comment:\n$remark"));
                 }
-                $pdf->Rect($rightMargin, $top - 1, $contentWidth, $pdf->GetY() - $top + 2);
+                $pdf->Rect($rightMargin, $top, $contentWidth, $pdf->GetY() - $top + 2);
                 $pdf->Ln();
             }
     }
