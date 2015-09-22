@@ -35,6 +35,10 @@ class PdfController extends Controller implements IAdminPage
     const INDIVIDUAL="ind";
     const ALL="all";
 
+    //group types
+    const GROUP_BY_TEACHER = "byTeacher";
+    const GROUP_BY_STUDENT = "byStudent";
+
     /**
      * @Route("/pdf/test")
      */
@@ -100,6 +104,19 @@ class PdfController extends Controller implements IAdminPage
     }
 
     /**
+     * @Route("/pdf/teachers", name="pdf_by_teacher")
+     */
+    public function teacherAction()
+    {
+        $this->getWorkGroups($schoolyear, $teachers, self::GROUP_BY_TEACHER);
+        $pdf = $this->createPdf();
+        foreach ($teachers as $t) {
+            $this->addResultGroup($pdf, $t, $schoolyear, $t->works, self::GROUP_BY_TEACHER);
+        }
+        return $this->renderPdf($pdf);
+    }
+
+    /**
      * @Route("/pdf/all", name="pdf_all")
      */
     public function allAction()
@@ -107,24 +124,30 @@ class PdfController extends Controller implements IAdminPage
         return $this->getPdf(self::ALL);
     }
 
-    private function getPdf($what)
+    private function getWorkGroups(&$schoolyear, &$groups, $groupBy)
     {
         $db = $this->db();
         $schoolyear = $this->getSchoolYear();
-        $works = Work::GetListBySchoolYear($db, $schoolyear, TRUE);
-        $students = array();
+        $byTeacher = $groupBy == self::GROUP_BY_TEACHER;
+        $works = Work::GetListBySchoolYear($db, $schoolyear, TRUE, $byTeacher);
+        $groups=array();
         $byId = array();
         foreach ($works as $w) {
-            $s = $w->student;
+            $s = $byTeacher ? $w->teacher : $w->student;
             if (!isset($byId[$s->id])) {
                 $byId[$s->id] = $s;
-                $students[]=$s;
+                $groups[]=$s;
                 $s->works=array();
             } else {
                 $s = $byId[$s->id];
             }
             $s->works[] = $w;
         }
+    }
+
+    private function getPdf($what)
+    {
+        $this->getWorkGroups($schoolyear, $students, self::GROUP_BY_STUDENT);
 
         $pdf = $this->createPdf();
         foreach ($students as $s) {
@@ -133,13 +156,18 @@ class PdfController extends Controller implements IAdminPage
         return $this->renderPdf($pdf);
     }
 
-    private function addResults($pdf, $student, $works, $schoolyear, $what)
+    private function getLengths(&$pageWidth, &$pageHeight, &$rightMargin, &$contentWidth, &$height)
     {
         $pageWidth=ResultPdf::PAGE_WIDTH;
         $pageHeight=ResultPdf::PAGE_HEIGHT;
         $rightMargin=ResultPdf::MARGIN;
         $contentWidth=ResultPdf::CONTENT_WIDTH;
         $height=ResultPdf::LINE_HEIGHT;
+    }
+
+    private function addResults($pdf, $student, $works, $schoolyear, $what)
+    {
+        $this->getLengths($pageWidth, $pageHeight, $rightMargin, $contentWidth, $height);
         if ($what == self::ALL || $what == self::TUTORS) {
             $pdf->AddPage();
             $pdf->SetY(42);
@@ -173,11 +201,30 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
 "));
         }
         if ($what == self::ALL || $what == self::TUTORS || $what == self::GROUPED) {
+            $this->addResultGroup($pdf, $student, $schoolyear, $works, self::GROUP_BY_STUDENT);
+        }
+
+        $this->addIndividualResults($pdf, $what, $works, $schoolyear);
+    }
+
+    private function addResultGroup($pdf, $group, $schoolyear, $works, $groupBy)
+    {
+        $this->getLengths($pageWidth, $pageHeight, $rightMargin, $contentWidth, $height);
             $pdf->AddPage();
-            $pageHeader = function() use ($pdf, $height, $schoolyear, $student)
+            $byTeacher = $groupBy == self::GROUP_BY_TEACHER;
+            $groupHeader="Fiche de résultats $schoolyear";
+            if ($byTeacher) {
+                $teacher = $group;
+                $groupHeader.= "\nProfesseur: ".$teacher->fullname;
+            } else {
+                $student = $group;
+                $groupHeader.= ": ".$student->name." [".$student->class->code."]";
+            }
+            $groupHeader = utf8_decode($groupHeader);
+            $pageHeader = function() use ($pdf, $height, $schoolyear, $groupHeader)
             {
                 $pdf->SetFont("", "B", 16);
-                $pdf->Cell(0, $height, utf8_decode("Fiche de résultats $schoolyear: ".$student->name." [".$student->class->code."]"), 0, 1, "C");
+                $pdf->MultiCell(0, $height, $groupHeader, 0, "C");
                 $pdf->Ln();
                 $pdf->SetFont("", "", 12);
             };
@@ -215,14 +262,21 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
                 }
                 $top = $pdf->GetY();
                 $pdf->SetFont("", "B");
+                if ($byTeacher) {
+                    $pdf->Write($height, utf8_decode($w->student->name." [".$w->student->class->code."]"));
+                    $pdf->Ln();
+                    $pdf->Ln();
+                }
                 $pdf->Write($height, utf8_decode($type));
                 $pdf->SetFont("", "");
                 $pdf->Write($height, utf8_decode(" en $subject"));
                 $pdf->Ln();
                 $pdf->Ln();
+                if (!$byTeacher) {
                 $pdf->Write($height, utf8_decode("Professeur: $teacherName"));
                 $pdf->Ln();
                 $pdf->Ln();
+                }
                 $pdf->Write($height, utf8_decode("Résultat: "));
                 if (!$hasResult) {
                     $pdf->SetFont("", "B");
@@ -232,12 +286,20 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
                 $pdf->Ln();
                 if ($hasRemark) {
                     $pdf->Ln();
-                    $pdf->MultiCell(0, $height, utf8_decode("Commentaire du professeur:\n$remark"));
+                    $comment = "Commentaire";
+                    if (!$byTeacher) {
+                        $comment.=" du professeur";
+                    }
+                    $pdf->MultiCell(0, $height, utf8_decode("$comment:\n$remark"));
                 }
                 $pdf->Rect($rightMargin, $top - 1, $contentWidth, $pdf->GetY() - $top + 2);
                 $pdf->Ln();
             }
-        }
+    }
+
+    private function addIndividualResults($pdf, $what, $works, $schoolyear)
+    {
+        $this->getLengths($pageWidth, $pageHeight, $rightMargin, $contentWidth, $height);
         if ($what == self::ALL || $what == self::INDIVIDUAL) {
             foreach ($works as $w) {
                 $pdf->AddPage();
