@@ -15,6 +15,8 @@ class PdfController extends Controller implements IAdminPage
 {
     static $months = array(null, "janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre");
 
+    private $draft;
+
     //batch types
     const TUTORS = "tutors";
     const GROUPED = "grouped";
@@ -193,6 +195,14 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
         $this->addIndividualResults($pdf, $what, $works, $schoolyear);
     }
 
+    private function getDraft()
+    {
+        if (!$this->draft) {
+            $this->draft = $this->createPdf();
+        }
+        return $this->draft;
+    }
+
     private function addResultGroup($pdf, $group, $schoolyear, $works, $groupBy)
     {
         $this->getLengths($pageWidth, $pageHeight, $rightMargin, $contentWidth, $height);
@@ -214,7 +224,7 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
             $pdf->Ln();
             $pdf->SetFont("", "", 12);
         };
-        $draft = $this->createPdf();
+        $draft = $this->getDraft();
         $addPage($draft);
         $actions = array(
             $addPage
@@ -287,7 +297,6 @@ Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
             }
             $actions[] = $addWorkResult;
         }
-        $draft->Close();
         foreach ($actions as $a) {
             $a($pdf);
         }
