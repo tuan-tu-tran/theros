@@ -5,5 +5,7 @@ ADD CONSTRAINT `fk_raw_data_3`
   FOREIGN KEY (`rd_sy_id`)
   REFERENCES `schoolyear` (`sy_id`)
   ON DELETE RESTRICT
-  ON UPDATE RESTRICT;
-
+  ON UPDATE RESTRICT,
+DROP INDEX `rd_st_id_UNIQUE` ,
+ADD UNIQUE INDEX `rd_st_id_UNIQUE` (`rd_st_id` ASC, `rd_sy_id` ASC)
+;
