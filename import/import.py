@@ -8,6 +8,7 @@ import argparse
 import sys
 import re
 import hashlib
+import os
 
 parser=argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 parser.add_argument("-w","--works", help="the csv file containing the raw works export from ProEco", metavar="CSV_FILE" , default="travaux.csv", dest="worksFile")
@@ -16,7 +17,7 @@ parser.add_argument("--teachers", help="the csv file containing the teachers exp
 parser.add_argument("-v","--verbose", action="store_const", dest="logging", const=logging.DEBUG, default=logging.INFO, help="show debug logs")
 parser.add_argument("--dsn", help="the dsn to use for db operations", action="store", dest="dsn", default="theros_dev")
 parser.add_argument("-i", "--insert", help="insert (ignoring duplicates) data into database (see --dsn)", action="store_true", dest="insertData")
-parser.add_argument("-y", "--shoolyear", help="specify the current school year", action="store", dest="schoolyear", default="2014-15")
+parser.add_argument("-y", "--shoolyear", help="specify the current school year", action="store", dest="schoolyear", default="2015-16")
 parser.add_argument("-t", "--truncate", help="truncate all tables", action="store_true", dest="truncate")
 parser.add_argument("-d", "--drop", help="drop all tables", action="store_true", dest="drop")
 parser.add_argument("--no-tutors", help="do not process tutors information", action="store_false", dest="tutors")
@@ -28,6 +29,9 @@ if not args.dsn and args.insertData:
     parser.error("missing --dsn specification")
 
 def iterCsv(fname, header=True):
+    if not os.path.exists(fname):
+        logger.warn("%s does not exist", fname)
+        return
     with open(fname) as fh:
         for line in fh:
             if header:
@@ -144,7 +148,7 @@ if args.insertData or args.truncate or args.drop:
             ])
 
             logging.info("inserting works")
-            query = "INSERT IGNORE INTO raw_data(rd_st_id, rd_cl_id, rd_desc) VALUES (?,?,?)"
+            query = "INSERT IGNORE INTO raw_data(rd_st_id, rd_cl_id, rd_desc, rd_sy_id) VALUES (?,?,?,?)"
             params=[]
             for w in works:
                 if w.klass not in classes:
@@ -157,25 +161,34 @@ if args.insertData or args.truncate or args.drop:
 
                 classId = classes[w.klass]
                 studentId = students[w.student]
-                params.append((studentId, classId, w.desc))
+                params.append((studentId, classId, w.desc, schoolyear))
             if len(params):
                 db.executemany(query, params)
             else:
                 logger.warn("no work inserted")
 
-            logging.info("inserting subjects")
-            params=sorted(subjects.items())
-            db.executemany("INSERT IGNORE INTO subject(sub_code, sub_desc) VALUES (?,?)", params)
+            if len(subjects):
+                logging.info("inserting subjects")
+                params=sorted(subjects.items())
+                db.executemany("INSERT IGNORE INTO subject(sub_code, sub_desc) VALUES (?,?)", params)
+            else:
+                logging.info("no subjects to insert")
 
-            logging.info("inserting teachers")
-            params=sorted(teachers.items())
-            db.executemany("INSERT IGNORE INTO teacher(tea_fullname, tea_password) VALUES (?,?)", params)
+            if teachers:
+                logging.info("inserting teachers")
+                params=sorted(teachers.items())
+                db.executemany("INSERT IGNORE INTO teacher(tea_fullname, tea_password) VALUES (?,?)", params)
+            else:
+                logging.info("no teachers to insert")
 
-            logging.info("inserting teachings")
-            subjects=dict([ (r.sub_code, r.sub_id) for r in db.execute("SELECT * FROM subject").fetchall() ])
-            teachers=dict([ (r.tea_fullname, r.tea_id) for r in db.execute("SELECT * FROM teacher").fetchall() ])
-            params=[ (teachers[name], subjects[code], schoolyear, classes[klass]) for name, code, klass in teachings ]
-            db.executemany("INSERT IGNORE INTO teacher_subject(ts_tea_id, ts_sub_id, ts_sy_id, ts_cl_id) VALUES (?,?,?,?)", params)
+            if teachings:
+                logging.info("inserting teachings")
+                subjects=dict([ (r.sub_code, r.sub_id) for r in db.execute("SELECT * FROM subject").fetchall() ])
+                teachers=dict([ (r.tea_fullname, r.tea_id) for r in db.execute("SELECT * FROM teacher").fetchall() ])
+                params=[ (teachers[name], subjects[code], schoolyear, classes[klass]) for name, code, klass in teachings ]
+                db.executemany("INSERT IGNORE INTO teacher_subject(ts_tea_id, ts_sub_id, ts_sy_id, ts_cl_id) VALUES (?,?,?,?)", params)
+            else:
+                logging.info("no teachings to insert")
 
         conn.commit()
     finally:
