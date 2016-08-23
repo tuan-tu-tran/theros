@@ -37,9 +37,12 @@ CREATE TABLE `raw_data` (
   `rd_cl_id` int(11) NOT NULL,
   `rd_desc` text NOT NULL,
   `rd_treated` tinyint(4) DEFAULT '0',
+  `rd_sy_id` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`rd_id`),
   UNIQUE KEY `rd_st_id_UNIQUE` (`rd_st_id`),
   KEY `fk_raw_data_2_idx` (`rd_cl_id`),
+  KEY `fk_raw_data_3_idx` (`rd_sy_id`),
+  CONSTRAINT `fk_raw_data_3` FOREIGN KEY (`rd_sy_id`) REFERENCES `schoolyear` (`sy_id`),
   CONSTRAINT `fk_raw_data_1` FOREIGN KEY (`rd_st_id`) REFERENCES `student` (`st_id`),
   CONSTRAINT `fk_raw_data_2` FOREIGN KEY (`rd_cl_id`) REFERENCES `class` (`cl_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

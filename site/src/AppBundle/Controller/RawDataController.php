@@ -24,13 +24,19 @@ class RawDataController extends Controller implements IAdminPage
     public function indexAction(Request $request)
     {
         $db=$this->get("database_connection");
-        $res=$db->query("
+        $schoolyear = $this->getParameter("schoolyear");
+        $stmt = $db->prepare("
             SELECT *
             FROM raw_data
             JOIN student ON st_id = rd_st_id
             JOIN class ON cl_id = rd_cl_id
+            JOIN schoolyear ON rd_sy_id = sy_id
+            WHERE sy_desc = :sy_desc
             ORDER BY cl_desc, st_name
-        ")->fetchAll();
+        ");
+        $stmt->bindValue("sy_desc", $schoolyear, \PDO::PARAM_STR);
+        $stmt->execute();
+        $res = $stmt->fetchAll();
         $works=[];
         foreach($res as $row){
             $w=RawData::GetFull($row);
