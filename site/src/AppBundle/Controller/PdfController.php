@@ -180,12 +180,30 @@ class PdfController extends Controller implements IAdminPage
             $pdf->SetFont("", "");
             $pdf->Write($height, ".\n");
             $pdf->MultiCell(0, $height, utf8_decode("
+Pour mémoire, le but du travail de vacances est de faire revoir à l'élève des aspects de la matière qui sont primordiaux pour redémarrer l'année suivante, et donc de lui assurer de meilleures bases. Les résultats du travail de vacances seront reportés dans le TJ (Travail Journalier) du premier bulletin à hauteur de 20% de la cote globale.
+
+Quant à la remise à niveau, elle a pour but de faire revoir à l'élève, par l'étude et de nouveaux exercices suivis d'un examen, des pans de la matière qui sont importants pour redémarrer l'année suivante, et donc d'assurer à votre enfant de meilleures chances de réussite. Un risque d'échec dans une branche avec remise à niveau risque d'entraîner des difficultés dans la matière concernée durant l'année. L'élève qui en juin serait toujours en échec compromettrait la réussite de son année scolaire (Voir Règlement des études).
+
+"));
+            $pdf->Write($height, utf8_decode("Le "));
+            $pdf->SetFont("", "B");
+            $pdf->Write($height, utf8_decode("travail de vacances"));
+            $pdf->SetFont("", "");
+            $pdf->Write($height, utf8_decode(" et la "));
+            $pdf->SetFont("", "B");
+            $pdf->Write($height, utf8_decode("remise à niveau"));
+            $pdf->SetFont("", "");
+            $pdf->Write($height, utf8_decode(" sont des examens "));
+            $pdf->SetFont("", "B");
+            $pdf->Write($height, utf8_decode("obligatoires.\n"));
+            $pdf->SetFont("", "");
+            $pdf->MultiCell(0, $height, utf8_decode("
 Si $name est en réussite, le contrat a été rempli et nous considérons que les lacunes observées en juin ont été totalement ou partiellement levées (voir commentaire éventuel laissé par le professeur).
 
 En cas d'échec, par contre, nous encourageons l'élève à poursuivre le travail de remédiation dans les matières concernées. En effet, vous savez que l'accumulation d'échecs dans une même discipline compromet le bon déroulement des apprentissages.
 
 
-Valériane Wiot (Directrice-Adjointe) et Vincent Sterpin (Directeur)
+M. Payet (Directeur-Adjoint) et M. Rosi (Directeur)
 "));
         }
         if ($what == self::ALL || $what == self::TUTORS || $what == self::GROUPED) {
