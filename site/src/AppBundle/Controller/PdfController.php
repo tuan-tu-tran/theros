@@ -180,7 +180,7 @@ class PdfController extends Controller implements IAdminPage
             $pdf->SetFont("", "");
             $pdf->Write($height, ".\n");
             $pdf->MultiCell(0, $height, utf8_decode("
-Pour mémoire, le but du travail de vacances est de faire revoir à l'élève des aspects de la matière qui sont primordiaux pour redémarrer l'année suivante, et donc de lui assurer de meilleures bases. Les résultats du travail de vacances seront reportés dans le TJ (Travail Journalier) du premier bulletin à hauteur de 20% de la cote globale.
+Pour mémoire, le but du travail de vacances est de faire revoir à l'élève des aspects de la matière qui sont primordiaux pour redémarrer l'année suivante, et donc de lui assurer de meilleures bases. Les résultats des travaux de vacances et remise(s) à niveau seront reportés dans le premier bulletin afin d’examiner à chaque conseil de classe l’évolution générale de l’élève dans les branches qui étaient en échec l’année précédent.
 
 Quant à la remise à niveau, elle a pour but de faire revoir à l'élève, par l'étude et de nouveaux exercices suivis d'un examen, des pans de la matière qui sont importants pour redémarrer l'année suivante, et donc d'assurer à votre enfant de meilleures chances de réussite. Un risque d'échec dans une branche avec remise à niveau risque d'entraîner des difficultés dans la matière concernée durant l'année. L'élève qui en juin serait toujours en échec compromettrait la réussite de son année scolaire (Voir Règlement des études).
 
