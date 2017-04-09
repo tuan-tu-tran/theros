@@ -1,0 +1,1 @@
+mv release next && mv prev release

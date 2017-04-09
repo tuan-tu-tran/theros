@@ -1,0 +1,3 @@
+rm -rf next
+tar xzf next.tgz
+cp release/site/app/config/parameters.yml next/site/app/config
