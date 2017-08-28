@@ -71,6 +71,7 @@ logger.info("got %i works, %i students, %i classes", len(works), len(students), 
 
 subjects={}
 for i,line in enumerate(iterCsv(args.subjectsFile, False)):
+    logging.debug("%s: %s", i, line)
     code=line[2].strip().upper()
     desc=line[5]
     subjects[code]=desc
@@ -91,7 +92,7 @@ for i,line in enumerate(iterCsv(args.teachersFile)):
     elif subject not in subjects:
         logger.warn("%s teaches %s in %s : unknown subject", name, subject, klass)
     elif len(localClasses) == 0:
-        logger.Warn("%s teaches %s in %s : unknown class", name, subject, klass)
+        logger.warn("%s teaches %s in %s : unknown class", name, subject, klass)
     else:
         for c in localClasses:
             teachings.add((name, subject, c))
