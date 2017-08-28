@@ -17,7 +17,7 @@ parser.add_argument("--teachers", help="the csv file containing the teachers exp
 parser.add_argument("-v","--verbose", action="store_const", dest="logging", const=logging.DEBUG, default=logging.INFO, help="show debug logs")
 parser.add_argument("--dsn", help="the dsn to use for db operations", action="store", dest="dsn", default="theros_dev")
 parser.add_argument("-i", "--insert", help="insert (ignoring duplicates) data into database (see --dsn)", action="store_true", dest="insertData")
-parser.add_argument("-y", "--shoolyear", help="specify the current school year", action="store", dest="schoolyear", default="2015-16")
+parser.add_argument("-y", "--shoolyear", help="specify the current school year", action="store", dest="schoolyear", default="2016-17")
 parser.add_argument("-t", "--truncate", help="truncate all tables", action="store_true", dest="truncate")
 parser.add_argument("-d", "--drop", help="drop all tables", action="store_true", dest="drop")
 parser.add_argument("--no-tutors", help="do not process tutors information", action="store_false", dest="tutors")
