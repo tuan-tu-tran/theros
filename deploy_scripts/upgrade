@@ -1,0 +1,18 @@
+#!/bin/sh
+DB=theros
+USER=user
+PASSWORD=password
+HOST=host
+
+set -e
+VERSION=`cat next/version.txt|cut -f 1 -d.|cut -c 2`
+PREV_VERSION=`cat release/version.txt|cut -f 1 -d.|cut -c 2`
+if [ "$VERSION" -ne "$PREV_VERSION" ]
+then
+    NAME=to$VERSION.0.sql
+    echo upgrade from "$PREV_VERSION".0 to "$VERSION".0 : run $NAME
+    echo "mysql $DB -u$USER -p$PASSWORD -h$HOST < next/import/$NAME"
+    mysql $DB -u$USER -p$PASSWORD -h$HOST < next/import/$NAME
+else
+    echo no upgrade needed "$PREV_VERSION".0 =\> "$VERSION".0
+fi

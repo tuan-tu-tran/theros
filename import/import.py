@@ -17,7 +17,7 @@ parser.add_argument("--teachers", help="the csv file containing the teachers exp
 parser.add_argument("-v","--verbose", action="store_const", dest="logging", const=logging.DEBUG, default=logging.INFO, help="show debug logs")
 parser.add_argument("--dsn", help="the dsn to use for db operations", action="store", dest="dsn", default="theros_dev")
 parser.add_argument("-i", "--insert", help="insert (ignoring duplicates) data into database (see --dsn)", action="store_true", dest="insertData")
-parser.add_argument("-y", "--shoolyear", help="specify the current school year", action="store", dest="schoolyear", default="2015-16")
+parser.add_argument("-y", "--shoolyear", help="specify the current school year", action="store", dest="schoolyear", default="2016-17")
 parser.add_argument("-t", "--truncate", help="truncate all tables", action="store_true", dest="truncate")
 parser.add_argument("-d", "--drop", help="drop all tables", action="store_true", dest="drop")
 parser.add_argument("--no-tutors", help="do not process tutors information", action="store_false", dest="tutors")
@@ -53,10 +53,11 @@ class Work:
         self.line=line
 
 for i,line in enumerate(iterCsv(worksFile)):
-    klass,student, dummy, foo, desc, tutor, address, zipCode, city = line
+    klass,student, dummy, foo, desc, tutor, address, zipCode, city = line[:9]
     klass=klass.replace(" ","").upper()
     if not re.search(r"^\d[A-Z]+$", klass):
-        raise ValueError, "line %i contains bad class: %s"%(i+1, klass)
+        logger.warn("discard line %i of %s : bad class: %s",i+1, worksFile, klass)
+        continue
     student=student.replace("  "," ")
     classes.add(klass)
     students[student]=(student, tutor, address, zipCode, city)
@@ -71,6 +72,7 @@ logger.info("got %i works, %i students, %i classes", len(works), len(students), 
 
 subjects={}
 for i,line in enumerate(iterCsv(args.subjectsFile, False)):
+    logging.debug("%s: %s", i, line)
     code=line[2].strip().upper()
     desc=line[5]
     subjects[code]=desc
@@ -91,7 +93,7 @@ for i,line in enumerate(iterCsv(args.teachersFile)):
     elif subject not in subjects:
         logger.warn("%s teaches %s in %s : unknown subject", name, subject, klass)
     elif len(localClasses) == 0:
-        logger.Warn("%s teaches %s in %s : unknown class", name, subject, klass)
+        logger.warn("%s teaches %s in %s : unknown class", name, subject, klass)
     else:
         for c in localClasses:
             teachings.add((name, subject, c))
@@ -177,7 +179,8 @@ if args.insertData or args.truncate or args.drop:
             if teachers:
                 logging.info("inserting teachers")
                 params=sorted(teachers.items())
-                db.executemany("INSERT IGNORE INTO teacher(tea_fullname, tea_password) VALUES (?,?)", params)
+                params=[ (name, password, password) for name,password in params]
+                db.executemany("INSERT IGNORE INTO teacher(tea_fullname, tea_password, tea_pwd_changed) VALUES (?,?, 1) ON DUPLICATE KEY UPDATE tea_password = ?, tea_pwd_changed = 1", params)
             else:
                 logging.info("no teachers to insert")
 
