@@ -53,7 +53,7 @@ class Work:
         self.line=line
 
 for i,line in enumerate(iterCsv(worksFile)):
-    klass,student, dummy, foo, desc, tutor, address, zipCode, city = line
+    klass,student, dummy, foo, desc, tutor, address, zipCode, city = line[:9]
     klass=klass.replace(" ","").upper()
     if not re.search(r"^\d[A-Z]+$", klass):
         raise ValueError, "line %i contains bad class: %s"%(i+1, klass)
