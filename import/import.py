@@ -177,7 +177,8 @@ if args.insertData or args.truncate or args.drop:
             if teachers:
                 logging.info("inserting teachers")
                 params=sorted(teachers.items())
-                db.executemany("INSERT IGNORE INTO teacher(tea_fullname, tea_password) VALUES (?,?)", params)
+                params=[ (name, password, password) for name,password in params]
+                db.executemany("INSERT IGNORE INTO teacher(tea_fullname, tea_password, tea_pwd_changed) VALUES (?,?, 1) ON DUPLICATE KEY UPDATE tea_password = ?, tea_pwd_changed = 1", params)
             else:
                 logging.info("no teachers to insert")
 
